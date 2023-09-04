@@ -14,7 +14,8 @@ from differentfiles.drawing import (
 class King(Piece):
     def __init__(self, x, y, c):
         super().__init__(x, y, c)
-        self.set_letter("♔")
+        # self.set_letter("♔")
+        self.set_letter("Ki")
 
     def draw_moves(self, pieces):
 

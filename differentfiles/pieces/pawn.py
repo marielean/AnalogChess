@@ -7,8 +7,9 @@ from differentfiles.drawing import draw_line_round_corners_polygon, see_through,
 class Pawn(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
-        self.set_letter("♙")
-
+        # self.set_letter("♙")
+        self.set_letter("P")
+        
     def draw_moves(self, pieces):
 
         fake_piece = Pawn(self.start_x, self.start_y, self.color)

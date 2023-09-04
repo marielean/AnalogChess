@@ -11,7 +11,8 @@ from differentfiles.drawing import (
 class Bishop(Piece):
     def __init__(self, x, y, c):
         super().__init__(x, y, c)
-        self.set_letter("♗")
+        # self.set_letter("♗")
+        self.set_letter("B")
 
     def draw_moves(self, pieces):
         fake_piece = Bishop(self.start_x, self.start_y, self.color)

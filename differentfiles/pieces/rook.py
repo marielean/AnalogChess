@@ -11,7 +11,8 @@ from differentfiles.drawing import (
 class Rook(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
-        self.set_letter("♖")
+        # self.set_letter("♖")
+        self.set_letter("R")
 
     def draw_moves(self, pieces):
         fake_piece = Rook(self.start_x, self.start_y, self.color)
