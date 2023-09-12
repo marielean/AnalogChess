@@ -11,8 +11,8 @@ from differentfiles.drawing import (
 class Bishop(Piece):
     def __init__(self, x, y, c):
         super().__init__(x, y, c)
-        # self.set_letter("♗")
-        self.set_letter("B")
+        self.set_letter("♗")
+        # self.set_letter("B")
         self.set_weight(3)
 
     def draw_moves(self, pieces):

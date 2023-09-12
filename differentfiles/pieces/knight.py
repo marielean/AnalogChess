@@ -2,13 +2,14 @@ from .piece import Piece
 from differentfiles.colors import *
 from differentfiles.utils import *
 from differentfiles.drawing import arc, see_through, see_through2, pygame_draw_circle
+from differentfiles.AB import *
 
 
 class Knight(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
-        # self.set_letter("♘")
-        self.set_letter("K")
+        self.set_letter("♘")
+        # self.set_letter("K")
         self.edge_position_angles=[]
         self.draw_first_arc = True
         self.edge_positions=[]
@@ -75,8 +76,8 @@ class Knight(Piece):
     def drag(self, new_p, pieces):
         if self.grabbed:
 
-            x = new_p[0] - self.start_x
-            y = new_p[1] - self.start_y
+            x = apply_granularity(new_p[0] - self.start_x)
+            y = apply_granularity(new_p[1] - self.start_y)
 
             Radius = math.sqrt(5)
 

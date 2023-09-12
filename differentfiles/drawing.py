@@ -15,11 +15,12 @@ see_through.fill((0, 0, 0, 0))
 
 def get_fontname():
     # Clever way to get the best font for the system (from @andychase)
-    font_options = ["segoeuisymbol", "applesymbols", "DejaVuSans"]
-    font_to_use = font_options[0]
-    for font in font_options:
-        if font in pygame.font.get_fonts():
-            font_to_use = font
+    # font_options = ["segoeuisymbol", "applesymbols", "DejaVuSans"]
+    # font_to_use = font_options[0]
+    font_to_use = "DejaVuSans"
+    # for font in font_options:
+    #     if font in pygame.font.get_fonts():
+    #         font_to_use = font
     return font_to_use
 
 
