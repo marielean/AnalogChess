@@ -13,6 +13,7 @@ class Bishop(Piece):
         super().__init__(x, y, c)
         # self.set_letter("♗")
         self.set_letter("B")
+        self.set_weight(3)
 
     def draw_moves(self, pieces):
         fake_piece = Bishop(self.start_x, self.start_y, self.color)

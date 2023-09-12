@@ -9,7 +9,8 @@ class Pawn(Piece):
         super().__init__(x, y, d)
         # self.set_letter("♙")
         self.set_letter("P")
-        
+        self.set_weight(1)
+
     def draw_moves(self, pieces):
 
         fake_piece = Pawn(self.start_x, self.start_y, self.color)

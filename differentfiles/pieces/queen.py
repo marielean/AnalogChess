@@ -13,6 +13,7 @@ class Queen(Piece):
         super().__init__(x, y, c)
         # self.set_letter("♕")
         self.set_letter("Q")
+        self.set_weight(9)
 
     def draw_moves(self, pieces):
 

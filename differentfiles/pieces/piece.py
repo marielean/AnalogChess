@@ -27,6 +27,10 @@ class Piece:
         self.targeted = False
         self.turn = 0
         self.deleted = False
+        self.weight = 0
+
+    def set_weight(self, weight):
+        self.weight = weight
 
     def set_letter(self, letter):
         self.letter = letter

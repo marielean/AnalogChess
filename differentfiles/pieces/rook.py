@@ -13,6 +13,7 @@ class Rook(Piece):
         super().__init__(x, y, d)
         # self.set_letter("♖")
         self.set_letter("R")
+        self.set_weight(5)
 
     def draw_moves(self, pieces):
         fake_piece = Rook(self.start_x, self.start_y, self.color)
