@@ -2,6 +2,7 @@ import math
 import pygame
 from differentfiles.utils import width, height, dist, to_game_coords
 from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
+from differentfiles.AB import *
 
 
 class Piece:
@@ -159,6 +160,9 @@ class Piece:
 
     # math shit
     def slide(self, dx, dy, pieces, capture=True, fake=False):
+
+        dx = apply_granularity(dx)
+        dy = apply_granularity(dy)
 
         all_pieces = pieces
         if capture:

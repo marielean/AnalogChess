@@ -2,6 +2,11 @@
 
 depth = 2
 
+def apply_granularity(coordinate, granularity=1):
+    rounded = round(coordinate, granularity)
+    return rounded
+
+
 def evaluate(pieces):
     white_score = 0
     black_score = 0
