@@ -9,6 +9,7 @@ from differentfiles.drawing import (
     draw_checkers,
     screen,
 )
+from differentfiles.AB import *
 
 pygame.init()
 
@@ -101,6 +102,10 @@ while not done:
             pieces = new_pieces
             for piece in pieces:
                 piece.calc_paths(pieces)
+
+            ws, bs = evaluate(pieces)
+            print(ws, bs)
+            
 
     """
     if not pygame.mouse.get_focused():
