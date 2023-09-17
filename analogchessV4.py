@@ -76,15 +76,22 @@ while not done:
             quit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             for piece in pieces:
+                print(piece.get_turn())
+                # print(piece.color, piece.letter, piece.x, piece.y)
                 piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                """
+                
+                '''
                 if whites_turn:
                     if piece.color == white:
+                        whites_turn = False
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 else:
                     if piece.color != white:
+                        whites_turn = True
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                """
+                
+                '''
+                
         elif event.type == pygame.MOUSEMOTION:
             for piece in pieces:
                 piece.drag(to_game_coords(pygame.mouse.get_pos()), pieces)
@@ -94,6 +101,7 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 piece.ungrab(pieces)
+                #print('game_player_status', game_player_status)
                 if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
                 else:
@@ -104,7 +112,7 @@ while not done:
                 piece.calc_paths(pieces)
 
             ws, bs = evaluate(pieces)
-            print(ws, bs)
+            # print(ws, bs)
             
 
     """

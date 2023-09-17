@@ -30,6 +30,11 @@ class Piece:
         self.deleted = False
         self.weight = 0
 
+        self.white_turn = True
+
+    def get_turn(self):
+        return self.white_turn
+
     def set_weight(self, weight):
         self.weight = weight
 
@@ -142,17 +147,31 @@ class Piece:
                             < self.radius
                         ):
                             self.confirm(pieces)
+                            if self.white_turn:
+                                # print("white turn, next turn black")
+                                self.white_turn = False
+                                for one_piece in pieces:
+                                    one_piece.white_turn = False
+                            else:
+                                # print("black turn, next turn white")
+                                self.white_turn = True
+                                for one_piece in pieces:
+                                    one_piece.white_turn = True
+                            # print("confirm", self.white_turn)
                             return
                         else:
                             self.cancel(pieces)
+                            print("cancel", self.white_turn)
                             return
 
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             self.confirm(pieces)
+                            print("confirm")
                             return
                         elif event.key == pygame.K_ESCAPE:
                             self.cancel(pieces)
+                            print("cancel")
                             return
 
     def overlaps(self, piece):
