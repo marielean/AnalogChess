@@ -158,11 +158,11 @@ class Piece:
                                 for one_piece in pieces:
                                     one_piece.white_turn = True
                             # print("confirm", self.white_turn)
-                            return
+                            return "confirm"
                         else:
                             self.cancel(pieces)
                             print("cancel", self.white_turn)
-                            return
+                            return "cancel"
 
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:

@@ -100,13 +100,13 @@ while not done:
 
             new_pieces = []
             for piece in pieces:
-                piece.ungrab(pieces)
+                sol = piece.ungrab(pieces)
+                print(sol)
                 #print('game_player_status', game_player_status)
                 if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
                 else:
                     new_pieces.append(piece)
-
             pieces = new_pieces
             for piece in pieces:
                 piece.calc_paths(pieces)
