@@ -401,5 +401,5 @@ class Piece:
     def draw_moves(self, pieces):
         pass
 
-    def getAllMoves(self, pieces):
+    def get_all_directions(self, pieces):
         pass
