@@ -43,6 +43,8 @@ class Rook(Piece):
             )
             path_len = math.sqrt(path[0] ** 2 + path[1] ** 2)
             self.slide(path[0] * dist / path_len, path[1] * dist / path_len, pieces)
+            print("path ", path, ", ", "dist ", dist, ", ", "path_len", path_len)
+            
 
     def draw_paths(self, pieces):
         if self.deleted:

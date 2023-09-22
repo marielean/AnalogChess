@@ -161,7 +161,7 @@ class Piece:
                             return "confirm"
                         else:
                             self.cancel(pieces)
-                            print("cancel", self.white_turn)
+                            # print("cancel", self.white_turn)
                             return "cancel"
 
                     elif event.type == pygame.KEYDOWN:

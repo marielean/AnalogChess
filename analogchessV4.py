@@ -76,7 +76,7 @@ while not done:
             quit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             for piece in pieces:
-                print(piece.get_turn())
+                # print(piece.get_turn())
                 # print(piece.color, piece.letter, piece.x, piece.y)
                 piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 
@@ -101,7 +101,7 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                print(sol)
+                # print(sol)
                 #print('game_player_status', game_player_status)
                 if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
