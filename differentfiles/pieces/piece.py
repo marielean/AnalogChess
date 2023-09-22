@@ -304,6 +304,11 @@ class Piece:
             self.slide_attack(
                 (self.x - self.start_x), self.y - self.start_y, all_pieces, fake=fake
             )
+        
+        '''print("letter, ", self.letter, "start_x ", self.start_x, "start_y, ", self.start_y, "dx ", dx, 
+              ", ", "dy ", dy, ", \n", "new_dist ", new_dist, ", ", "new_new_dist", new_new_dist, 
+              "full_dist ", full_dist, "first_hit_piece ", first_hit_piece, 
+              "\nfirst_block ", first_block, "hit_first_block ", hit_first_block)'''
 
     def slide_attack(self, dx, dy, pieces, fake=False):
 
@@ -394,4 +399,7 @@ class Piece:
         return (min_path, min_l)
 
     def draw_moves(self, pieces):
+        pass
+
+    def getAllMoves(self, pieces):
         pass

@@ -25,6 +25,7 @@ class Rook(Piece):
             fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
             end_positions.append((fake_piece.x, fake_piece.y))
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+        print("end_positions rook", end_positions)
 
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
@@ -35,6 +36,18 @@ class Rook(Piece):
                 self.radius * 2 * 640 / 8,
             )
 
+    def getAllMoves(self, pieces):
+        fake_piece = Rook(self.start_x, self.start_y, self.color)
+
+        end_positions = []
+
+        directions = [[10, 0], [0, 10], [-10, 0], [0, -10]]
+        for d in directions:
+            fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
+            end_positions.append((fake_piece.x, fake_piece.y))
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+        print("end_positions rook", end_positions)
+
     def drag(self, new_p, pieces):
         if self.grabbed:
             self.slide(0, 0, pieces)
@@ -43,7 +56,7 @@ class Rook(Piece):
             )
             path_len = math.sqrt(path[0] ** 2 + path[1] ** 2)
             self.slide(path[0] * dist / path_len, path[1] * dist / path_len, pieces)
-            print("path ", path, ", ", "dist ", dist, ", ", "path_len", path_len)
+            #print("start_x ", self.start_x, "start_y, ", self.start_y, "path ", path, ", ", "dist ", dist, ", ", "path_len", path_len, "new_p ", new_p)
             
 
     def draw_paths(self, pieces):
