@@ -10,7 +10,7 @@ def get_random_moves(pieces):
     list_directions = []
     for p in pieces:
         directions = p.get_all_directions(pieces)
-        list_directions.append([p.letter, p.color ,directions])
+        list_directions.append([p.id, p.color ,directions])
     
     return list_directions
 
