@@ -62,11 +62,13 @@ class Rook(Piece):
             end_positions.append((fake_piece.x, fake_piece.y))
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
         
+        '''
         file = open("rook.txt", "a")
         print("end_positions rook", end_positions)
         for riga in end_positions:
             file.write(str(riga) + "\n")
-
+        '''
+        
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
                 see_through,
