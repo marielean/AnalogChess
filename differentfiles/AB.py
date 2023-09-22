@@ -6,6 +6,14 @@ def apply_granularity(coordinate, granularity=1):
     rounded = round(coordinate, granularity)
     return rounded
 
+def get_random_moves(pieces):
+    list_directions = []
+    for p in pieces:
+        directions = p.get_all_directions(pieces)
+        list_directions.append([p.letter, p.color ,directions])
+    
+    return list_directions
+
 
 def evaluate(pieces):
     white_score = 0

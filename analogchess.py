@@ -123,3 +123,5 @@ while not done:
     see_through.fill((0, 0, 0, 0))
 
     see_through2.fill((0, 0, 0, 0))
+
+    print("random_moves ", get_random_moves(pieces))
