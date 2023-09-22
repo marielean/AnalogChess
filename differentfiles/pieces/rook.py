@@ -47,6 +47,7 @@ class Rook(Piece):
             end_positions.append((fake_piece.x, fake_piece.y))
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
         print("end_positions rook", end_positions)
+        return end_positions
 
     def drag(self, new_p, pieces):
         if self.grabbed:
