@@ -36,7 +36,7 @@ class Rook(Piece):
                 self.radius * 2 * 640 / 8,
             )
 
-    def getAllMoves(self, pieces):
+    def get_all_moves(self, pieces):
         fake_piece = Rook(self.start_x, self.start_y, self.color)
 
         end_positions = []
