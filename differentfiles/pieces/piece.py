@@ -20,6 +20,7 @@ class Piece:
         self.start_y = self.y
         text_scale = 0.85
         self.letter = "X"
+        self.id = "XX"
         self.font = pygame.font.SysFont(
             get_fontname(), int(diameter / 8 * 640 * text_scale)
         )
@@ -31,6 +32,9 @@ class Piece:
         self.weight = 0
 
         self.white_turn = True
+
+    def set_id(self, id):
+        self.id = id
 
     def get_turn(self):
         return self.white_turn
