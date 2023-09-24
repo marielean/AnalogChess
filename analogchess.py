@@ -24,6 +24,10 @@ done = False
 clock = pygame.time.Clock()
 confirmed = True
 
+# varibili per gestire i turni del gioco
+turn_number = 0
+whites_turn = True
+
 pygame.display.set_caption("Analog Chess")
 
 
@@ -47,7 +51,15 @@ while not done:
             for piece in pieces:
                 # print(piece.get_turn())
                 # print(piece.color, piece.letter, piece.x, piece.y)
-                piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                print("turn_number: ", turn_number%2)
+                print("turn: ", whites_turn)
+                if whites_turn:
+                    if piece.color == white:
+                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                else:
+                    if piece.color != white:
+                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                        
                 
                 '''
                 if whites_turn:
@@ -70,7 +82,16 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                # print(sol)
+                
+                if sol != None:
+                    print("sol", sol)
+                    if sol:
+                        turn_number += 1
+                        
+                        if whites_turn:
+                            whites_turn = False
+                        else:
+                            whites_turn = True
                 #print('game_player_status', game_player_status)
                 if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
@@ -124,4 +145,8 @@ while not done:
 
     see_through2.fill((0, 0, 0, 0))
 
-    print("random_moves ", get_random_moves(pieces))
+    '''
+    list_directions_white, list_directions_black = get_all_directions(pieces)
+    print("random_moves_white: ", list_directions_white)
+    print("random_moves_black: ", list_directions_black)
+    '''

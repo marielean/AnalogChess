@@ -162,11 +162,11 @@ class Piece:
                                 for one_piece in pieces:
                                     one_piece.white_turn = True
                             # print("confirm", self.white_turn)
-                            return "confirm"
+                            return True
                         else:
                             self.cancel(pieces)
                             # print("cancel", self.white_turn)
-                            return "cancel"
+                            return False
 
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
@@ -405,5 +405,5 @@ class Piece:
     def draw_moves(self, pieces):
         pass
 
-    def get_all_directions(self, pieces):
+    def get_all_directions_per_piece(self, pieces):
         pass

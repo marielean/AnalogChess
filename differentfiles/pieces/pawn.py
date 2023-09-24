@@ -8,7 +8,7 @@ class Pawn(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
         self.set_letter("♙")
-        # self.set_letter("P")
+        self.set_id("P")
         self.set_weight(1)
 
     def draw_moves(self, pieces):

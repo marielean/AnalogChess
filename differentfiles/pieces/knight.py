@@ -9,7 +9,7 @@ class Knight(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
         self.set_letter("♘")
-        # self.set_letter("K")
+        self.set_id("K")
         self.edge_position_angles=[]
         self.draw_first_arc = True
         self.edge_positions=[]
