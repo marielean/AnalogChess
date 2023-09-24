@@ -15,6 +15,18 @@ class Bishop(Piece):
         self.set_id("B")
         self.set_weight(3)
 
+    def get_all_directions_per_piece(self, pieces):
+        fake_piece = Bishop(self.start_x, self.start_y, self.color)
+        directions = [[10, 10], [-10, -10], [10, -10], [-10, 10]]
+        end_positions = []
+        for d in directions:
+            fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
+            end_positions.append((fake_piece.x, fake_piece.y))
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+
+        return end_positions
+
+
     def draw_moves(self, pieces):
         fake_piece = Bishop(self.start_x, self.start_y, self.color)
         directions = [[10, 10], [-10, -10], [10, -10], [-10, 10]]

@@ -11,6 +11,36 @@ class Pawn(Piece):
         self.set_id("P")
         self.set_weight(1)
 
+    def get_all_directions_per_piece(self, pieces):
+        fake_piece = Pawn(self.start_x, self.start_y, self.color)
+
+        end_positions = []
+        forward_dist = 1
+        if self.turn == 0:
+            forward_dist = 2
+
+        if self.color == white:
+            directions = [[1, 1], [-1, 1]]
+            fake_piece.slide(
+                0, forward_dist, [p for p in pieces if p != self], capture=False
+            )
+            end_positions.append((fake_piece.x, fake_piece.y))
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], capture=False)
+        else:
+            directions = [[-1, -1], [1, -1]]
+            fake_piece.slide(
+                0, -forward_dist, [p for p in pieces if p != self], capture=False
+            )
+            end_positions.append((fake_piece.x, fake_piece.y))
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], capture=False)
+
+        for d in directions:
+            fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
+            end_positions.append((fake_piece.x, fake_piece.y))
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+
+        return end_positions
+
     def draw_moves(self, pieces):
 
         fake_piece = Pawn(self.start_x, self.start_y, self.color)

@@ -16,6 +16,7 @@ class King(Piece):
         super().__init__(x, y, c)
         self.set_letter("♔")
         self.set_id("Ki")
+        self.set_weight(100)
 
     def get_all_directions_per_piece(self, pieces):
         fake_piece = King(self.start_x, self.start_y, self.color)
@@ -43,7 +44,7 @@ class King(Piece):
                     long_castle = False
                 if 4.5 < p.x < 7.5:
                     short_castle = False
-        if self.turn == 0:
+        '''if self.turn == 0:
             if long_castle:
                 if left_rook:
                     if left_rook.turn == 0:
@@ -62,7 +63,7 @@ class King(Piece):
                             to_screen_coords((self.start_x + 2, self.start_y)),
                             self.radius / 8 * 640,
                         )
-
+'''
         if self.turn == 0:
             pieces = [p for p in pieces if (p != left_rook and p != right_rook)]
 

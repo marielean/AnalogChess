@@ -17,6 +17,7 @@ pygame.init()
 pieces = [
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
+    Knight(1.5, 0.5, white),
     Rook(0.5, 7.5, black),
 ]
 
@@ -145,8 +146,8 @@ while not done:
 
     see_through2.fill((0, 0, 0, 0))
 
-    '''
+    
     list_directions_white, list_directions_black = get_all_directions(pieces)
     print("random_moves_white: ", list_directions_white)
     print("random_moves_black: ", list_directions_black)
-    '''
+    

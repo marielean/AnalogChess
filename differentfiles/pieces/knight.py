@@ -15,6 +15,12 @@ class Knight(Piece):
         self.edge_positions=[]
         self.set_weight(3)
 
+    def get_all_directions_per_piece(self, pieces):
+        
+
+        return self.edge_position_angles
+
+
     def draw_moves(self, pieces):
         Radius = math.sqrt(5)
         
