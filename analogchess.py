@@ -84,7 +84,7 @@ while not done:
                 sol = piece.ungrab(pieces)
                 
                 if sol != None:
-                    print("sol", sol)
+                    #print("sol", sol)
                     if sol:
                         turn_number += 1
                         

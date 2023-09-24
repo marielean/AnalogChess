@@ -172,11 +172,11 @@ class Piece:
                         if event.key == pygame.K_RETURN:
                             self.confirm(pieces)
                             print("confirm")
-                            return
+                            return True
                         elif event.key == pygame.K_ESCAPE:
                             self.cancel(pieces)
                             print("cancel")
-                            return
+                            return False
 
     def overlaps(self, piece):
         return dist((self.x, self.y), (piece.x, piece.y)) < self.radius * 2
