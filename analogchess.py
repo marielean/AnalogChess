@@ -51,8 +51,8 @@ while not done:
             for piece in pieces:
                 # print(piece.get_turn())
                 # print(piece.color, piece.letter, piece.x, piece.y)
-                print("turn_number: ", turn_number%2)
-                print("turn: ", whites_turn)
+                # print("turn_number: ", turn_number%2)
+                print("whites_turn: ", whites_turn)
                 if whites_turn:
                     if piece.color == white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
