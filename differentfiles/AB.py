@@ -6,16 +6,24 @@ def apply_granularity(coordinate, granularity=1):
     rounded = round(coordinate, granularity)
     return rounded
 
+def random_move():
+    """
+    Selects a random move from the valid moves for the current players turn
+    :param board: the current board being used for the game (Board)
+    :return: tuple representing move; format: ((sourceX, sourceY), (destX, destY))
+    """
+    pass
+
 # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori
 def get_all_directions(pieces):
     list_directions_white = []
     list_directions_black = []
     for p in pieces:
         if not p.deleted:
-            if p.color == (0,0,0):
+            if p.color == black:
                 direction = p.get_all_directions_per_piece(pieces)
                 list_directions_black.append([p.id, p.color, direction])
-            elif p.color == (255,255,255):
+            elif p.color == white:
                 direction = p.get_all_directions_per_piece(pieces)
                 list_directions_white.append([p.id, p.color, direction])
     
