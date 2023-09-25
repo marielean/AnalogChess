@@ -7,3 +7,11 @@ dark_gray = (222, 184, 135)
 RED_HIGHLIGHT = (240, 50, 50, 150)
 
 GREEN_HIGHLIGHT = (0, 255, 0, 80)
+
+
+pawn = "P"
+rook = "R"
+knight = "K"
+bishop = "B"
+queen = "Q"
+king = "K"

@@ -1,4 +1,5 @@
 import pygame
+from differentfiles.pieces.pawn import *
 from differentfiles.pieces import *
 from differentfiles.colors import *
 from differentfiles.utils import to_game_coords
@@ -55,7 +56,7 @@ while not done:
                 # print(piece.get_turn())
                 # print(piece.color, piece.letter, piece.x, piece.y)
                 # print("turn_number: ", turn_number%2)
-                print("whites_turn: ", whites_turn)
+                #print("whites_turn: ", whites_turn)
                 if whites_turn:
                     if piece.color == white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
@@ -84,26 +85,19 @@ while not done:
 
             new_pieces = []
             for piece in pieces:
-                sol = piece.ungrab(pieces)
-                print("sol", sol)
-                if sol != None:
-                    #print("sol", sol)
-                    if sol:
-                        turn_number += 1
-                        
-                        '''if whites_turn:
-                            whites_turn = False
-                        else:
-                            whites_turn = True'''
-                #print('game_player_status', game_player_status)
-                if piece.can_promote() and piece.id == "P":
+                piece.ungrab(pieces)
+                if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
-                elif not piece.can_promote() and not piece.id == "P":
+                else:
                     new_pieces.append(piece)
-            for piece in pieces:
-                piece.calc_paths(pieces)
+            pieces = new_pieces
             for piece in pieces:
                 whites_turn = piece.white_turn
+
+            for piece in pieces:
+                piece.calc_paths(pieces)
+            
+            
 
             ws, bs = evaluate(pieces)
             # print(ws, bs)

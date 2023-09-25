@@ -17,7 +17,17 @@ pygame.init()
 whites_turn = True
 radius = 0.7
 
+
 pieces = [
+    Pawn(0.5, 1.5, white),
+    Rook(0.5, 0.5, white),
+    King(4.5, 0.5, white),
+    Knight(1.5, 0.5, white),
+    Rook(0.5, 7.5, black),
+    Pawn(0.5, 6.5, black),
+]
+
+pieces1 = [
     Rook(0.5, 0.5, white),
     Rook(7.5, 0.5, white),
     Knight(1.5, 0.5, white),

@@ -3,6 +3,7 @@ import pygame
 from differentfiles.utils import width, height, dist, to_game_coords
 from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
 from differentfiles.AB import *
+from differentfiles.colors import *
 
 
 class Piece:
@@ -133,7 +134,7 @@ class Piece:
                 return
 
             font = pygame.font.SysFont("oldenglishtext", int(80))
-            confirm_text = font.render("Confirm?", True, (0, 0, 0))
+            confirm_text = font.render("Confirm?", True, black)
             draw_center_text(confirm_text)
 
             pygame.display.flip()
@@ -153,13 +154,13 @@ class Piece:
                             self.confirm(pieces)
                             print(self.id)
                                 
-                            if self.white_turn and self.color == (255, 255, 255):
+                            if self.white_turn and self.color == white:
                                 print("white turn, next turn black")
                                 self.white_turn = False
                                 for one_piece in pieces:
                                     one_piece.white_turn = False
                                 return True
-                            elif not self.white_turn and self.color == (0, 0, 0):
+                            elif not self.white_turn and self.color == black:
                                 print("black turn, next turn white")
                                 self.white_turn = True
                                 for one_piece in pieces:
