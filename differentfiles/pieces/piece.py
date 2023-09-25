@@ -367,9 +367,7 @@ class Piece:
             elif dist(
                 (self.x, self.y), (self.start_x, self.start_y)
             ) > first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2):
-                new_dist = first_hit_dist + 2 * math.sqrt(
-                    4 * piece.radius**2 - perp_dist**2
-                )
+                new_dist = first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2)
                 if not fake:
                     first_piece_hit.target()
 
