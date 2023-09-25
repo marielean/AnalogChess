@@ -149,6 +149,7 @@ class Pawn(Piece):
 
     def ungrab(self, pieces):
         if self.grabbed:
+            print("ungrab pawn", self.color) 
             attacked = False
             for piece in pieces:
                 if piece.targeted:
@@ -157,7 +158,7 @@ class Pawn(Piece):
             if self.direction:
                 if not attacked and (self.direction[0] != 0):
                     self.cancel(pieces)
-                    self.cancel(pieces)
+                    #self.cancel(pieces)
                     return
 
             super().ungrab(pieces)

@@ -15,11 +15,12 @@ pygame.init()
 
 
 pieces = [
+    Pawn(0.5, 1.5, white),
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
     Knight(1.5, 0.5, white),
     Rook(0.5, 7.5, black),
-    #Pawn(0.5, 6.5, black),
+    Pawn(0.5, 6.5, black),
 ]
 
 done = False
@@ -84,24 +85,25 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                #print("sol", sol)
+                print("sol", sol)
                 if sol != None:
                     #print("sol", sol)
                     if sol:
                         turn_number += 1
                         
-                        if whites_turn:
+                        '''if whites_turn:
                             whites_turn = False
                         else:
-                            whites_turn = True
+                            whites_turn = True'''
                 #print('game_player_status', game_player_status)
-                if piece.can_promote():
+                if piece.can_promote() and piece.id == "P":
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
-                else:
+                elif not piece.can_promote() and not piece.id == "P":
                     new_pieces.append(piece)
-            pieces = new_pieces
             for piece in pieces:
                 piece.calc_paths(pieces)
+            for piece in pieces:
+                whites_turn = piece.white_turn
 
             ws, bs = evaluate(pieces)
             # print(ws, bs)
@@ -149,6 +151,6 @@ while not done:
 
     
     list_directions_white, list_directions_black = get_all_directions(pieces)
-    print("random_moves_white: ", list_directions_white)
-    print("random_moves_black: ", list_directions_black)
+    #print("random_moves_white: ", list_directions_white)
+    #print("random_moves_black: ", list_directions_black)
     
