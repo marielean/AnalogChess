@@ -19,6 +19,7 @@ pieces = [
     King(4.5, 0.5, white),
     Knight(1.5, 0.5, white),
     Rook(0.5, 7.5, black),
+    #Pawn(0.5, 6.5, black),
 ]
 
 done = False
@@ -83,7 +84,7 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                
+                #print("sol", sol)
                 if sol != None:
                     #print("sol", sol)
                     if sol:
