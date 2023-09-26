@@ -9,6 +9,7 @@ from differentfiles.drawing import (
     draw_line_round_corners_polygon,
     draw_checkers,
     screen,
+    draw_center_text,
 )
 from differentfiles.AB import *
 
@@ -126,6 +127,16 @@ while not done:
                 else:
                     new_pieces.append(piece)
             pieces = new_pieces
+
+            for piece in pieces:
+                if piece.deleted and piece.id == king:
+                    done = True
+                    font = pygame.font.SysFont("oldenglishtext", int(80))
+                    confirm_text = font.render("Wiiiiiiin", True, black)
+                    draw_center_text(confirm_text)
+                    break
+
+            
             for piece in pieces:
                 whites_turn = piece.white_turn
 
