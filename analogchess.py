@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from differentfiles.pieces.pawn import *
 from differentfiles.pieces import *
 from differentfiles.colors import *
@@ -16,7 +16,7 @@ from differentfiles.AB import *
 pygame.init()
 
 
-pieces1 = [
+pieces = [
     Pawn(0.5, 1.5, white),
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
@@ -25,7 +25,7 @@ pieces1 = [
     Pawn(0.5, 6.5, black),
 ]
 
-pieces = [
+pieces1 = [
     Rook(0.5, 0.5, white),
     Rook(7.5, 0.5, white),
     Knight(1.5, 0.5, white),
@@ -121,7 +121,13 @@ while not done:
 
             new_pieces = []
             for piece in pieces:
-                piece.ungrab(pieces)
+                sol = piece.ungrab(pieces)
+                print(sol)
+                if sol != None:
+                    if whites_turn:
+                        whites_turn = False
+                    else:
+                        whites_turn = True
                 if piece.can_promote():
                     new_pieces.append(Queen(piece.x, piece.y, piece.color))
                 else:
@@ -134,11 +140,13 @@ while not done:
                     font = pygame.font.SysFont("oldenglishtext", int(80))
                     confirm_text = font.render("Wiiiiiiin", True, black)
                     draw_center_text(confirm_text)
-                    break
+                    pygame.display.flip()
 
             
+            '''
             for piece in pieces:
                 whites_turn = piece.white_turn
+            '''
 
             for piece in pieces:
                 piece.calc_paths(pieces)
