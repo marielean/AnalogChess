@@ -162,7 +162,7 @@ class Pawn(Piece):
                     return
 
             sol = super().ungrab(pieces)
-            print("pawn ungrab", sol)
+            #print("pawn ungrab", sol)
             return sol
 
     def draw_paths(self, pieces):

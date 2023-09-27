@@ -16,7 +16,7 @@ from differentfiles.AB import *
 pygame.init()
 
 
-pieces = [
+pieces1 = [
     Pawn(0.5, 1.5, white),
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
@@ -25,7 +25,7 @@ pieces = [
     Pawn(0.5, 6.5, black),
 ]
 
-pieces1 = [
+pieces = [
     Rook(0.5, 0.5, white),
     Rook(7.5, 0.5, white),
     Knight(1.5, 0.5, white),

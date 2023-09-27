@@ -152,16 +152,16 @@ class Piece:
                             < self.radius
                         ):
                             self.confirm(pieces)
-                            print(self.id)
+                            #print(self.id)
                                 
                             if self.white_turn and self.color == white:
-                                print("white turn, next turn black")
+                                #print("white turn, next turn black")
                                 self.white_turn = False
                                 for one_piece in pieces:
                                     one_piece.white_turn = False
                                 return True
                             elif not self.white_turn and self.color == black:
-                                print("black turn, next turn white")
+                                #print("black turn, next turn white")
                                 self.white_turn = True
                                 for one_piece in pieces:
                                     one_piece.white_turn = True
