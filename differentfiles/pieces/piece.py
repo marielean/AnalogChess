@@ -152,7 +152,7 @@ class Piece:
                             < self.radius
                         ):
                             self.confirm(pieces)
-                            #print(self.id)
+                            print("Pezzo giocato", self.id)
                                 
                             if self.white_turn and self.color == white:
                                 #print("white turn, next turn black")

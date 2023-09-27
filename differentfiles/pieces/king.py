@@ -15,7 +15,7 @@ class King(Piece):
     def __init__(self, x, y, c):
         super().__init__(x, y, c)
         self.set_letter("♔")
-        self.set_id("Ki")
+        self.set_id(king)
         self.set_weight(100)
 
     def get_all_directions_per_piece(self, pieces):

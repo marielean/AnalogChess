@@ -122,7 +122,7 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                print(sol)
+                #print(sol)
                 if sol != None:
                     if whites_turn:
                         whites_turn = False

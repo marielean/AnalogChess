@@ -8,7 +8,7 @@ class Pawn(Piece):
     def __init__(self, x, y, d):
         super().__init__(x, y, d)
         self.set_letter("♙")
-        self.set_id("P")
+        self.set_id(pawn)
         self.set_weight(1)
 
     def get_all_directions_per_piece(self, pieces):
