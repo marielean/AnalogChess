@@ -16,7 +16,7 @@ from differentfiles.AB import *
 pygame.init()
 
 
-pieces1 = [
+pieces = [
     Pawn(0.5, 1.5, white),
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
@@ -25,7 +25,7 @@ pieces1 = [
     Pawn(0.5, 6.5, black),
 ]
 
-pieces = [
+pieces1 = [
     Rook(0.5, 0.5, white),
     Rook(7.5, 0.5, white),
     Knight(1.5, 0.5, white),
@@ -93,25 +93,16 @@ while not done:
                 # print(piece.color, piece.letter, piece.x, piece.y)
                 # print("turn_number: ", turn_number%2)
                 #print("whites_turn: ", whites_turn)
-                if whites_turn:
+                piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                '''if whites_turn:
                     if piece.color == white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 else:
                     if piece.color != white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                        
+                        '''
                 
-                '''
-                if whites_turn:
-                    if piece.color == white:
-                        whites_turn = False
-                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                else:
-                    if piece.color != white:
-                        whites_turn = True
-                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 
-                '''
                 
         elif event.type == pygame.MOUSEMOTION:
             for piece in pieces:
@@ -122,7 +113,7 @@ while not done:
             new_pieces = []
             for piece in pieces:
                 sol = piece.ungrab(pieces)
-                #print(sol)
+                # print(sol)
                 if sol != None:
                     if whites_turn:
                         whites_turn = False
@@ -150,6 +141,12 @@ while not done:
 
             for piece in pieces:
                 piece.calc_paths(pieces)
+                if piece.id == knight:
+                    angles, points = piece.get_all_directions_per_piece(pieces)
+                    print("color: ", piece.color)
+                    print("point: ", piece.x, piece.y)
+                    print("angles: ", angles)
+                    print("points: ", points)
             
             
 
@@ -198,7 +195,7 @@ while not done:
     see_through2.fill((0, 0, 0, 0))
 
     
-    list_directions_white, list_directions_black = get_all_directions(pieces)
+    #list_directions_white, list_directions_black = get_all_directions(pieces)
     #print("random_moves_white: ", list_directions_white)
     #print("random_moves_black: ", list_directions_black)
     

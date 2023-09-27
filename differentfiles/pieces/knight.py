@@ -16,7 +16,7 @@ class Knight(Piece):
         self.set_weight(3)
 
     def get_all_directions_per_piece(self, pieces):
-        return self.edge_position_angles
+        return self.edge_position_angles, self.edge_positions
 
 
     def draw_moves(self, pieces):

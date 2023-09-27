@@ -1,3 +1,5 @@
+import math
+
 black = (0, 0, 0)
 white = (255, 255, 255)
 light_gray = (255, 222, 173)
@@ -15,3 +17,5 @@ knight = "K"
 bishop = "B"
 queen = "Q"
 king = "Ki"
+
+Radius = math.sqrt(5)
