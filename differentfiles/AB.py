@@ -14,6 +14,37 @@ def random_move():
     """
     pass
 
+def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
+    list_points = []
+    x_distance = abs(x_start - x_end)
+    y_distance = abs(y_start - y_end)
+    for i in range(granularity):
+        x_new = x_start + (x_distance/granularity)*i
+        y_new = y_start + (y_distance/granularity)*i
+        list_points.append((x_new, y_new))
+    return list_points
+
+
+
+def get_all_moves_from_distance(list_pieces):
+    #print("list_pieces: ", list_pieces)
+    list_moves = []
+    for d in list_pieces:
+        #print("d: ", d)
+        for i in range(len(d[3])):
+            list_point_x = []
+            list_point_y = []
+            #print("i: ", d[3][i])
+            #print(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
+            list_point = get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
+            print("list point per piece: ", d[0], d[1], d[2], list_point)
+            # list_moves.append(get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1]))
+            for j in range(len(list_point)):
+                list_moves.append([d[0], d[1], d[2], list_point[j]])
+
+
+    return list_moves
+
 # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori
 def get_all_directions(pieces):
     list_directions_white = []
@@ -22,10 +53,10 @@ def get_all_directions(pieces):
         if not p.deleted:
             if p.color == black:
                 direction = p.get_all_directions_per_piece(pieces)
-                list_directions_black.append([p.id, p.color, direction])
+                list_directions_black.append([p.id, p.color, (p.x, p.y), direction])
             elif p.color == white:
                 direction = p.get_all_directions_per_piece(pieces)
-                list_directions_white.append([p.id, p.color, direction])
+                list_directions_white.append([p.id, p.color, (p.x, p.y), direction])
     
     return list_directions_white, list_directions_black
 
