@@ -14,13 +14,22 @@ def random_move():
     """
     pass
 
+
+# grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
+# granularity è il numero di punti che si vogliono ottenere per ogni direzione
 def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
     list_points = []
     x_distance = abs(x_start - x_end)
     y_distance = abs(y_start - y_end)
-    for i in range(granularity):
-        x_new = x_start + (x_distance/granularity)*i
-        y_new = y_start + (y_distance/granularity)*i
+    for i in range(1, granularity+1):
+        if x_distance != 0:
+            x_new = x_start + (x_distance/granularity)*i
+        else:
+            x_new = x_start
+        if y_distance != 0:
+            y_new = y_start + (y_distance/granularity)*i
+        else:
+            y_new = y_start
         list_points.append((x_new, y_new))
     return list_points
 
@@ -37,7 +46,7 @@ def get_all_moves_from_distance(list_pieces):
             #print("i: ", d[3][i])
             #print(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
             list_point = get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
-            print("list point per piece: ", d[0], d[1], d[2], list_point)
+            # print("list point per piece: ", d[0], d[1], d[2], list_point)
             # list_moves.append(get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1]))
             for j in range(len(list_point)):
                 list_moves.append([d[0], d[1], d[2], list_point[j]])

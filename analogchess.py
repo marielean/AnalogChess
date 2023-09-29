@@ -196,10 +196,10 @@ while not done:
 
     
     list_directions_white, list_directions_black = get_all_directions(pieces)
-    print("random_moves_white: ", list_directions_white)
-    print("random_moves_black: ", list_directions_black)
+    print("list_directions_white: ", list_directions_white)
+    print("list_directions_black: ", list_directions_black)
 
     print("\n\n\n")
     all_point_white = get_all_moves_from_distance(list_directions_white)
-    print("all_moves_white: ", all_point_white)
+    print("all_point_white: ", all_point_white)
     
