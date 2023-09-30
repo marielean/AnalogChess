@@ -15,6 +15,14 @@ def random_move():
     pass
 
 
+def max_alpha_beta():
+    max_value = -math.inf
+    pass
+
+def min_alpha_beta():
+    min_value = math.inf
+    pass 
+
 # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
 # granularity è il numero di punti che si vogliono ottenere per ogni direzione
 def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
@@ -49,6 +57,8 @@ def get_all_moves_from_distance(list_pieces):
             # print("list point per piece: ", d[0], d[1], d[2], list_point)
             # list_moves.append(get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1]))
             for j in range(len(list_point)):
+                # lista nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]], 
+                # dove l'ultima lista corrisponde ai punti possibli per una direzione direzione
                 list_moves.append([d[0], d[1], d[2], list_point[j]])
 
 
@@ -70,14 +80,24 @@ def get_all_directions(pieces):
     return list_directions_white, list_directions_black
 
 
-def evaluate(pieces):
-    white_score = 0
-    black_score = 0
+def evaluate_position(pieces):
+    white_score = 0 # punteggio bianco con valore positivo
+    black_score = 0 # punteggio nero con valore negativo
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            white_score += piece.x + piece.y
+        if piece.color == black and piece.deleted == False:
+            black_score -= piece.x + piece.y
+    return white_score, black_score
+
+def evaluate_weith(pieces):
+    white_score = 0 # punteggio bianco con valore positivo
+    black_score = 0 # punteggio nero con valore negativo
     for piece in pieces:
         if piece.color == white and piece.deleted == False:
             white_score += piece.weight
         if piece.color == black and piece.deleted == False:
-            black_score += piece.weight
+            black_score -= piece.weight
     return white_score, black_score
 
 
