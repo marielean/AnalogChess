@@ -143,15 +143,17 @@ while not done:
                 piece.calc_paths(pieces)
                 if piece.id == knight:
                     angles, points = piece.get_all_directions_per_piece(pieces)
+                    '''
                     print("color: ", piece.color)
                     print("point: ", piece.x, piece.y)
                     print("angles: ", angles)
                     print("points: ", points)
-            
+                    '''
+            print("white evaluate: ", evaluate_position(pieces)[0])
+            print("black evaluate: ", evaluate_position(pieces)[1])         
             
 
-            ws, bs = evaluate(pieces)
-            # print(ws, bs)
+            
             
 
     """
@@ -196,10 +198,10 @@ while not done:
 
     
     list_directions_white, list_directions_black = get_all_directions(pieces)
-    print("list_directions_white: ", list_directions_white)
-    print("list_directions_black: ", list_directions_black)
+    # print("list_directions_white: ", list_directions_white)
+    # print("list_directions_black: ", list_directions_black)
 
-    print("\n\n\n")
+    #print("\n\n\n")
     all_point_white = get_all_moves_from_distance(list_directions_white)
-    print("all_point_white: ", all_point_white)
+    # print("all_point_white: ", all_point_white)
     
