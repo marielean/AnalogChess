@@ -80,6 +80,31 @@ def get_all_directions(pieces):
     return list_directions_white, list_directions_black
 
 
+def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
+    
+    # Terminating condition. i.e
+    # leaf node is reached
+    if depth == 3:
+        return 
+    
+    if maximizingPlayer:
+        best = -math.inf
+        
+        # Recur for left and right children
+        for item in nodes:
+            new_pieces = []
+            for p in pieces:
+                if p.id == item[0] and p.color == item[1] and p.x == item[2][0] and p.y == item[2][1]:
+                  new_pieces.append()  
+            val = alpha_beta_pruning(depth + 1, item, False, nodes, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+            
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+        return best
+
 def evaluate_position(pieces):
     white_score = 0 # punteggio bianco con valore positivo
     black_score = 0 # punteggio nero con valore negativo
