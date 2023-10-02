@@ -63,3 +63,21 @@ __King:__ Moves 0-1 squares orthogonally or 0-sqrt(2) squares diagonally. It is 
  __Warning: This code is fucking awful.__
  
 Do not expect the code to be stable under any modifications, but you can try if you want I guess. Also there are barely any comments sorry. I am in Electrical Engineering and I like writing shitty code to piss off my Computer Science friends.
+
+## EURISTICHE
+
+Il peso del cavallo è 3. Il suo valore però varia di 0.16 per ogni casella controllata in più rispetto a 4.
+Peso_cavallo = 3 + 1/granularità*(numero_case_controllate - 4*granularità)
+
+NOTA: con case controllate si intendono le case in cui si potrebbe muovere (se c'è un pezzo dello stesso colore non ci può andare mentre se ce n'è uno dell'altro colore sì)
+
+NOTA 2: il valore 4*granularità (o quello che è) dovrebbe in realtà essere un parametro che rappresenti l'area media coperta dal pezzo
+
+Pesi altri pezzi:
+peso_cavallo = 3 + 1/granularità*(numero_case_controllate - 4*granularità)
+peso_pedone = 1 + 1/granularità*(numero_case_controllate - 2*granularità)
+peso_alfiere = 3 + 1/granularità*(numero_case_controllate - 4*granularità)
+peso_torre = 5 + 1/granularità*(numero_case_controllate - 6*granularità)
+peso_regina = 9 + 1/granularità*(numero_case_controllate - 10*granularità)
+peso_re = 60
+
