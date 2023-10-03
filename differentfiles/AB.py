@@ -25,9 +25,31 @@ def min_alpha_beta():
     min_value = math.inf
     pass 
 
+
+# metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
+def apply_move(pieces, move):
+    for p in pieces:
+        if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
+            p.x = move[3][0]
+            p.y = move[3][1]
+            break
+    return pieces
+
+# metodo che resituisce se la partita è finita 
+def is_terminal(pieces, maximizingPlayer):
+    if maximizingPlayer:
+        for p in pieces:
+            if p.color == black and p.id == "K" and p.deleted:
+                return True, "max ha vinto"
+    else:
+        for p in pieces:
+            if p.color == white and p.id == "K" and p.deleted:
+                return True, "min ha vinto"
+    return False
+
+
 # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
 # granularity è il numero di punti che si vogliono ottenere per ogni direzione
-
 def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
     list_points = []
     dx = (x_end - x_start)/granularity
@@ -92,12 +114,12 @@ def get_all_directions(pieces):
     return list_directions_white, list_directions_black
 
 
-def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
+def alpha_beta_search(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
     
     # Terminating condition. i.e
     # leaf node is reached
-    if depth == 3:
-        return 
+    if depth == 3 or is_terminal(pieces, maximizingPlayer):
+        return utility(pieces, maximizingPlayer)
     
     if maximizingPlayer:
         best = -math.inf
@@ -108,7 +130,7 @@ def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, 
             for p in pieces:
                 if p.id == item[0] and p.color == item[1] and p.x == item[2][0] and p.y == item[2][1]:
                   new_pieces.append()  
-            val = alpha_beta_pruning(depth + 1, item, False, nodes, alpha, beta)
+            val = alpha_beta_search(depth + 1, item, False, nodes, alpha, beta)
             best = max(best, val)
             alpha = max(alpha, best)
             
@@ -117,7 +139,27 @@ def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, 
                 break
         return best
 
-def evaluate_position(pieces):
+    else:
+        best = math.inf
+        
+        # Recur for left and
+        # right children
+        for item in nodes:
+            val = alpha_beta_search(depth + 1, item, True, nodes, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+            
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+        return best
+
+
+# utility function
+def utility(pieces, maximizingPlayer):
+    return evaluate_position(pieces, maximizingPlayer)
+
+def evaluate_position(pieces, maximizingPlayer):
     white_score = 0 # punteggio bianco con valore positivo
     black_score = 0 # punteggio nero con valore negativo
     for piece in pieces:
@@ -125,9 +167,11 @@ def evaluate_position(pieces):
             white_score += piece.x + piece.y
         if piece.color == black and piece.deleted == False:
             black_score -= piece.x + piece.y
-    return white_score, black_score
+    # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
+    return white_score if maximizingPlayer else black_score 
 
-def evaluate_weith(pieces):
+
+def evaluate_weith(pieces, maximizingPlayer):
     white_score = 0 # punteggio bianco con valore positivo
     black_score = 0 # punteggio nero con valore negativo
     for piece in pieces:
@@ -135,7 +179,7 @@ def evaluate_weith(pieces):
             white_score += piece.weight
         if piece.color == black and piece.deleted == False:
             black_score -= piece.weight
-    return white_score, black_score
+    return white_score if maximizingPlayer else black_score
 
 
 #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
