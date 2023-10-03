@@ -27,40 +27,44 @@ def min_alpha_beta():
 
 # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
 # granularity è il numero di punti che si vogliono ottenere per ogni direzione
-# def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
-#     list_points = []
-#     x_distance = abs(x_start - x_end)
-#     y_distance = abs(y_start - y_end)
-#     for i in range(1, granularity+1):
-#         if x_distance != 0:
-#             x_new = x_start + (x_distance/granularity)*i
-#         else:
-#             x_new = x_start
-#         if y_distance != 0:
-#             y_new = y_start + (y_distance/granularity)*i
-#         else:
-#             y_new = y_start
-#         list_points.append((x_new, y_new))
-#     return list_points
+'''
+def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
+    list_points = []
+    x_distance = abs(x_start - x_end)
+    y_distance = abs(y_start - y_end)
+    for i in range(1, granularity+1):
+        if x_distance != 0:
+             x_new = x_start + (x_distance/granularity)*i
+        else:
+             x_new = x_start
+        if y_distance != 0:
+             y_new = y_start + (y_distance/granularity)*i
+        else:
+             y_new = y_start
+        list_points.append((x_new, y_new))
+    return list_points
+'''
 
 # Metodo leggermente più efficiente (penso)
+
 def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
-    n = floor(abs(x_end-x_start)/granularity) # number of points for x and y (only 45 or 0 degree movements # are avaiables)
+    # n = floor(abs(x_end-x_start)/granularity) # number of points for x and y (only 45 or 0 degree movements # are avaiables)
     
     # Calculation on all the possible x_values
     if (x_end-x_start)!=0:
-        x_list = np.arange(1, n+1)/(x_end-x_start)+x_start
+        x_list = np.arange(1, granularity+1)/(x_end-x_start)+x_start
     else:
-        x_list = np.full(n, x_start)
+        x_list = np.full(granularity, x_start)
     
     # Calculation on all the possible x_values
     if (y_end-y_start)!=0:
-        y_list = np.arange(1, n+1)/(y_end-y_start)+y_start
+        y_list = np.arange(1, granularity+1)/(y_end-y_start)+y_start
     else:
-        y_list = np.full(n, y_start)
+        y_list = np.full(granularity, y_start)
     
     list_points = [(x_list[i],y_list[i]) for i in range(len(x_list))]
     return list_points
+
 
 
 def get_all_moves_from_distance(list_pieces):
