@@ -94,13 +94,14 @@ while not done:
                 # print("turn_number: ", turn_number%2)
                 #print("whites_turn: ", whites_turn)
                 piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                '''if whites_turn:
+                '''
+                if whites_turn:
                     if piece.color == white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 else:
                     if piece.color != white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                        '''
+                '''
                 
                 
                 
