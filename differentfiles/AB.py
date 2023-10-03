@@ -30,63 +30,49 @@ def min_alpha_beta():
 
 def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
     list_points = []
-    x_distance = abs(x_start - x_end)
-    y_distance = abs(y_start - y_end)
-    for i in range(1, granularity+1):
-        if x_distance != 0:
-             x_new = x_start + (x_distance/granularity)*i
-        else:
-             x_new = x_start
-        if y_distance != 0:
-             y_new = y_start + (y_distance/granularity)*i
-        else:
-             y_new = y_start
-        list_points.append((x_new, y_new))
+    dx = (x_end - x_start)/granularity
+    dy = (y_end - y_start)/granularity
+
+    x_new = dx*np.arange(1, granularity+1) + x_start
+    y_new = dy*np.arange(1, granularity+1) + y_start
+    list_points = [(x_new[i], y_new[i]) for i in range(len(x_new))]
+
+    # for i in range(1, granularity+1):
+    #     if dx != 0:
+    #          x_new = x_start + dx*i # 
+    #     else:
+    #          x_new = x_start
+    #     if dy != 0:
+    #          y_new = y_start + dy*i #
+    #     else:
+    #          y_new = y_start
+    #     list_points.append((x_new, y_new))
     return list_points
-
-
-# Metodo leggermente più efficiente (penso)
-
-'''
-def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
-    # n = floor(abs(x_end-x_start)/granularity) # number of points for x and y (only 45 or 0 degree movements # are avaiables)
-    
-    # Calculation on all the possible x_values
-    if (x_end-x_start)!=0:
-        x_list = np.arange(x_start, x_end)/(x_end-x_start)+x_start
-    else:
-        x_list = np.full(granularity, x_start)
-    
-    # Calculation on all the possible x_values
-    if (y_end-y_start)!=0:
-        y_list = np.arange(x_start, x_end)/(y_end-y_start)+y_start
-    else:
-        y_list = np.full(granularity, y_start)
-    
-    list_points = [(x_list[i],y_list[i]) for i in range(len(x_list))]
-    return list_points
-    '''
-
 
 
 def get_all_moves_from_distance(list_pieces):
     #print("list_pieces: ", list_pieces)
     list_moves = []
-    for d in list_pieces:
+
+    for curr_piece in list_pieces:
+        # curr_piece is [piece_name, color, current_position]
+
+        list_moves.append([curr_piece[0], curr_piece[1], curr_piece[2], []]) # the last empty list will contain the possible future moves
+
         #print("d: ", d)
-        for i in range(len(d[3])):
-            list_point_x = []
-            list_point_y = []
+        for final_pos in curr_piece[3]: 
             #print("i: ", d[3][i])
             #print(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
-            list_point = get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1])
+            list_point = get_points_from_distance(curr_piece[2][0], final_pos[0], curr_piece[2][1], final_pos[1])
             # print("list point per piece: ", d[0], d[1], d[2], list_point)
             # list_moves.append(get_points_from_distance(d[2][0], d[3][i][0], d[2][1], d[3][i][1]))
-            for j in range(len(list_point)):
-                # lista nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]], 
-                # dove l'ultima lista corrisponde ai punti possibli per una direzione direzione
-                list_moves.append([d[0], d[1], d[2], list_point[j]])
 
+            list_moves[-1][-1] += list_point # list_moves[-1][-1] is the avaiable moves list of the last inserted piece
+
+            # for j in range(len(list_point)):
+            #     # lista nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]], 
+            #     # dove l'ultima lista corrisponde ai punti possibli per una direzione direzione
+            #     list_moves.append([d[0], d[1], d[2], list_point[j]])
 
     return list_moves
 
