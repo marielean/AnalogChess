@@ -21,7 +21,9 @@ def random_move(pieces, whitePlayer):
         list_moves = get_all_moves_from_distance(list_directions_white)
     else:
         list_moves = get_all_moves_from_distance(list_directions_black)
-    move = random.choice(list_moves)
+    random_piece = random.choice(list_moves)
+    r_move = random.choice(random_piece[-1])
+    move = [random_piece[0], random_piece[1], random_piece[2], r_move]
     return move
 
 
