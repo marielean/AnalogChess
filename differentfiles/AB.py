@@ -1,6 +1,7 @@
 from .colors import *
 import numpy as np
 from math import floor
+import random
 
 depth = 2
 
@@ -8,13 +9,20 @@ def apply_granularity(coordinate, granularity=1):
     rounded = round(coordinate, granularity)
     return rounded
 
-def random_move():
+def random_move(pieces, whitePlayer):
     """
     Selects a random move from the valid moves for the current players turn
     :param board: the current board being used for the game (Board)
     :return: tuple representing move; format: ((sourceX, sourceY), (destX, destY))
     """
-    pass
+    list_directions_white, list_directions_black = get_all_directions(pieces)
+    list_moves = get_all_moves_from_distance(list_directions_white)
+    if whitePlayer:
+        list_moves = get_all_moves_from_distance(list_directions_white)
+    else:
+        list_moves = get_all_moves_from_distance(list_directions_black)
+    move = random.choice(list_moves)
+    return move
 
 
 def max_alpha_beta():

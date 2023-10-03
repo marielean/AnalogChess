@@ -94,15 +94,18 @@ while not done:
                 # print(piece.color, piece.letter, piece.x, piece.y)
                 # print("turn_number: ", turn_number%2)
                 #print("whites_turn: ", whites_turn)
-                piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                '''
+                # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                
                 if whites_turn:
                     if piece.color == white:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 else:
                     if piece.color != white:
-                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                '''
+                        #piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                        move = random_move(pieces, whites_turn)
+                        print("random_move: ", move)
+                        apply_move(pieces, move)
+                        whites_turn = True
                 
                 
                 
@@ -197,11 +200,11 @@ while not done:
     see_through2.fill((0, 0, 0, 0))
 
     
-    list_directions_white, list_directions_black = get_all_directions(pieces)
+    # list_directions_white, list_directions_black = get_all_directions(pieces)
     # print("list_directions_white: ", list_directions_white)
     # print("list_directions_black: ", list_directions_black)
 
-    print("\n\n\n")
-    all_point_white = get_all_moves_from_distance(list_directions_white)
-    print("all_point_white: ", all_point_white)
+    # print("\n\n\n")
+    # all_point_white = get_all_moves_from_distance(list_directions_white)
+    # print("all_point_white: ", all_point_white)
     
