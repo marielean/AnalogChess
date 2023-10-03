@@ -1,4 +1,4 @@
-import pygame, time
+import pygame, time, random
 from differentfiles.pieces.pawn import *
 from differentfiles.pieces import *
 from differentfiles.colors import *
@@ -21,6 +21,7 @@ pieces = [
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
     #Knight(1.5, 0.5, white),
+    King(4.5, 7.5, black),
     Rook(0.5, 7.5, black),
     Pawn(0.5, 6.5, black),
 ]
@@ -149,9 +150,7 @@ while not done:
                     print("point: ", piece.x, piece.y)
                     print("angles: ", angles)
                     print("points: ", points)
-                    '''
-            print("white evaluate: ", evaluate_position(pieces)[0])
-            print("black evaluate: ", evaluate_position(pieces)[1])         
+                    '''     
             
 
             
