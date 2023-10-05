@@ -202,11 +202,13 @@ while not done:
     see_through2.fill((0, 0, 0, 0))
 
     
-    # list_directions_white, list_directions_black = get_all_directions(pieces)
+    # list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
     # print("list_directions_white: ", list_directions_white)
     # print("list_directions_black: ", list_directions_black)
 
     # print("\n\n\n")
     # all_point_white = get_all_moves_from_distance(list_directions_white)
     # print("all_point_white: ", all_point_white)
+
+    # print("action: ", actions(pieces, whites_turn))
     

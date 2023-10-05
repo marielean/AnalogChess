@@ -15,7 +15,7 @@ def random_move(pieces, whitePlayer):
     :param board: the current board being used for the game (Board)
     :return: tuple representing move; format: ((sourceX, sourceY), (destX, destY))
     """
-    list_directions_white, list_directions_black = get_all_directions(pieces)
+    list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
     list_moves = get_all_moves_from_distance(list_directions_white)
     if whitePlayer:
         list_moves = get_all_moves_from_distance(list_directions_white)
@@ -82,6 +82,7 @@ def get_points_from_distance(x_start, x_end, y_start, y_end, granularity=2):
     return list_points
 
 
+# restituisce tutte le mosse possibili per tutti i pezzi presenti nella list_pieces nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
 def get_all_moves_from_distance(list_pieces):
     #print("list_pieces: ", list_pieces)
     list_moves = []
@@ -108,8 +109,8 @@ def get_all_moves_from_distance(list_pieces):
 
     return list_moves
 
-# restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori
-def get_all_directions(pieces):
+# restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
+def get_all_directions_all_in_one(pieces):
     list_directions_white = []
     list_directions_black = []
     for p in pieces:
@@ -123,9 +124,7 @@ def get_all_directions(pieces):
     
     return list_directions_white, list_directions_black
 
-
-def alpha_beta_search(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
-    
+def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
     # Terminating condition. i.e
     # leaf node is reached
     if depth == 3 or is_terminal(pieces, maximizingPlayer):
@@ -163,6 +162,66 @@ def alpha_beta_search(depth, node_index, maximizingPlayer, nodes, alpha, beta, p
             if beta <= alpha:
                 break
         return best
+    
+# actions: restituisce la lista di azioni possibili in uno stato della scacchiera diviso per giocatore... 
+def actions(pieces, maximizingPlayer):
+    list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
+    moves = []
+    i = 0
+    if maximizingPlayer:
+        list_moves = get_all_moves_from_distance(list_directions_white)
+        for item in list_moves:
+            for i in range(len(item[-1])):
+                moves.append([item[0], item[1], item[2], item[-1][i]])
+        return moves
+    else:
+        list_moves = get_all_moves_from_distance(list_directions_black)
+        for item in list_moves:
+            for i in range(len(item[-1])):
+                moves.append([item[0], item[1], item[2], item[-1][i]])
+        return moves
+    
+# metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
+# pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
+# depth è la profondità dell'albero di ricerca
+def alpha_beta_search(pieces, depth, maximizingPlayer):
+    '''
+    Metodo che implementa la funzione alpha-beta.
+    Suggerimento: devono essere utilizzati i metodi:
+    - game.is_terminal: controlla che lo stato sia terminale
+    - game.utility: restituisce l'utilità di uno stato per un giocatore
+    - game.actions: restituisce la lista di azioni possibili in uno stato
+    - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
+    '''
+
+    def max_value(pieces, depth, alpha, beta, maximizingPlayer):
+        if depth == 0 or is_terminal(pieces):
+            return utility(pieces, maximizingPlayer)
+        v = -math.inf
+        actions = actions(pieces, maximizingPlayer)
+
+        for a in actions:
+            v = max(v, min_value(apply_move(pieces, a), depth - 1, alpha, beta, maximizingPlayer))
+            if v >= beta:
+                return v
+            alpha = max(alpha, v)
+        return v
+
+    def min_value(pieces, depth, alpha, beta, maximizingPlayer):
+        if depth == 0 or is_terminal(pieces):
+            return utility(pieces, maximizingPlayer)
+        v = math.inf
+        action_s = actions(pieces, maximizingPlayer)
+
+        for a in action_s:
+            v = min(v, max_value(apply_move(pieces, a), depth - 1, alpha, beta, maximizingPlayer))
+            if v <= alpha:
+                return v
+            beta = min(beta, v)
+        return v
+
+    # Body di alpha_beta_pruning
+    return max(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer))
 
 
 # utility function
