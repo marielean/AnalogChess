@@ -3,6 +3,7 @@ from differentfiles.colors import *
 from differentfiles.utils import *
 from differentfiles.drawing import arc, see_through, see_through2, pygame_draw_circle
 from differentfiles.AB import *
+import numpy as np
 
 
 class Knight(Piece):
@@ -16,7 +17,13 @@ class Knight(Piece):
         self.set_weight(3)
 
     def get_all_directions_per_piece(self, pieces):
-        return self.edge_position_angles, self.edge_positions
+        list_arc = []
+        if self.draw_first_arc:
+            list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(0,len(self.edge_position_angles),2)]
+        else:
+            list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(1,len(self.edge_position_angles)-1,2)]
+            list_arc.append((self.edge_position_angles[-1]-2*np.pi, self.edge_position_angles[0]))
+        return list_arc
 
 
     def draw_moves(self, pieces):

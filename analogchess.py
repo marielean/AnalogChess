@@ -20,7 +20,8 @@ pieces = [
     Pawn(0.5, 1.5, white),
     Rook(0.5, 0.5, white),
     King(4.5, 0.5, white),
-    #Knight(1.5, 0.5, white),
+    Knight(1.5, 0.5, white),
+    Knight(6.5, 7.5, black),
     King(4.5, 7.5, black),
     Rook(0.5, 7.5, black),
     Pawn(0.5, 6.5, black),
@@ -101,15 +102,13 @@ while not done:
                         piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                 else:
                     if piece.color != white:
-                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                        '''
+                        # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                        
                         move = random_move(pieces, whites_turn)
                         print("random_move: ", move)
                         apply_move(pieces, move)
                         whites_turn = True
-                        '''
-                
-                
+                               
                 
         elif event.type == pygame.MOUSEMOTION:
             for piece in pieces:
@@ -148,14 +147,6 @@ while not done:
 
             for piece in pieces:
                 piece.calc_paths(pieces)
-                if piece.id == knight:
-                    angles, points = piece.get_all_directions_per_piece(pieces)
-                    '''
-                    print("color: ", piece.color)
-                    print("point: ", piece.x, piece.y)
-                    print("angles: ", angles)
-                    print("points: ", points)
-                    '''     
             
 
             
