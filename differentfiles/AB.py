@@ -3,38 +3,12 @@ import numpy as np
 from math import floor
 import random
 
-depth = 2
+
 
 def apply_granularity(coordinate, granularity=1):
     rounded = round(coordinate, granularity)
     return rounded
 
-def random_move(pieces, whitePlayer):
-    """
-    Selects a random move from the valid moves for the current players turn
-    :param board: the current board being used for the game (Board)
-    :return: tuple representing move; format: ((sourceX, sourceY), (destX, destY))
-    """
-    list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
-    # list_moves = get_all_moves_from_distance(list_directions_white)
-    list_moves = None
-    if whitePlayer:
-        list_moves = get_all_moves_from_distance(list_directions_white)
-    else:
-        list_moves = get_all_moves_from_distance(list_directions_black)
-    random_piece = random.choice(list_moves)
-    r_move = random.choice(random_piece[-1])
-    move = [random_piece[0], random_piece[1], random_piece[2], r_move]
-    return move
-
-
-def max_alpha_beta():
-    max_value = -math.inf
-    pass
-
-def min_alpha_beta():
-    min_value = math.inf
-    pass 
 
 
 # metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
@@ -129,44 +103,7 @@ def get_all_directions_all_in_one(pieces):
     
     return list_directions_white, list_directions_black
 
-def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
-    # Terminating condition. i.e
-    # leaf node is reached
-    if depth == 3 or is_terminal(pieces, maximizingPlayer):
-        return utility(pieces, maximizingPlayer)
-    
-    if maximizingPlayer:
-        best = -math.inf
-        
-        # Recur for left and right children
-        for item in nodes:
-            new_pieces = []
-            for p in pieces:
-                if p.id == item[0] and p.color == item[1] and p.x == item[2][0] and p.y == item[2][1]:
-                  new_pieces.append()  
-            val = alpha_beta_search(depth + 1, item, False, nodes, alpha, beta)
-            best = max(best, val)
-            alpha = max(alpha, best)
-            
-            # Alpha Beta Pruning
-            if beta <= alpha:
-                break
-        return best
 
-    else:
-        best = math.inf
-        
-        # Recur for left and
-        # right children
-        for item in nodes:
-            val = alpha_beta_search(depth + 1, item, True, nodes, alpha, beta)
-            best = min(best, val)
-            beta = min(beta, best)
-            
-            # Alpha Beta Pruning
-            if beta <= alpha:
-                break
-        return best
     
 # actions: restituisce la lista di azioni possibili in uno stato della scacchiera diviso per giocatore... 
 def actions(pieces, maximizingPlayer):
@@ -185,6 +122,43 @@ def actions(pieces, maximizingPlayer):
             for i in range(len(item[-1])):
                 moves.append([item[0], item[1], item[2], item[-1][i]])
         return moves
+
+
+def get_one_random_move(pieces, maximizingPlayer):
+    """
+    Selects a random move from the valid moves for the current players turn
+    :param board: the current board being used for the game (pieces)
+    :return: list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
+    """
+    list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
+    # list_moves = get_all_moves_from_distance(list_directions_white)
+    list_moves = None
+    if maximizingPlayer:
+        list_moves = get_all_moves_from_distance(list_directions_white)
+    else:
+        list_moves = get_all_moves_from_distance(list_directions_black)
+    random_piece = random.choice(list_moves)
+    r_move = random.choice(random_piece[-1])
+    move = [random_piece[0], random_piece[1], random_piece[2], r_move]
+    return move 
+
+# function for random move
+def random_move(pieces, maximizingPlayer):
+    move = get_one_random_move(pieces, maximizingPlayer)
+    print("random_move: ", move)
+    apply_move(pieces, move)
+    whites_turn = True
+
+# function for best move
+def best_move(pieces, maximizingPlayer):
+
+    # esegue una mossa casuale
+    random_move(pieces, maximizingPlayer)
+
+    # ritorna la mossa migliore in base all'algoritmo alpha-beta
+    # return alpha_beta_search(pieces, depth_size, maximizingPlayer)
+    
+
     
 # metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
 # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
@@ -228,6 +202,45 @@ def alpha_beta_search(pieces, depth, maximizingPlayer):
     # Body di alpha_beta_pruning
     return max(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer))
 
+
+def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
+    # Terminating condition. i.e
+    # leaf node is reached
+    if depth == depth_size or is_terminal(pieces, maximizingPlayer):
+        return utility(pieces, maximizingPlayer)
+    
+    if maximizingPlayer:
+        best = -math.inf
+        
+        # Recur for left and right children
+        for item in nodes:
+            new_pieces = []
+            for p in pieces:
+                if p.id == item[0] and p.color == item[1] and p.x == item[2][0] and p.y == item[2][1]:
+                  new_pieces.append()  
+            val = alpha_beta_search(depth + 1, item, False, nodes, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+            
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+        return best
+
+    else:
+        best = math.inf
+        
+        # Recur for left and
+        # right children
+        for item in nodes:
+            val = alpha_beta_search(depth + 1, item, True, nodes, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+            
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+        return best
 
 # utility function
 def utility(pieces, maximizingPlayer):

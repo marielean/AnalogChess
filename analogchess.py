@@ -104,10 +104,7 @@ while not done:
                     if piece.color != white:
                         # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                         
-                        move = random_move(pieces, whites_turn)
-                        print("random_move: ", move)
-                        apply_move(pieces, move)
-                        whites_turn = True
+                        pass
                                
                 
         elif event.type == pygame.MOUSEMOTION:

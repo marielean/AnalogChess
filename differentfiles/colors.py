@@ -18,4 +18,6 @@ bishop = "B"
 queen = "Q"
 king = "Ki"
 
+depth_size = 4
+
 Radius = math.sqrt(5)
