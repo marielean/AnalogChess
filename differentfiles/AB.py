@@ -108,7 +108,7 @@ def get_all_moves_from_distance(list_pieces):
 
         for final_pos in curr_piece[3]: 
             
-            is_knight = (curr_piece[0]=='K')
+            is_knight = (curr_piece[0]==knight)
             list_point = get_points_from_distance(curr_piece[2][0], curr_piece[2][1], final_pos[0], final_pos[1], knight_flag=is_knight)
             
             list_moves[-1][-1] += list_point # list_moves
