@@ -63,8 +63,8 @@ def get_points_from_distance(x_start, y_start, x_end, y_end, granularity=2, knig
         radius = math.sqrt(5) # I remember that the radius of the knight is sqrt(5) but you can change it if it is wrong
 
         delta = (end_ang - start_ang)/(granularity-1) # Angles variation (Let's do an example to explain why I have used granularity-1 as denominator. In the simplest case with only 2 points for arc, I want that the points are the first and the last points of the arc. Then, the delta have to be the total length of the arc.)
-        x_new = np.cos(-np.arange(granularity)*delta+start_ang+np.pi/2)*radius + x_start
-        y_new = np.sin(-np.arange(granularity)*delta+start_ang+np.pi/2)*radius + y_start
+        x_new = np.cos(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + x_start
+        y_new = np.sin(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + y_start
         # The two previous lines calculate the coordinates x and y of the avaiable moves from the possible angles. The main problems are that the angles are calculated from the positive y semi-axis and that are considered positives the clock-wise angles (the opposite of "normal" algebra). Then the formulas are not very trivial... The idea is to firstly transform the angles in a "conventional" representation and then compute the sin or cos.
 
     list_points = [(x_new[i], y_new[i]) for i in range(len(x_new))]
