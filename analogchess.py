@@ -154,8 +154,8 @@ while not done:
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
             if whites_turn == False:
                 move = best_move(pieces, whites_turn)
-                alpha_beta = alpha_beta_search(pieces, 1, whites_turn)
-                print("alpha_beta: ", alpha_beta)
+                # alpha_beta = alpha_beta_search(pieces, 1, whites_turn)
+                # print("alpha_beta: ", alpha_beta)
                 whites_turn = True
             
             
