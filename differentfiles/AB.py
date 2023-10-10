@@ -14,15 +14,15 @@ def apply_granularity(coordinate, granularity=1):
 
 
 # metodo che resituisce se la partita è finita 
-def is_terminal(pieces, maximizingPlayer):
-    if maximizingPlayer:
+def is_terminal(pieces, whites_turn):
+    if whites_turn:
         for p in pieces:
             if p.color == black and p.id == "K" and p.deleted:
-                return True, "max ha vinto"
+                return True, "bianco ha vinto"
     else:
         for p in pieces:
             if p.color == white and p.id == "K" and p.deleted:
-                return True, "min ha vinto"
+                return True, "nero ha vinto"
     return False
 
 
@@ -168,7 +168,7 @@ def best_move(pieces, whites_turn):
 # metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
 # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
 # depth è la profondità dell'albero di ricerca
-def alpha_beta_search(pieces, depth, maximizingPlayer):
+def alpha_beta_search(pieces, depth, whites_turn):
     '''
     Metodo che implementa la funzione alpha-beta.
     Suggerimento: devono essere utilizzati i metodi:
@@ -178,34 +178,34 @@ def alpha_beta_search(pieces, depth, maximizingPlayer):
     - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
     '''
 
-    def max_value(pieces, depth, alpha, beta, maximizingPlayer):
-        if depth == 0 or is_terminal(pieces):
-            return utility(pieces, maximizingPlayer)
+    def max_value(pieces, depth, alpha, beta, whites_turn):
+        if depth == 0 or is_terminal(pieces, whites_turn):
+            return utility(pieces, whites_turn)
         v = -math.inf
-        action_s = actions(pieces, maximizingPlayer)
+        action_s = actions(pieces, whites_turn)
 
         for a in action_s:
-            v = max(v, min_value(apply_move(pieces, a), depth - 1, alpha, beta, maximizingPlayer))
+            v = max(v, min_value(apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
             if v >= beta:
                 return v
             alpha = max(alpha, v)
         return v
 
-    def min_value(pieces, depth, alpha, beta, maximizingPlayer):
-        if depth == 0 or is_terminal(pieces):
-            return utility(pieces, maximizingPlayer)
+    def min_value(pieces, depth, alpha, beta, whites_turn):
+        if depth == 0 or is_terminal(pieces, whites_turn):
+            return utility(pieces, whites_turn)
         v = math.inf
-        action_s = actions(pieces, maximizingPlayer)
+        action_s = actions(pieces, whites_turn)
 
         for a in action_s:
-            v = min(v, max_value(apply_move(pieces, a), depth - 1, alpha, beta, maximizingPlayer))
+            v = min(v, max_value(apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
             if v <= alpha:
                 return v
             beta = min(beta, v)
         return v
 
     # Body di alpha_beta_pruning
-    return max(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer)) if maximizingPlayer else min(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer))
+    return max(actions(pieces, whites_turn), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, whites_turn)) 
 
 
 def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
