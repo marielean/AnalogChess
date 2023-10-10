@@ -193,7 +193,7 @@ def alpha_beta_search(pieces, depth, whites_turn):
 
     def min_value(pieces, depth, alpha, beta, whites_turn):
         if depth == 0 or is_terminal(pieces, whites_turn):
-            return utility(pieces, whites_turn)
+            return -utility(pieces, whites_turn)
         v = math.inf
         action_s = actions(pieces, whites_turn)
 
@@ -251,19 +251,19 @@ def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, 
 def utility(pieces, maximizingPlayer):
     return evaluate_position(pieces, maximizingPlayer)
 
-def evaluate_position(pieces, maximizingPlayer):
+def evaluate_position(pieces, whites_turn):
     white_score = 0 # punteggio bianco con valore positivo
     black_score = 0 # punteggio nero con valore negativo
     for piece in pieces:
         if piece.color == white and piece.deleted == False:
-            white_score += piece.x + piece.y
+            white_score += piece.y
         if piece.color == black and piece.deleted == False:
-            black_score -= piece.x + piece.y
+            black_score += piece.y
     # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
-    return white_score if maximizingPlayer else black_score 
+    return white_score if whites_turn else black_score 
 
 
-def evaluate_weith(pieces, maximizingPlayer):
+def evaluate_weith(pieces, whites_turn):
     white_score = 0 # punteggio bianco con valore positivo
     black_score = 0 # punteggio nero con valore negativo
     for piece in pieces:
@@ -271,7 +271,7 @@ def evaluate_weith(pieces, maximizingPlayer):
             white_score += piece.weight
         if piece.color == black and piece.deleted == False:
             black_score -= piece.weight
-    return white_score if maximizingPlayer else black_score
+    return white_score if whites_turn else black_score
 
 
 #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
