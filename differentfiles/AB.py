@@ -58,14 +58,17 @@ def get_points_from_distance(x_start, y_start, x_end, y_end, granularity=2, knig
         y_new = dy*np.arange(1, granularity+1) + y_start
     else:
         # If the piece is a knight, the movements are on a circonference arc with center (x_start, y_start). 
-        # The variables x_end, y_end in this case are not really x and y but are the angles (in rad) of the first point of arc and of the last. In this sense we will rename them for a better readability. Finally, note that the angles are calculated from the positive semi-axis of y.
+        # The variables x_end, y_end in this case are not really x and y but are the angles (in rad) of the first point of arc and of the last. 
+        # In this sense we will rename them for a better readability. Finally, note that the angles are calculated from the positive semi-axis of y.
         start_ang, end_ang = x_end, y_end
         radius = math.sqrt(5) # I remember that the radius of the knight is sqrt(5) but you can change it if it is wrong
 
         delta = (end_ang - start_ang)/(granularity-1) # Angles variation (Let's do an example to explain why I have used granularity-1 as denominator. In the simplest case with only 2 points for arc, I want that the points are the first and the last points of the arc. Then, the delta have to be the total length of the arc.)
         x_new = np.cos(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + x_start
         y_new = np.sin(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + y_start
-        # The two previous lines calculate the coordinates x and y of the avaiable moves from the possible angles. The main problems are that the angles are calculated from the positive y semi-axis and that are considered positives the clock-wise angles (the opposite of "normal" algebra). Then the formulas are not very trivial... The idea is to firstly transform the angles in a "conventional" representation and then compute the sin or cos.
+        # The two previous lines calculate the coordinates x and y of the avaiable moves from the possible angles. 
+        # The main problems are that the angles are calculated from the positive y semi-axis and that are considered positives the clock-wise angles (the opposite of "normal" algebra). 
+        # Then the formulas are not very trivial... The idea is to firstly transform the angles in a "conventional" representation and then compute the sin or cos.
 
     list_points = [(x_new[i], y_new[i]) for i in range(len(x_new))]
     return list_points
@@ -177,9 +180,9 @@ def alpha_beta_search(pieces, depth, maximizingPlayer):
         if depth == 0 or is_terminal(pieces):
             return utility(pieces, maximizingPlayer)
         v = -math.inf
-        actions = actions(pieces, maximizingPlayer)
+        action_s = actions(pieces, maximizingPlayer)
 
-        for a in actions:
+        for a in action_s:
             v = max(v, min_value(apply_move(pieces, a), depth - 1, alpha, beta, maximizingPlayer))
             if v >= beta:
                 return v
@@ -200,7 +203,7 @@ def alpha_beta_search(pieces, depth, maximizingPlayer):
         return v
 
     # Body di alpha_beta_pruning
-    return max(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer))
+    return max(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer)) if maximizingPlayer else min(actions(pieces, maximizingPlayer), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, maximizingPlayer))
 
 
 def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):

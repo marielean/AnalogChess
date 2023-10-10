@@ -103,7 +103,8 @@ while not done:
                 else:
                     if piece.color != white:
                         # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                        
+                        move = alpha_beta_search(pieces, 3, whites_turn)
+                        apply_move(pieces, move)
                         pass
                                
                 
