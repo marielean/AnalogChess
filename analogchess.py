@@ -89,64 +89,72 @@ while not done:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            for piece in pieces:
-                # print(piece.get_turn())
-                # print(piece.color, piece.letter, piece.x, piece.y)
-                # print("turn_number: ", turn_number%2)
-                #print("whites_turn: ", whites_turn)
-                # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                
-                if whites_turn:
-                    if piece.color == white:
-                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                else:
-                    if piece.color != white:
-                        # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                        move = alpha_beta_search(pieces, 3, whites_turn)
-                        apply_move(pieces, move)
-                        pass
-                               
-                
-        elif event.type == pygame.MOUSEMOTION:
-            for piece in pieces:
-                piece.drag(to_game_coords(pygame.mouse.get_pos()), pieces)
 
-        elif event.type == pygame.MOUSEBUTTONUP:
-
-            new_pieces = []
-            for piece in pieces:
-                sol = piece.ungrab(pieces)
-                # print(sol)
-                if sol != None:
+        # turno del giocatore e cioè il bianco (in seguito fare che si sceglie il colore durante la creazione della partita)
+        if whites_turn:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for piece in pieces:
+                    # print(piece.get_turn())
+                    # print(piece.color, piece.letter, piece.x, piece.y)
+                    # print("turn_number: ", turn_number%2)
+                    # print("whites_turn: ", whites_turn)
+                    # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                    
                     if whites_turn:
-                        whites_turn = False
+                        if piece.color == white:
+                            piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                     else:
-                        whites_turn = True
-                if piece.can_promote():
-                    new_pieces.append(Queen(piece.x, piece.y, piece.color))
-                else:
-                    new_pieces.append(piece)
-            pieces = new_pieces
+                        if piece.color != white:
+                            piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
+                            # move = alpha_beta_search(pieces, 3, whites_turn)
+                            # apply_move(pieces, move)
+                            
+                                
+                    
+            elif event.type == pygame.MOUSEMOTION:
+                for piece in pieces:
+                    piece.drag(to_game_coords(pygame.mouse.get_pos()), pieces)
 
-            for piece in pieces:
-                if piece.deleted and piece.id == king:
-                    done = True
-                    font = pygame.font.SysFont("oldenglishtext", int(80))
-                    confirm_text = font.render("Wiiiiiiin", True, black)
-                    draw_center_text(confirm_text)
-                    pygame.display.flip()
+            elif event.type == pygame.MOUSEBUTTONUP:
 
+                new_pieces = []
+                for piece in pieces:
+                    sol = piece.ungrab(pieces)
+                    
+                    if sol != None:
+                        # print("sol:", sol)
+                        if sol == True:
+                            if whites_turn:
+                                whites_turn = False
+                            else:
+                                whites_turn = True
+                    if piece.can_promote():
+                        new_pieces.append(Queen(piece.x, piece.y, piece.color))
+                    else:
+                        new_pieces.append(piece)
+                pieces = new_pieces
+
+                for piece in pieces:
+                    if piece.deleted and piece.id == king:
+                        done = True
+                        font = pygame.font.SysFont("oldenglishtext", int(80))
+                        confirm_text = font.render("Wiiiiiiin", True, black)
+                        draw_center_text(confirm_text)
+                        pygame.display.flip()
+
+                
+                '''
+                for piece in pieces:
+                    whites_turn = piece.white_turn
+                '''
+
+                for piece in pieces:
+                    piece.calc_paths(pieces)
             
-            '''
-            for piece in pieces:
-                whites_turn = piece.white_turn
-            '''
-
-            for piece in pieces:
-                piece.calc_paths(pieces)
-            
-
+            # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
+            if whites_turn == False:
+                move = best_move(pieces, whites_turn)
+                whites_turn = True
             
             
 

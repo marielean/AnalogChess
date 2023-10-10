@@ -11,14 +11,7 @@ def apply_granularity(coordinate, granularity=1):
 
 
 
-# metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
-def apply_move(pieces, move):
-    for p in pieces:
-        if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-            p.x = move[3][0]
-            p.y = move[3][1]
-            break
-    return pieces
+
 
 # metodo che resituisce se la partita è finita 
 def is_terminal(pieces, maximizingPlayer):
@@ -127,7 +120,7 @@ def actions(pieces, maximizingPlayer):
         return moves
 
 
-def get_one_random_move(pieces, maximizingPlayer):
+def get_one_random_move(pieces, whites_turn):
     """
     Selects a random move from the valid moves for the current players turn
     :param board: the current board being used for the game (pieces)
@@ -136,7 +129,7 @@ def get_one_random_move(pieces, maximizingPlayer):
     list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
     # list_moves = get_all_moves_from_distance(list_directions_white)
     list_moves = None
-    if maximizingPlayer:
+    if whites_turn:
         list_moves = get_all_moves_from_distance(list_directions_white)
     else:
         list_moves = get_all_moves_from_distance(list_directions_black)
@@ -145,18 +138,27 @@ def get_one_random_move(pieces, maximizingPlayer):
     move = [random_piece[0], random_piece[1], random_piece[2], r_move]
     return move 
 
+
+# metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
+def apply_move(pieces, move):
+    for p in pieces:
+        if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
+            p.x = move[3][0]
+            p.y = move[3][1]
+            break
+    return pieces
+
 # function for random move
-def random_move(pieces, maximizingPlayer):
-    move = get_one_random_move(pieces, maximizingPlayer)
+def random_move(pieces, whites_turn):
+    move = get_one_random_move(pieces, whites_turn)
     print("random_move: ", move)
     apply_move(pieces, move)
-    whites_turn = True
 
 # function for best move
-def best_move(pieces, maximizingPlayer):
+def best_move(pieces, whites_turn):
 
     # esegue una mossa casuale
-    random_move(pieces, maximizingPlayer)
+    random_move(pieces, whites_turn)
 
     # ritorna la mossa migliore in base all'algoritmo alpha-beta
     # return alpha_beta_search(pieces, depth_size, maximizingPlayer)
