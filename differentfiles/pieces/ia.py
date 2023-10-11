@@ -1,4 +1,5 @@
 from differentfiles.colors import *
+from differentfiles.pieces.board import *
 import numpy as np
 from math import floor
 import random
