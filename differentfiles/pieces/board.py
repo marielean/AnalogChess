@@ -1,7 +1,9 @@
 from . import *
 from differentfiles.colors import *
 
+
 class Board:
+
     def __init__(self):
         self.pieces = [
             Pawn(0.5, 1.5, white),
@@ -48,10 +50,12 @@ class Board:
             Pawn(6.5, 6.5, black),
             Pawn(7.5, 6.5, black),
         ]
-        pass
+
+    
+        
 
     def get_pieces(self):
-        return self.pieces1
+        return self.pieces
 
 
     # settare i pezzi con uno stato nuovo della classe Piece

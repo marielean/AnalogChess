@@ -1,8 +1,9 @@
 from differentfiles.colors import *
-from differentfiles.pieces.board import *
+from differentfiles.pieces.board import Board
 import numpy as np
 from math import floor
 import random
+from copy import deepcopy
 
 class IA:
     def __init__(self):
@@ -244,20 +245,34 @@ class IA:
         return max(self.actions_per_color(pieces, whites_turn), key=lambda a: min_value(self.apply_move(pieces, a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
+
+    def board_apply_move(self, board: Board, move):
+        pieces = board.get_pieces
+        for p in pieces:
+            if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
+                #print(move[0], move[1], move[2][0], move[2][1])
+                p.x = move[3][0]
+                p.y = move[3][1]
+                break
+        return board
+
+
     # metodo che restituisce la mossa migliore in base all'algoritmo minimax
     # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
     # depth è la profondità dell'albero di ricerca
-    def minimax_search(self, pieces, depth, alpha, beta, whites_turn):
+    def minimax_search(self, board: Board, depth, alpha, beta, whites_turn):
         # whites_turn = True if White2Play and False is Black2Play
+        print("board: ", board.get_pieces())
 
-        if depth == 0 or self.is_terminal(pieces, whites_turn):
-            return self.utility(pieces, whites_turn)
+        if depth == 0 or self.is_terminal(board.get_pieces(), whites_turn):
+            return self.utility(board.get_pieces(), whites_turn)
         
         if whites_turn:
             maxEval, best_move  = -np.inf, None
-            for action in self.actions_per_color(pieces, whites_turn):
-                test_pieces = pieces.copy()
-                evalu = self.minimax_search(self.apply_move(test_pieces, action), depth - 1, alpha, beta, False)
+            for action in self.actions_per_color(board.get_pieces(), whites_turn):
+                fake_board = Board().__new__
+                fake_board.set_pieces(board.get_pieces())
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
                 
                 if evalu >= maxEval:
                     maxEval = evalu
@@ -270,9 +285,10 @@ class IA:
         
         else:
             minEval, best_move = np.inf, None
-            for action in self.actions_per_color(pieces, whites_turn):
-                test_pieces = pieces.copy()
-                evalu = self.minimax_search(self.apply_move(test_pieces, action), depth - 1, alpha, beta, True)
+            for action in self.actions_per_color(board.get_pieces(), whites_turn):
+                fake_board = Board().__new__
+                fake_board.set_pieces(board.get_pieces())
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
                 if evalu <= minEval:
                     minEval = evalu
                     best_move = action
