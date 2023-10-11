@@ -72,6 +72,8 @@ whites_turn = True
 
 pygame.display.set_caption("Analog Chess")
 
+def get_white_turn():
+    return whites_turn
 
 draw_line_round_corners_polygon(
     see_through, (120, 120), (220, 220), RED_HIGHLIGHT, 0.7 * 640 / 8
@@ -153,9 +155,11 @@ while not done:
             
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
             if whites_turn == False:
+                alpha_beta_pieces = pieces
                 move = best_move(pieces, whites_turn)
-                alpha_beta = alpha_beta_search(pieces, 1, whites_turn)
-                print("alpha_beta: ", alpha_beta)
+                print("actions: ", actions_per_color(pieces, whites_turn))
+                #alpha_beta = alpha_beta_search(alpha_beta_pieces, 1, whites_turn)
+                #print("alpha_beta: ", alpha_beta)
                 whites_turn = True
             
             

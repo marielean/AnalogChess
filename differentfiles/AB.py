@@ -102,11 +102,40 @@ def get_all_directions_all_in_one(pieces):
 
     
 # actions: restituisce la lista di azioni possibili in uno stato della scacchiera diviso per giocatore... 
-def actions(pieces, maximizingPlayer):
+def actions(pieces):
     list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
     moves = []
     i = 0
-    if maximizingPlayer:
+    '''
+    if whites_turn:
+        list_moves = get_all_moves_from_distance(list_directions_white)
+        for item in list_moves:
+            for i in range(len(item[-1])):
+                moves.append([item[0], item[1], item[2], item[-1][i]])
+        return moves
+    else:
+        list_moves = get_all_moves_from_distance(list_directions_black)
+        for item in list_moves:
+            for i in range(len(item[-1])):
+                moves.append([item[0], item[1], item[2], item[-1][i]])
+        return moves
+    '''
+    list_moves = get_all_moves_from_distance(list_directions_white)
+    for item in list_moves:
+        for i in range(len(item[-1])):
+            moves.append([item[0], item[1], item[2], item[-1][i]])
+    list_moves = get_all_moves_from_distance(list_directions_black)
+    for item in list_moves:
+        for i in range(len(item[-1])):
+            moves.append([item[0], item[1], item[2], item[-1][i]])
+
+    return moves
+
+def actions_per_color(pieces, whites_turn):
+    list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
+    moves = []
+    i = 0
+    if whites_turn:
         list_moves = get_all_moves_from_distance(list_directions_white)
         for item in list_moves:
             for i in range(len(item[-1])):
@@ -141,8 +170,10 @@ def get_one_random_move(pieces, whites_turn):
 
 # metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
 def apply_move(pieces, move):
+    #print("apply_move: ", move)
     for p in pieces:
         if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
+            #print(move[0], move[1], move[2][0], move[2][1])
             p.x = move[3][0]
             p.y = move[3][1]
             break
@@ -182,7 +213,7 @@ def alpha_beta_search(pieces, depth, whites_turn):
         if depth == 0 or is_terminal(pieces, whites_turn):
             return utility(pieces, whites_turn)
         v = -math.inf
-        action_s = actions(pieces, whites_turn)
+        action_s = actions_per_color(pieces, whites_turn)
 
         for a in action_s:
             v = max(v, min_value(apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
@@ -193,9 +224,9 @@ def alpha_beta_search(pieces, depth, whites_turn):
 
     def min_value(pieces, depth, alpha, beta, whites_turn):
         if depth == 0 or is_terminal(pieces, whites_turn):
-            return -utility(pieces, whites_turn)
+            return utility(pieces, whites_turn)
         v = math.inf
-        action_s = actions(pieces, whites_turn)
+        action_s = actions_per_color(pieces, whites_turn)
 
         for a in action_s:
             v = min(v, max_value(apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
@@ -205,7 +236,50 @@ def alpha_beta_search(pieces, depth, whites_turn):
         return v
 
     # Body di alpha_beta_pruning
-    return max(actions(pieces, whites_turn), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, whites_turn)) 
+    return max(actions_per_color(pieces, whites_turn), key=lambda a: min_value(apply_move(pieces, a), depth, -math.inf, math.inf, pieces[0].get_turn())) 
+
+
+
+
+# utility function
+def utility(pieces, whites_turn):
+    return evaluate_weith(pieces, whites_turn)
+
+def evaluate_position(pieces, whites_turn):
+    white_score = 0 # punteggio bianco con valore positivo
+    black_score = 0 # punteggio nero con valore negativo
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            white_score += piece.y
+        if piece.color == black and piece.deleted == False:
+            black_score += piece.y
+    # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
+    return white_score if whites_turn else black_score 
+
+
+def evaluate_weith(pieces, whites_turn):
+    white_score = 0 # punteggio bianco con valore positivo
+    black_score = 0 # punteggio nero con valore negativo
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            white_score += piece.weight
+        if piece.color == black and piece.deleted == False:
+            black_score += piece.weight
+    return white_score if whites_turn else black_score
+
+
+#restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
+def get_chess_board_status(pieces):
+    white_status = []
+    black_status = []
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            white_status.append(piece.letter, piece.x, piece.y)
+        elif piece.color == black and piece.deleted == False:
+            black_status.append(piece.letter, piece.x, piece.y)
+    return white_status, black_status
+
+
 
 
 def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
@@ -246,41 +320,3 @@ def alpha_beta_pruning(depth, node_index, maximizingPlayer, nodes, alpha, beta, 
             if beta <= alpha:
                 break
         return best
-
-# utility function
-def utility(pieces, maximizingPlayer):
-    return evaluate_position(pieces, maximizingPlayer)
-
-def evaluate_position(pieces, whites_turn):
-    white_score = 0 # punteggio bianco con valore positivo
-    black_score = 0 # punteggio nero con valore negativo
-    for piece in pieces:
-        if piece.color == white and piece.deleted == False:
-            white_score += piece.y
-        if piece.color == black and piece.deleted == False:
-            black_score += piece.y
-    # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
-    return white_score if whites_turn else black_score 
-
-
-def evaluate_weith(pieces, whites_turn):
-    white_score = 0 # punteggio bianco con valore positivo
-    black_score = 0 # punteggio nero con valore negativo
-    for piece in pieces:
-        if piece.color == white and piece.deleted == False:
-            white_score += piece.weight
-        if piece.color == black and piece.deleted == False:
-            black_score -= piece.weight
-    return white_score if whites_turn else black_score
-
-
-#restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
-def get_chess_board_status(pieces):
-    white_status = []
-    black_status = []
-    for piece in pieces:
-        if piece.color == white and piece.deleted == False:
-            white_status.append(piece.letter, piece.x, piece.y)
-        elif piece.color == black and piece.deleted == False:
-            black_status.append(piece.letter, piece.x, piece.y)
-    return white_status, black_status
