@@ -213,7 +213,7 @@ class IA:
         - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
         '''
 
-        def max_value(self, pieces, depth, alpha, beta, whites_turn):
+        def max_value(pieces, depth, alpha, beta, whites_turn):
             if depth == 0 or self.is_terminal(pieces, whites_turn):
                 return self.utility(pieces, whites_turn)
             v = -math.inf
@@ -240,10 +240,45 @@ class IA:
             return v
 
         # Body di alpha_beta_pruning
-        return max(self.actions_per_color(pieces, whites_turn), key=lambda a: min_value(self.apply_move(pieces, a), depth, -math.inf, math.inf, pieces[0].get_turn())) 
+        return max(self.actions_per_color(pieces, whites_turn), key=lambda a: min_value(self.apply_move(pieces, a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
+    # metodo che restituisce la mossa migliore in base all'algoritmo minimax
+    # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
+    # depth è la profondità dell'albero di ricerca
+    def minimax_search(self, pieces, depth, alpha, beta, whites_turn):
+        # whites_turn = True if White2Play and False is Black2Play
 
+        if depth == 0 or self.is_terminal(pieces, whites_turn):
+            return self.utility(pieces, whites_turn)
+        
+        if whites_turn:
+            maxEval, best_move  = -np.inf, None
+            for action in self.actions_per_color(pieces, whites_turn):
+                test_pieces = pieces.copy()
+                evalu = self.minimax_search(self.apply_move(test_pieces, action), depth - 1, alpha, beta, False)
+                
+                if evalu >= maxEval:
+                    maxEval = evalu
+                    best_move = action
+                
+                alpha = max(alpha, maxEval)
+                if beta <= alpha:
+                    break
+            return [maxEval, best_move]
+        
+        else:
+            minEval, best_move = np.inf, None
+            for action in self.actions_per_color(pieces, whites_turn):
+                test_pieces = pieces.copy()
+                evalu = self.minimax_search(self.apply_move(test_pieces, action), depth - 1, alpha, beta, True)
+                if evalu <= minEval:
+                    minEval = evalu
+                    best_move = action
+                beta = min(beta, minEval)
+                if beta <= alpha:
+                    break
+            return [minEval, best_move]
 
     # utility function
     def utility(self, pieces, whites_turn):
