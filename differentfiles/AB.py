@@ -10,9 +10,6 @@ def apply_granularity(coordinate, granularity=1):
     return rounded
 
 
-
-
-
 # metodo che resituisce se la partita è finita 
 def is_terminal(pieces, whites_turn):
     if whites_turn:
