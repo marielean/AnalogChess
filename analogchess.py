@@ -15,6 +15,8 @@ from differentfiles.AB import *
 
 pygame.init()
 
+ia = IA()
+
 
 pieces = [
     Pawn(0.5, 1.5, white),
@@ -156,11 +158,13 @@ while not done:
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
             if whites_turn == False:
                 alpha_beta_pieces = pieces
-                move = best_move(pieces, whites_turn)
-                print("actions: ", actions_per_color(pieces, whites_turn))
-                #alpha_beta = alpha_beta_search(alpha_beta_pieces, 1, whites_turn)
-                #print("alpha_beta: ", alpha_beta)
+                #move = ia.best_move(pieces, whites_turn)
+                #print("random_move: ", move)
+                print("actions: ", ia.actions_per_color(pieces, whites_turn))
+                alpha_beta = alpha_beta_search(alpha_beta_pieces, 1, whites_turn)
+                print("alpha_beta: ", alpha_beta)
                 whites_turn = True
+                ia.set_turn(whites_turn)
             
             
 
