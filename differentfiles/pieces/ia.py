@@ -205,7 +205,7 @@ class IA:
     # metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
     # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
     # depth è la profondità dell'albero di ricerca
-    def alpha_beta_search(self, pieces, depth, whites_turn):
+    def alpha_beta_search(self, board: Board, depth, whites_turn):
         '''
         Metodo che implementa la funzione alpha-beta.
         Suggerimento: devono essere utilizzati i metodi:
@@ -214,7 +214,7 @@ class IA:
         - game.actions: restituisce la lista di azioni possibili in uno stato
         - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
         '''
-
+        pieces = board.get_pieces()
         def max_value(pieces, depth, alpha, beta, whites_turn):
             if depth == 0 or self.is_terminal(pieces, whites_turn):
                 return self.utility(pieces, whites_turn)
@@ -278,7 +278,7 @@ class IA:
             for action in actions:
                 fake_board = Board()
                 fake_board.set_pieces(board.get_pieces())
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)[0]
                 
                 if evalu >= maxEval:
                     maxEval = evalu
@@ -298,7 +298,7 @@ class IA:
                 fake_board.set_pieces(board.get_pieces())
                 fake_pieces = fake_board.get_pieces()
                 print("fake_pieces: ", fake_pieces[0].id)
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)[0]
                 if evalu <= minEval:
                     minEval = evalu
                     best_move = action
