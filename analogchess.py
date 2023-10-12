@@ -17,6 +17,7 @@ pygame.init()
 
 ia = IA()
 board = Board()
+board.new_board()
 
 pieces = board.get_pieces()
 
@@ -167,6 +168,7 @@ while not done:
                 #print("alpha_beta: ", alpha_beta)
                 minmax_move = ia.minimax_search(board, 1, -np.inf, np.inf, whites_turn)
                 print("minmax_move: ", minmax_move)
+                ia.board_apply_move(board, minmax_move[1])
                 whites_turn = True
                 ia.set_turn(whites_turn)
             
