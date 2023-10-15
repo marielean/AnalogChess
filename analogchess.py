@@ -164,11 +164,12 @@ while not done:
                 # move = ia.best_move(pieces, whites_turn)
                 # print("random_move: ", move)
                 print("actions: ", ia.actions_per_color(pieces, whites_turn))
-                #alpha_beta = ia.alpha_beta_search(alpha_beta_pieces, 1, whites_turn)
-                #print("alpha_beta: ", alpha_beta)
-                minmax_move = ia.minimax_search(board, depth_size, -np.inf, np.inf, whites_turn)
-                print("minmax_move: ", minmax_move)
-                ia.board_apply_move(board, minmax_move[1])
+                alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
+                print("alpha_beta: ", alpha_beta)
+                ia.board_apply_move(board, alpha_beta)
+                #minmax_move = ia.minimax_search(board, depth_size, -np.inf, np.inf, whites_turn)
+                #print("minmax_move: ", minmax_move)
+                #ia.board_apply_move(board, minmax_move[1])
                 whites_turn = True
                 ia.set_turn(whites_turn)
             

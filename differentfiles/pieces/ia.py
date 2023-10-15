@@ -215,6 +215,9 @@ class IA:
         - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
         '''
         pieces = board.get_pieces()
+        fake_board = Board()
+        fake_board.set_pieces(pieces)
+        print(fake_board.get_pieces()[0], pieces[0])
         def max_value(pieces, depth, alpha, beta, whites_turn):
             if depth == 0 or self.is_terminal(pieces, whites_turn):
                 return self.utility(pieces, whites_turn)
@@ -242,7 +245,7 @@ class IA:
             return v
 
         # Body di alpha_beta_pruning
-        return max(self.actions_per_color(pieces, whites_turn), key=lambda a: min_value(self.apply_move(pieces, a), depth, -math.inf, math.inf, self.whiteTurn)) 
+        return max(self.actions_per_color(fake_board.get_pieces(), whites_turn), key=lambda a: min_value(self.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
 
@@ -278,7 +281,7 @@ class IA:
             for action in actions:
                 fake_board = Board()
                 fake_board.set_pieces(board.get_pieces())
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)[0]
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
                 
                 if evalu >= maxEval:
                     maxEval = evalu
@@ -287,7 +290,7 @@ class IA:
                 alpha = max(alpha, maxEval)
                 if beta <= alpha:
                     break
-            return [maxEval, best_move]
+            return maxEval, best_move
         
         else:
             minEval, best_move = np.inf, None
@@ -298,14 +301,14 @@ class IA:
                 fake_board.set_pieces(board.get_pieces())
                 fake_pieces = fake_board.get_pieces()
                 print("fake_pieces: ", fake_pieces[0].id)
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)[0]
+                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
                 if evalu <= minEval:
                     minEval = evalu
                     best_move = action
                 beta = min(beta, minEval)
                 if beta <= alpha:
                     break
-            return [minEval, best_move]
+            return minEval, best_move
 
     # utility function
     def utility(self, pieces, whites_turn):
