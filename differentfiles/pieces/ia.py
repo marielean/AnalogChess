@@ -59,6 +59,8 @@ class IA:
             for i in range(len(item[-1])):
                 moves.append([item[0], item[1], item[2], item[-1][i]])
 
+        self.verify_actions(moves)
+
         return moves
 
     def actions_per_color(self, board: Board, pieces: dict, whites_turn: bool):
@@ -70,17 +72,26 @@ class IA:
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
+                self.verify_actions(moves)
             return moves
         else:
             list_moves = board.get_all_moves_from_distance(list_directions_black)
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
+                self.verify_actions(moves)
             return moves
 
-    def verify_actions(self, board, moves):
+    def is_valid_move(self, move):
+        if move[2][0] == move[3][0] and move[2][1] == move[3][1]:
+            return False
+        return True
+
+    def verify_actions(self, moves):
         new_moves = []
-        
+        for move in moves:
+            if self.is_valid_move(move):
+                new_moves.append(move)
         
         return new_moves
 
