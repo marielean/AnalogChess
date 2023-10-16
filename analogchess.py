@@ -161,17 +161,19 @@ while not done:
             
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
             if whites_turn == False:
-                # move = ia.best_move(pieces, whites_turn)
-                # print("random_move: ", move)
-                print("actions: ", ia.actions_per_color(pieces, whites_turn))
-                alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
-                print("alpha_beta: ", alpha_beta)
-                ia.board_apply_move(board, alpha_beta)
-                #minmax_move = ia.minimax_search(board, depth_size, -np.inf, np.inf, whites_turn)
+                move = ia.best_move(pieces, whites_turn, board)
+                print("random_move: ", move)
+                print("actions: ", ia.actions_per_color(board, pieces, whites_turn))
+                print("actions: ", ia.actions_per_color(board, pieces, True))
+                #alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
+                #print("alpha_beta: ", alpha_beta)
+                #ia.board_apply_move(board, alpha_beta)
+                #minmax_move = ia.minimax_search(board, 2, -np.inf, np.inf, whites_turn)
                 #print("minmax_move: ", minmax_move)
                 #ia.board_apply_move(board, minmax_move[1])
                 whites_turn = True
                 ia.set_turn(whites_turn)
+                board.set_turn(whites_turn)
             
             
 

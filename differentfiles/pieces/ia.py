@@ -30,85 +30,10 @@ class IA:
                     return True, "nero ha vinto"
         return False
     
-        
-    # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
-    # granularity è il numero di punti che si vogliono ottenere per ogni direzione
-    def get_points_from_distance(self, x_start, y_start, x_end, y_end, granularity=2, knight_flag=False):
-        '''
-        get_points_from_distance(x_start, y_start, x_end, y_end, granularity=2, knight_flag=False)
-        The function returns all the possible moves in the following format:
-        [(x1, y1), (x2, y2), ...]
-        x_start: starting x of the path (current x position if the piece is a knight)
-        y_start: starting y of the path (current y position if the piece is a knight)
-        x_end: final x of the path (start angle if the piece is a knight)
-        y_end: final y of the path (final angle if the piece is a knight)
-        granularity: number of point per path (analogous chess -> granularity high). Default 2
-        knight_flag: boolean flag. It must be true if the piece is a knight, false otherway. Default=False.
-        '''
-        list_points = []
-        if not knight_flag:
-            # If the piece is not a knight, the movement can be on a point in a line. 
-            # In this case (x_start, y_start) are the coordinate of the first point of the line and (x_end, y_end) is the final point
-            dx = (x_end - x_start)/granularity
-            dy = (y_end - y_start)/granularity
-
-            x_new = dx*np.arange(1, granularity+1) + x_start
-            y_new = dy*np.arange(1, granularity+1) + y_start
-        else:
-            # If the piece is a knight, the movements are on a circonference arc with center (x_start, y_start). 
-            # The variables x_end, y_end in this case are not really x and y but are the angles (in rad) of the first point of arc and of the last. 
-            # In this sense we will rename them for a better readability. Finally, note that the angles are calculated from the positive semi-axis of y.
-            start_ang, end_ang = x_end, y_end
-            radius = math.sqrt(5) # I remember that the radius of the knight is sqrt(5) but you can change it if it is wrong
-
-            delta = (end_ang - start_ang)/(granularity-1) # Angles variation (Let's do an example to explain why I have used granularity-1 as denominator. In the simplest case with only 2 points for arc, I want that the points are the first and the last points of the arc. Then, the delta have to be the total length of the arc.)
-            x_new = np.cos(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + x_start
-            y_new = np.sin(-(np.arange(granularity)*delta+start_ang-np.pi/2))*radius + y_start
-            # The two previous lines calculate the coordinates x and y of the avaiable moves from the possible angles. 
-            # The main problems are that the angles are calculated from the positive y semi-axis and that are considered positives the clock-wise angles (the opposite of "normal" algebra). 
-            # Then the formulas are not very trivial... The idea is to firstly transform the angles in a "conventional" representation and then compute the sin or cos.
-
-        list_points = [(x_new[i], y_new[i]) for i in range(len(x_new))]
-        return list_points
-
-
-    # restituisce tutte le mosse possibili per tutti i pezzi presenti nella list_pieces nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_moves_from_distance(self, list_pieces):
-        #print("list_pieces: ", list_pieces)
-        list_moves = []
-
-        for curr_piece in list_pieces:
-            # curr_piece is [piece_name, color, current_position, final_positions_list]
-            list_moves.append([curr_piece[0], curr_piece[1], curr_piece[2], []]) # the last empty list will contain the possible future moves
-
-            for final_pos in curr_piece[3]: 
-                
-                is_knight = (curr_piece[0]==knight)
-                list_point = self.get_points_from_distance(curr_piece[2][0], curr_piece[2][1], final_pos[0], final_pos[1], knight_flag=is_knight)
-                
-                list_moves[-1][-1] += list_point # list_moves
-        return list_moves
-
-    # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self, pieces):
-        list_directions_white = []
-        list_directions_black = []
-        for p in pieces:
-            if not p.deleted:
-                if p.color == black:
-                    direction = p.get_all_directions_per_piece(pieces)
-                    list_directions_black.append([p.id, p.color, (p.x, p.y), direction])
-                elif p.color == white:
-                    direction = p.get_all_directions_per_piece(pieces)
-                    list_directions_white.append([p.id, p.color, (p.x, p.y), direction])
-        
-        return list_directions_white, list_directions_black
-
-
-        
+    
     # actions: restituisce la lista di azioni possibili in uno stato della scacchiera diviso per giocatore... 
-    def actions(self, pieces):
-        list_directions_white, list_directions_black = self.get_all_directions_all_in_one(pieces)
+    def actions(self, board: Board, pieces: dict):
+        list_directions_white, list_directions_black = board.get_all_directions_all_in_one(pieces)
         moves = []
         i = 0
         '''
@@ -125,76 +50,69 @@ class IA:
                     moves.append([item[0], item[1], item[2], item[-1][i]])
             return moves
         '''
-        list_moves = self.get_all_moves_from_distance(list_directions_white)
+        list_moves = board.get_all_moves_from_distance(list_directions_white)
         for item in list_moves:
             for i in range(len(item[-1])):
                 moves.append([item[0], item[1], item[2], item[-1][i]])
-        list_moves = self.get_all_moves_from_distance(list_directions_black)
+        list_moves = board.get_all_moves_from_distance(list_directions_black)
         for item in list_moves:
             for i in range(len(item[-1])):
                 moves.append([item[0], item[1], item[2], item[-1][i]])
 
         return moves
 
-    def actions_per_color(self, pieces, whites_turn):
-        list_directions_white, list_directions_black = self.get_all_directions_all_in_one(pieces)
+    def actions_per_color(self, board: Board, pieces: dict, whites_turn: bool):
+        list_directions_white, list_directions_black = board.get_all_directions_all_in_one(pieces)
         moves = []
         i = 0
         if whites_turn:
-            list_moves = self.get_all_moves_from_distance(list_directions_white)
+            list_moves = board.get_all_moves_from_distance(list_directions_white)
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
             return moves
         else:
-            list_moves = self.get_all_moves_from_distance(list_directions_black)
+            list_moves = board.get_all_moves_from_distance(list_directions_black)
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
             return moves
 
 
-    def get_one_random_move(self, pieces, whites_turn):
+    def get_one_random_move(self, pieces: dict, whites_turn: bool, board: Board):
         """
         Selects a random move from the valid moves for the current players turn
         :param board: the current board being used for the game (pieces)
         :return: list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         """
-        list_directions_white, list_directions_black = self.get_all_directions_all_in_one(pieces)
+        list_directions_white, list_directions_black = board.get_all_directions_all_in_one(pieces)
         # list_moves = get_all_moves_from_distance(list_directions_white)
         list_moves = None
         if whites_turn:
-            list_moves = self.get_all_moves_from_distance(list_directions_white)
+            list_moves = board.get_all_moves_from_distance(list_directions_white)
         else:
-            list_moves = self.get_all_moves_from_distance(list_directions_black)
+            list_moves = board.get_all_moves_from_distance(list_directions_black)
         random_piece = random.choice(list_moves)
         r_move = random.choice(random_piece[-1])
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move 
 
 
-    # metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
-    def apply_move(self, pieces, move):
-        #print("apply_move: ", move)
-        for p in pieces:
-            if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-                #print(move[0], move[1], move[2][0], move[2][1])
-                p.x = move[3][0]
-                p.y = move[3][1]
-                break
-        return pieces
+    
 
     # function for random move
-    def random_move(self, pieces, whites_turn):
-        move = self.get_one_random_move(pieces, whites_turn)
-        self.apply_move(pieces, move)
-        return move
+    def random_move(self, pieces, whites_turn, board):
+        actions = self.actions_per_color(board, pieces, whites_turn)
+        r_move = random.choice(actions)
+        print("r_move", r_move)
+        board.apply_move(pieces, r_move)
+        return r_move
 
     # function for best move
-    def best_move(self, pieces, whites_turn):
+    def best_move(self, pieces, whites_turn, board):
 
         # esegue una mossa casuale
-        move = self.random_move(pieces, whites_turn)
+        move = self.random_move(pieces, whites_turn, board)
         return move
 
         # ritorna la mossa migliore in base all'algoritmo alpha-beta
@@ -218,9 +136,10 @@ class IA:
         fake_board = Board()
         fake_board.set_pieces(pieces)
         print(fake_board.get_pieces()[0], pieces[0])
-        def max_value(pieces, depth, alpha, beta, whites_turn):
+
+        def max_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
             if depth == 0 or self.is_terminal(pieces, whites_turn):
-                return self.utility(pieces, whites_turn)
+                return fake_board.utility(pieces, whites_turn)
             v = -math.inf
             action_s = self.actions_per_color(pieces, whites_turn)
 
@@ -231,8 +150,8 @@ class IA:
                 alpha = max(alpha, v)
             return v
 
-        def min_value(pieces, depth, alpha, beta, whites_turn):
-            if depth == 0 or self.is_terminal(pieces, whites_turn):
+        def min_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
+            if depth == 0 or fake_board.is_terminal(pieces, whites_turn):
                 return self.utility(pieces, whites_turn)
             v = math.inf
             action_s = self.actions_per_color(pieces, whites_turn)
@@ -245,20 +164,8 @@ class IA:
             return v
 
         # Body di alpha_beta_pruning
-        return max(self.actions_per_color(fake_board.get_pieces(), whites_turn), key=lambda a: min_value(self.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
-
-
-
-    def board_apply_move(self, board: Board, move):
-        pieces = board.get_pieces()
-        print("pieces:", pieces[0].id)
-        for p in pieces:
-            if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-                #print(move[0], move[1], move[2][0], move[2][1])
-                p.x = move[3][0]
-                p.y = move[3][1]
-                break
-        return board
+        return max(self.actions_per_color(fake_board.get_pieces(), whites_turn), 
+                   key=lambda a: min_value(fake_board, fake_board.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
     
@@ -271,20 +178,23 @@ class IA:
         # whites_turn = True if White2Play and False is Black2Play
         #print("board: ", board.get_pieces())
 
-        if depth == 0 or self.is_terminal(board.get_pieces(), whites_turn):
+        if depth == 0 or board.is_terminal(board.get_pieces(), whites_turn):
             return self.utility(board.get_pieces(), whites_turn)
         
         if whites_turn:
             maxEval, best_move  = -np.inf, None
             pieces = board.get_pieces()
             actions = self.actions_per_color(pieces, whites_turn)
+
             for action in actions:
                 fake_board = Board()
                 fake_board.set_pieces(board.get_pieces())
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
-                
-                if evalu >= maxEval:
-                    maxEval = evalu
+                #print("fake_pieces: ", fake_pieces[0].id)
+
+                evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
+                val = evalu[0] if isinstance(evalu, tuple) else evalu
+                if val >= maxEval:
+                    maxEval = val
                     best_move = action
                 
                 alpha = max(alpha, maxEval)
@@ -296,14 +206,17 @@ class IA:
             minEval, best_move = np.inf, None
             pieces = board.get_pieces()
             actions = self.actions_per_color(pieces, whites_turn)
+
             for action in actions:
                 fake_board = Board()
                 fake_board.set_pieces(board.get_pieces())
                 fake_pieces = fake_board.get_pieces()
-                print("fake_pieces: ", fake_pieces[0].id)
-                evalu = self.minimax_search(self.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
-                if evalu <= minEval:
-                    minEval = evalu
+                #print("fake_pieces: ", fake_pieces[0].id)
+
+                evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
+                val = evalu[0] if isinstance(evalu, tuple) else evalu
+                if val <= minEval:
+                    minEval = val
                     best_move = action
                 beta = min(beta, minEval)
                 if beta <= alpha:
@@ -335,20 +248,6 @@ class IA:
             if piece.color == black and piece.deleted == False:
                 black_score += piece.weight
         return white_score if whites_turn else black_score
-
-
-    #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
-    def get_chess_board_status(self, pieces):
-        white_status = []
-        black_status = []
-        for piece in pieces:
-            if piece.color == white and piece.deleted == False:
-                white_status.append(piece.letter, piece.x, piece.y)
-            elif piece.color == black and piece.deleted == False:
-                black_status.append(piece.letter, piece.x, piece.y)
-        return white_status, black_status
-
-
 
 
     def alpha_beta_pruning(self, depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
