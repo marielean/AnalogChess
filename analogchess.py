@@ -172,9 +172,6 @@ while not done:
                 #print("minmax_move: ", minmax_move)
                 #ia.board_apply_move(board, minmax_move[1])
                 whites_turn = True
-                ia.set_turn(whites_turn)
-                board.set_turn(whites_turn)
-            
             
 
     """
@@ -182,6 +179,8 @@ while not done:
         for piece in pieces:
             piece.ungrab(pieces)
     """
+    ia.set_turn(whites_turn)
+    board.set_turn(whites_turn)
 
     draw_checkers()
 

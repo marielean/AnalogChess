@@ -78,6 +78,11 @@ class IA:
                     moves.append([item[0], item[1], item[2], item[-1][i]])
             return moves
 
+    def verify_actions(self, board, moves):
+        new_moves = []
+        
+        
+        return new_moves
 
     def get_one_random_move(self, pieces: dict, whites_turn: bool, board: Board):
         """
@@ -118,7 +123,7 @@ class IA:
         # ritorna la mossa migliore in base all'algoritmo alpha-beta
         # return alpha_beta_search(pieces, depth_size, maximizingPlayer)
         
-
+    
         
     # metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
     # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
@@ -168,7 +173,7 @@ class IA:
                    key=lambda a: min_value(fake_board, fake_board.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
-    
+
     def minimax_search(self, board: Board, depth, alpha, beta, whites_turn):
         '''
         metodo che restituisce la mossa migliore in base all'algoritmo minimax\n
