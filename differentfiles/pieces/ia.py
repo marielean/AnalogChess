@@ -72,14 +72,16 @@ class IA:
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
-                self.verify_actions(moves)
+            
+            self.verify_actions(moves)
             return moves
         else:
             list_moves = board.get_all_moves_from_distance(list_directions_black)
             for item in list_moves:
                 for i in range(len(item[-1])):
                     moves.append([item[0], item[1], item[2], item[-1][i]])
-                self.verify_actions(moves)
+            
+            self.verify_actions(moves)
             return moves
 
     def is_valid_move(self, move):
@@ -120,8 +122,6 @@ class IA:
     def random_move(self, pieces, whites_turn, board):
         actions = self.actions_per_color(board, pieces, whites_turn)
         r_move = random.choice(actions)
-        print("r_move", r_move)
-        board.apply_move(pieces, r_move)
         return r_move
 
     # function for best move
@@ -200,44 +200,46 @@ class IA:
         if whites_turn:
             maxEval, best_move  = -np.inf, None
             pieces = board.get_pieces()
-            actions = self.actions_per_color(pieces, whites_turn)
+            actions = self.actions_per_color(board, pieces, whites_turn)
 
             for action in actions:
-                fake_board = Board()
-                fake_board.set_pieces(board.get_pieces())
-                #print("fake_pieces: ", fake_pieces[0].id)
+                if self.is_valid_move(action):
+                    fake_board = Board()
+                    fake_board.set_pieces(board.get_pieces())
+                    #print("fake_pieces: ", fake_pieces[0].id)
 
-                evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
-                val = evalu[0] if isinstance(evalu, tuple) else evalu
-                if val >= maxEval:
-                    maxEval = val
-                    best_move = action
-                
-                alpha = max(alpha, maxEval)
-                if beta <= alpha:
-                    break
-            return maxEval, best_move
+                    evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
+                    val = evalu[0] if isinstance(evalu, tuple) else evalu
+                    if val >= maxEval:
+                        maxEval = val
+                        best_move = action
+                    
+                    alpha = max(alpha, maxEval)
+                    if beta <= alpha:
+                        break
+                return maxEval, best_move
         
         else:
             minEval, best_move = np.inf, None
             pieces = board.get_pieces()
-            actions = self.actions_per_color(pieces, whites_turn)
+            actions = self.actions_per_color(board, pieces, whites_turn)
 
             for action in actions:
-                fake_board = Board()
-                fake_board.set_pieces(board.get_pieces())
-                fake_pieces = fake_board.get_pieces()
-                #print("fake_pieces: ", fake_pieces[0].id)
+                if self.is_valid_move(action):
+                    fake_board = Board()
+                    fake_board.set_pieces(board.get_pieces())
+                    fake_pieces = fake_board.get_pieces()
+                    #print("fake_pieces: ", fake_pieces[0].id)
 
-                evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
-                val = evalu[0] if isinstance(evalu, tuple) else evalu
-                if val <= minEval:
-                    minEval = val
-                    best_move = action
-                beta = min(beta, minEval)
-                if beta <= alpha:
-                    break
-            return minEval, best_move
+                    evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
+                    val = evalu[0] if isinstance(evalu, tuple) else evalu
+                    if val <= minEval:
+                        minEval = val
+                        best_move = action
+                    beta = min(beta, minEval)
+                    if beta <= alpha:
+                        break
+                return minEval, best_move
 
     # utility function
     def utility(self, pieces, whites_turn):

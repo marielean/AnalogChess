@@ -72,7 +72,7 @@ class Board:
         self.whiteTurn = whiteTurn
 
     def new_board(self):
-        self.pieces = [
+        self.pieces1 = [
             Pawn(0.5, 1.5, white),
             Rook(0.5, 0.5, white),
             King(4.5, 0.5, white),
@@ -83,7 +83,7 @@ class Board:
             Pawn(0.5, 6.5, black),
         ]
 
-        self.pieces1 = [
+        self.pieces = [
             Rook(0.5, 0.5, white),
             Rook(7.5, 0.5, white),
             Knight(1.5, 0.5, white),
