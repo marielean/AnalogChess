@@ -53,7 +53,6 @@ class Board:
         restituisce la stessa istanza della board ma con le coordinate modificate del pezzo interessato
         '''
         pieces = self.get_pieces()
-        # print("pieces:", pieces[0].id)
         for i in range(len(pieces)):
             if pieces[i].id == move[0] and pieces[i].color == move[1] and pieces[i].x == move[2][0] and pieces[i].y == move[2][1]:
                 # Move the piece

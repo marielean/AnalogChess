@@ -1,6 +1,6 @@
 import pygame, time, random
-from differentfiles.pieces.pawn import *
 from differentfiles.pieces import *
+from differentfiles.ia import IA
 from differentfiles.colors import *
 from differentfiles.utils import to_game_coords
 from differentfiles.drawing import (
@@ -11,23 +11,18 @@ from differentfiles.drawing import (
     screen,
     draw_center_text,
 )
-from differentfiles.AB import *
 from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_1, algorithm = 'MiniMax', depth = 1)
+ia = IA(utility=custom_heuristic_1, algorithm = 'AlphaBeta', depth = 1)
 board = Board()
-
-# pieces = board.get_pieces()
 
 done = False
 clock = pygame.time.Clock()
 confirmed = True
 
-# varibili per gestire i turni del gioco
 turn_number = 0
-# whites_turn = True
 
 pygame.display.set_caption("Analog Chess")
 
@@ -39,25 +34,20 @@ grabbed_piece = None
 for piece in board.get_pieces():
     piece.calc_paths(board.get_pieces())
           
-
+just_played = False
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
 
-        # turno del giocatore e cioè il bianco (in seguito fare che si sceglie il colore durante la creazione della partita)
+        # turno del giocatore e cioè il bianco
         if board.is_white_turn():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for piece in board.get_pieces():
 
-                    if board.is_white_turn():
-                        if piece.color == white:
-                            piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                    else:
-                        if piece.color != white:
-                            piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                            
+                    if piece.color == white:
+                        piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                     
             elif event.type == pygame.MOUSEMOTION:
                 for piece in board.get_pieces():
@@ -73,6 +63,7 @@ while not done:
                     if sol != None:
                         if sol == True:
                             board.set_turn(not board.is_white_turn())
+                            just_played = True
 
                     if piece.can_promote():
                         new_pieces.append(Queen(piece.x, piece.y, piece.color))
@@ -81,31 +72,17 @@ while not done:
 
                 board.set_pieces(new_pieces)
 
-                for piece in board.get_pieces():
-                    if piece.deleted and piece.id == king:
-                        done = True
-                        font = pygame.font.SysFont("oldenglishtext", int(80))
-                        confirm_text = font.render("Wiiiiiiin", True, black)
-                        draw_center_text(confirm_text)
-                        pygame.display.flip()
-
+                if board.is_terminal():
+                    print("This is the end...")
+                    done = True
+                    font = pygame.font.SysFont("oldenglishtext", int(80))
+                    confirm_text = font.render("Wiiiiiiin", True, black)
+                    draw_center_text(confirm_text)
+                    pygame.display.flip()
 
                 for piece in board.get_pieces():
                     piece.calc_paths(board.get_pieces())
             
-            # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
-            if not board.is_white_turn():
-
-                best_move = ia.get_best_move(board)
-
-                # alphabeta_move = ia.alpha_beta_search(board, 1, whites_turn)
-                board.apply_move(best_move)
-                
-                board.set_turn(True)
-            
-
-    
-    # ia.set_turn(whites_turn)
 
     draw_checkers()
 
@@ -141,4 +118,18 @@ while not done:
 
     see_through2.fill((0, 0, 0, 0))
 
-    
+    # Il giocatore nero gioca solamente quando il bianco ha appena finito di giocare
+    if just_played:
+        best_move = ia.get_best_move(board)
+
+        board.apply_move(best_move)
+        
+        board.set_turn(True)
+        just_played = False
+        if board.is_terminal():
+            print("This is the end...")
+            done = True
+            font = pygame.font.SysFont("oldenglishtext", int(80))
+            confirm_text = font.render("Wiiiiiiin", True, black)
+            draw_center_text(confirm_text)
+            pygame.display.flip()
