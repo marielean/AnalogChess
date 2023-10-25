@@ -12,10 +12,11 @@ from differentfiles.drawing import (
     draw_center_text,
 )
 from differentfiles.AB import *
+from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA()
+ia = IA(utility=custom_heuristic_1)
 board = Board()
 board.new_board()
 
@@ -161,21 +162,24 @@ while not done:
             
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
             if whites_turn == False:
-                move = ia.random_move(pieces, whites_turn, board)
-                print("actions black: ", ia.actions_per_color(board, pieces, whites_turn))
-                print("actions white: ", ia.actions_per_color(board, pieces, True))
-                print("random_move: ", move)
+                # move = ia.random_move(pieces, whites_turn, board)
+                # print("actions black: ", ia.actions_per_color(board, pieces, whites_turn))
+                # print("actions white: ", ia.actions_per_color(board, pieces, True))
+                # print("random_move: ", move)
                 
-                minmax_move = ia.minimax_search(board, 2, -np.inf, np.inf, whites_turn)
-                print("minmax_move: ", minmax_move)
-                board.board_apply_move(board, minmax_move[1])
-                #board.board_apply_move(board, move)
-                whites_turn = True
-                #alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
-                #print("alpha_beta: ", alpha_beta)
-                #ia.board_apply_move(board, alpha_beta)
+                # minmax_move = ia.minimax_search(board, 2, -np.inf, np.inf, whites_turn)
+                # print("minmax_move: ", minmax_move)
+                # board.board_apply_move(board, minmax_move[1])
+                # #board.board_apply_move(board, move)
+                # whites_turn = True
+                # #alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
+                # #print("alpha_beta: ", alpha_beta)
+                # #ia.board_apply_move(board, alpha_beta)
                 
-                #print("minmax_move: ", minmax_move)
+                # #print("minmax_move: ", minmax_move)
+
+                alphabeta_move = ia.alpha_beta_search(board, 1, whites_turn)
+                board.apply_move(alphabeta_move)
                 
                 whites_turn = True
             
