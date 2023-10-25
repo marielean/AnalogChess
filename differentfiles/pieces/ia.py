@@ -4,15 +4,16 @@ import numpy as np
 from math import floor
 import random
 from copy import deepcopy
+from differentfiles.heuristics import custom_heuristic_0
 
 class IA:
-    def __init__(self):
+    def __init__(self, utility=custom_heuristic_0):
         # la prima mossa è sempre del bianco
         self.whiteTurn = True
+        self.utility = utility
 
     def set_turn(self, whiteTurn):
         self.whiteTurn = whiteTurn
-
 
     def apply_granularity(self, coordinate, granularity=1):
         rounded = round(coordinate, granularity)
@@ -139,49 +140,95 @@ class IA:
     # metodo che restituisce la mossa migliore in base all'algoritmo alpha-beta
     # pieces è la lista dei pezzi ancora in gioco e sarebbe lo stato attuale del gioco
     # depth è la profondità dell'albero di ricerca
-    def alpha_beta_search(self, board: Board, depth, whites_turn):
+    def alpha_beta_search(self, board: Board, depth, turn):
         '''
         Metodo che implementa la funzione alpha-beta.
-        Suggerimento: devono essere utilizzati i metodi:
-        - game.is_terminal: controlla che lo stato sia terminale
-        - game.utility: restituisce l'utilità di uno stato per un giocatore
-        - game.actions: restituisce la lista di azioni possibili in uno stato
-        - game.result: restituisce il risultato dell'applicazione di un'azione in uno stato
+        board: current board instance (current state)
+        depth: maximum depth of the algorithm
+        turn: boolean that is True if is white turn, False otherway.
         '''
-        pieces = board.get_pieces()
-        fake_board = Board()
-        fake_board.set_pieces(pieces)
-        print(fake_board.get_pieces()[0], pieces[0])
+        def max(curr_board, depth):
+            
+            if (depth == 0 or curr_board.is_terminal(turn)):
+                return None, self.utility(curr_board, turn)
+            
+            # initialization
+            max_value = -np.inf
+            max_move = None
 
-        def max_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
-            if depth == 0 or self.is_terminal(pieces, whites_turn):
-                return fake_board.utility(pieces, whites_turn)
-            v = -math.inf
-            action_s = self.actions_per_color(pieces, whites_turn)
+            # algorithm iteration (max is the turn player)
+            possible_moves = curr_board.get_all_moves(turn)
+            for piece in possible_moves:
+                print(piece)
+                for next_position in piece[3]:
+                    move = [piece[0],piece[1],piece[2],next_position]
+                    next_board = Board(curr_board.get_pieces())
+                    next_board.apply_move(move)
 
-            for a in action_s:
-                v = max(v, min_value(self.apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
-                if v >= beta:
-                    return v
-                alpha = max(alpha, v)
-            return v
+                    _, value = min(next_board, depth-1)
+                    if value > max_value:
+                        max_value = value
+                        max_move = move
+            return max_move, max_value
+        
+        def min(curr_board, depth):
+            if (depth == 0 or curr_board.is_terminal(turn)):
+                return None, self.utility(curr_board, turn)
+            
+            # initialization
+            min_value = np.inf
+            min_move = None
 
-        def min_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
-            if depth == 0 or fake_board.is_terminal(pieces, whites_turn):
-                return self.utility(pieces, whites_turn)
-            v = math.inf
-            action_s = self.actions_per_color(pieces, whites_turn)
+            # algorithm iteration (min is the turn player)
+            possible_moves = curr_board.get_all_moves(not turn)
+            for piece in possible_moves:
+                for next_position in piece[3]:
+                    move = [piece[0],piece[1],piece[2],next_position]
+                    next_board = Board(curr_board.get_pieces())
+                    next_board.apply_move(move)
 
-            for a in action_s:
-                v = min(v, max_value(self.apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
-                if v <= alpha:
-                    return v
-                beta = min(beta, v)
-            return v
+                    _, value = min(next_board, depth-1)
+                    if value > min_value:
+                        min_value = value
+                        min_move = move
+            return min_move, min_value
 
-        # Body di alpha_beta_pruning
-        return max(self.actions_per_color(fake_board.get_pieces(), whites_turn), 
-                   key=lambda a: min_value(fake_board, fake_board.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
+        move, value = max(board, depth)
+        return move
+        # pieces = board.get_pieces()
+        # fake_board = Board()
+        # fake_board.set_pieces(pieces)
+        # print(fake_board.get_pieces()[0], pieces[0])
+
+        # def max_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
+        #     if depth == 0 or self.is_terminal(pieces, whites_turn):
+        #         return fake_board.utility(pieces, whites_turn)
+        #     v = -math.inf
+        #     action_s = self.actions_per_color(pieces, whites_turn)
+
+        #     for a in action_s:
+        #         v = max(v, min_value(self.apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
+        #         if v >= beta:
+        #             return v
+        #         alpha = max(alpha, v)
+        #     return v
+
+        # def min_value(fake_board: Board, pieces, depth, alpha, beta, whites_turn):
+        #     if depth == 0 or fake_board.is_terminal(pieces, whites_turn):
+        #         return self.utility(pieces, whites_turn)
+        #     v = math.inf
+        #     action_s = self.actions_per_color(pieces, whites_turn)
+
+        #     for a in action_s:
+        #         v = min(v, max_value(self.apply_move(pieces, a), depth - 1, alpha, beta, whites_turn))
+        #         if v <= alpha:
+        #             return v
+        #         beta = min(beta, v)
+        #     return v
+
+        # # Body di alpha_beta_pruning
+        # return max(self.actions_per_color(fake_board.get_pieces(), whites_turn), 
+        #            key=lambda a: min_value(fake_board, fake_board.apply_move(fake_board.get_pieces(), a), depth, -math.inf, math.inf, self.whiteTurn)) 
 
 
 
@@ -208,7 +255,7 @@ class IA:
                     fake_board.set_pieces(board.get_pieces())
                     #print("fake_pieces: ", fake_pieces[0].id)
 
-                    evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, False)
+                    evalu = self.minimax_search(fake_board.apply_move(action), depth - 1, alpha, beta, False)
                     val = evalu[0] if isinstance(evalu, tuple) else evalu
                     if val >= maxEval:
                         maxEval = val
@@ -231,7 +278,7 @@ class IA:
                     fake_pieces = fake_board.get_pieces()
                     #print("fake_pieces: ", fake_pieces[0].id)
 
-                    evalu = self.minimax_search(fake_board.board_apply_move(fake_board, action), depth - 1, alpha, beta, True)
+                    evalu = self.minimax_search(fake_board.apply_move(action), depth - 1, alpha, beta, True)
                     val = evalu[0] if isinstance(evalu, tuple) else evalu
                     if val <= minEval:
                         minEval = val
@@ -242,30 +289,30 @@ class IA:
                 return minEval, best_move
 
     # utility function
-    def utility(self, pieces, whites_turn):
-        return self.evaluate_weith(pieces, whites_turn)
+    # def utility(self, pieces, whites_turn):
+    #     return self.evaluate_weith(pieces, whites_turn)
 
-    def evaluate_position(self, pieces, whites_turn):
-        white_score = 0 # punteggio bianco con valore positivo
-        black_score = 0 # punteggio nero con valore negativo
-        for piece in pieces:
-            if piece.color == white and piece.deleted == False:
-                white_score += piece.y
-            if piece.color == black and piece.deleted == False:
-                black_score += piece.y
-        # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
-        return white_score if whites_turn else black_score 
+    # def evaluate_position(self, pieces, whites_turn):
+    #     white_score = 0 # punteggio bianco con valore positivo
+    #     black_score = 0 # punteggio nero con valore negativo
+    #     for piece in pieces:
+    #         if piece.color == white and piece.deleted == False:
+    #             white_score += piece.y
+    #         if piece.color == black and piece.deleted == False:
+    #             black_score += piece.y
+    #     # restituisce il punteggio del giocatore che sta giocando (maximizingPlayer è il bianco, nero altrimenti)
+    #     return white_score if whites_turn else black_score 
 
 
-    def evaluate_weith(self, pieces, whites_turn):
-        white_score = 0 # punteggio bianco con valore positivo
-        black_score = 0 # punteggio nero con valore negativo
-        for piece in pieces:
-            if piece.color == white and piece.deleted == False:
-                white_score += piece.weight
-            if piece.color == black and piece.deleted == False:
-                black_score += piece.weight
-        return white_score if whites_turn else black_score
+    # def evaluate_weith(self, pieces, whites_turn):
+    #     white_score = 0 # punteggio bianco con valore positivo
+    #     black_score = 0 # punteggio nero con valore negativo
+    #     for piece in pieces:
+    #         if piece.color == white and piece.deleted == False:
+    #             white_score += piece.weight
+    #         if piece.color == black and piece.deleted == False:
+    #             black_score += piece.weight
+    #     return white_score if whites_turn else black_score
 
 
     def alpha_beta_pruning(self, depth, node_index, maximizingPlayer, nodes, alpha, beta, pieces):
