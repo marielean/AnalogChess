@@ -7,15 +7,23 @@ class Board:
 
     def __init__(self, pieces = None):
         self.pieces = []
-        self.pieces1 = []
-
-        if pieces is not None:
+        
+        if pieces is None:
+            self.new_board()
+        else:
             self.set_pieces(pieces)
+
         self.whiteTurn = True
 
-    # settare i pezzi con uno stato nuovo della classe Piece
-    def set_pieces(self, piecesss: dict):
-        for p in piecesss:
+    
+    def set_pieces(self, new_pieces):
+        '''
+        Board.set_pieces(self, new_pieces)
+        Metodo che setta i pezzi della Board a un nuovo stato.
+        new_pieces: lista di istanze Piece presenti nel nuovo stato
+        '''
+        self.pieces = []
+        for p in new_pieces:
             if p.id == pawn:
                 self.pieces.append(Pawn(p.x, p.y, p.color))
             elif p.id == rook:
@@ -35,18 +43,17 @@ class Board:
     def is_terminal(self, whites_turn: bool):
         if whites_turn:
             for p in self.get_pieces():
-                if p.color == black and p.id == "K" and p.deleted:
+                if p.color == black and p.id == "Ki" and p.deleted:
                     return True, "bianco ha vinto"
         else:
             for p in self.get_pieces():
-                if p.color == white and p.id == "K" and p.deleted:
+                if p.color == white and p.id == "Ki" and p.deleted:
                     return True, "nero ha vinto"
         return False
     
-    # applichi una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo
     def apply_move(self, move):
         '''
-        ## applichi una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo\n
+        ## applica una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo\n
         board: stato della scacchiera\n
         restituisce la stessa istanza della board ma con le coordinate modificate del pezzo interessato
         '''
@@ -54,37 +61,18 @@ class Board:
         # print("pieces:", pieces[0].id)
         for p in pieces:
             if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-                #print(move[0], move[1], move[2][0], move[2][1])
                 p.x = move[3][0]
                 p.y = move[3][1]
                 break
-    
-    # metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
-    # def apply_move(self, pieces, move):
-    #     #print("apply_move: ", move)
-    #     for p in pieces:
-    #         if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-    #             #print(move[0], move[1], move[2][0], move[2][1])
-    #             p.x = move[3][0]
-    #             p.y = move[3][1]
-    #             break
-    #     return pieces
+
 
     def set_turn(self, whiteTurn: bool):
         self.whiteTurn = whiteTurn
 
-    def new_board(self):
-        self.pieces1 = [
-            Pawn(0.5, 1.5, white),
-            Rook(0.5, 0.5, white),
-            King(4.5, 0.5, white),
-            Knight(1.5, 0.5, white),
-            Knight(6.5, 7.5, black),
-            King(4.5, 7.5, black),
-            Rook(0.5, 7.5, black),
-            Pawn(0.5, 6.5, black),
-        ]
+    def is_white_turn(self):
+        return self.whiteTurn
 
+    def new_board(self):
         self.pieces = [
             Rook(0.5, 0.5, white),
             Rook(7.5, 0.5, white),
@@ -194,14 +182,13 @@ class Board:
         return list_moves
 
     # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self, pieces = None):
+    def get_all_directions_all_in_one(self):
         '''
         DA FARE: non ha senso passare pieces visto che siamo nella classe board.
         Dopo aver adattato tutto si può togliere. Nel mentre ho messo un valore
         default e si può non usare il parametro (scelta migliore).
         '''
-        if pieces == None:
-            pieces = self.get_pieces()
+        pieces = self.get_pieces()
 
         list_directions_white = []
         list_directions_black = []

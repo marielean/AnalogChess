@@ -16,58 +16,10 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_1)
+ia = IA(utility=custom_heuristic_1, algorithm = 'MiniMax', depth = 1)
 board = Board()
-board.new_board()
 
-pieces = board.get_pieces()
-
-
-'''pieces = [
-    Pawn(0.5, 1.5, white),
-    Rook(0.5, 0.5, white),
-    King(4.5, 0.5, white),
-    Knight(1.5, 0.5, white),
-    Knight(6.5, 7.5, black),
-    King(4.5, 7.5, black),
-    Rook(0.5, 7.5, black),
-    Pawn(0.5, 6.5, black),
-]
-
-pieces1 = [
-    Rook(0.5, 0.5, white),
-    Rook(7.5, 0.5, white),
-    Knight(1.5, 0.5, white),
-    Knight(6.5, 0.5, white),
-    Bishop(5.5, 0.5, white),
-    Bishop(2.5, 0.5, white),
-    King(4.5, 0.5, white),
-    Queen(3.5, 0.5, white),
-    Pawn(0.5, 1.5, white),
-    Pawn(1.5, 1.5, white),
-    Pawn(2.5, 1.5, white),
-    Pawn(3.5, 1.5, white),
-    Pawn(4.5, 1.5, white),
-    Pawn(5.5, 1.5, white),
-    Pawn(6.5, 1.5, white),
-    Pawn(7.5, 1.5, white),
-    Rook(0.5, 7.5, black),
-    Rook(7.5, 7.5, black),
-    Knight(1.5, 7.5, black),
-    Knight(6.5, 7.5, black),
-    Bishop(5.5, 7.5, black),
-    Bishop(2.5, 7.5, black),
-    King(4.5, 7.5, black),
-    Queen(3.5, 7.5, black),
-    Pawn(0.5, 6.5, black),
-    Pawn(1.5, 6.5, black),
-    Pawn(2.5, 6.5, black),
-    Pawn(3.5, 6.5, black),
-    Pawn(4.5, 6.5, black),
-    Pawn(5.5, 6.5, black),
-    Pawn(6.5, 6.5, black),
-    Pawn(7.5, 6.5, black),
-]'''
+# pieces = board.get_pieces()
 
 done = False
 clock = pygame.time.Clock()
@@ -75,23 +27,18 @@ confirmed = True
 
 # varibili per gestire i turni del gioco
 turn_number = 0
-whites_turn = True
+# whites_turn = True
 
 pygame.display.set_caption("Analog Chess")
-
-def get_white_turn():
-    return whites_turn
 
 draw_line_round_corners_polygon(
     see_through, (120, 120), (220, 220), RED_HIGHLIGHT, 0.7 * 640 / 8
 )
 grabbed_piece = None
 
-for piece in pieces:
-    piece.calc_paths(pieces)
+for piece in board.get_pieces():
+    piece.calc_paths(board.get_pieces())
           
-
-
 
 while not done:
     for event in pygame.event.get():
@@ -100,50 +47,41 @@ while not done:
             quit()
 
         # turno del giocatore e cioè il bianco (in seguito fare che si sceglie il colore durante la creazione della partita)
-        if whites_turn:
+        if board.is_white_turn():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for piece in pieces:
-                    # print(piece.get_turn())
-                    # print(piece.color, piece.letter, piece.x, piece.y)
-                    # print("turn_number: ", turn_number%2)
-                    # print("whites_turn: ", whites_turn)
-                    # piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                    
-                    if whites_turn:
+                for piece in board.get_pieces():
+
+                    if board.is_white_turn():
                         if piece.color == white:
                             piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
                     else:
                         if piece.color != white:
                             piece.try_grab(to_game_coords(pygame.mouse.get_pos()))
-                            # move = alpha_beta_search(pieces, 3, whites_turn)
-                            # apply_move(pieces, move)
                             
-                                
                     
             elif event.type == pygame.MOUSEMOTION:
-                for piece in pieces:
-                    piece.drag(to_game_coords(pygame.mouse.get_pos()), pieces)
+                for piece in board.get_pieces():
+                    piece.drag(to_game_coords(pygame.mouse.get_pos()), board.get_pieces())
 
             elif event.type == pygame.MOUSEBUTTONUP:
 
                 new_pieces = []
-                for piece in pieces:
-                    sol = piece.ungrab(pieces)
-                    
+
+                for piece in board.get_pieces():
+                    sol = piece.ungrab(board.get_pieces())
+
                     if sol != None:
-                        # print("sol:", sol)
                         if sol == True:
-                            if whites_turn:
-                                whites_turn = False
-                            else:
-                                whites_turn = True
+                            board.set_turn(not board.is_white_turn())
+
                     if piece.can_promote():
                         new_pieces.append(Queen(piece.x, piece.y, piece.color))
                     else:
                         new_pieces.append(piece)
-                pieces = new_pieces
 
-                for piece in pieces:
+                board.set_pieces(new_pieces)
+
+                for piece in board.get_pieces():
                     if piece.deleted and piece.id == king:
                         done = True
                         font = pygame.font.SysFont("oldenglishtext", int(80))
@@ -151,69 +89,45 @@ while not done:
                         draw_center_text(confirm_text)
                         pygame.display.flip()
 
-                
-                '''
-                for piece in pieces:
-                    whites_turn = piece.white_turn
-                '''
 
-                for piece in pieces:
-                    piece.calc_paths(pieces)
+                for piece in board.get_pieces():
+                    piece.calc_paths(board.get_pieces())
             
             # giocatore nero e cioè l'IA (in seguito fare che si sceglie il colore durante la creazione della partita)
-            if whites_turn == False:
-                # move = ia.random_move(pieces, whites_turn, board)
-                # print("actions black: ", ia.actions_per_color(board, pieces, whites_turn))
-                # print("actions white: ", ia.actions_per_color(board, pieces, True))
-                # print("random_move: ", move)
-                
-                # minmax_move = ia.minimax_search(board, 2, -np.inf, np.inf, whites_turn)
-                # print("minmax_move: ", minmax_move)
-                # board.board_apply_move(board, minmax_move[1])
-                # #board.board_apply_move(board, move)
-                # whites_turn = True
-                # #alpha_beta = ia.alpha_beta_search(board, 1, whites_turn)
-                # #print("alpha_beta: ", alpha_beta)
-                # #ia.board_apply_move(board, alpha_beta)
-                
-                # #print("minmax_move: ", minmax_move)
+            if not board.is_white_turn():
 
-                alphabeta_move = ia.alpha_beta_search(board, 1, whites_turn)
-                board.apply_move(alphabeta_move)
+                best_move = ia.get_best_move(board)
+
+                # alphabeta_move = ia.alpha_beta_search(board, 1, whites_turn)
+                board.apply_move(best_move)
                 
-                whites_turn = True
+                board.set_turn(True)
             
 
-    """
-    if not pygame.mouse.get_focused():
-        for piece in pieces:
-            piece.ungrab(pieces)
-    """
-    ia.set_turn(whites_turn)
-    board.set_turn(whites_turn)
+    
+    # ia.set_turn(whites_turn)
 
     draw_checkers()
 
 
     prev_grabbed_piece = grabbed_piece
     grabbed_piece = None
-    for piece in pieces:
+    for piece in board.get_pieces():
         if piece.grabbed:
             grabbed_piece = piece   
     
     if grabbed_piece:
-        for piece in pieces:
+        for piece in board.get_pieces():
             if piece.color != grabbed_piece.color:
-                piece.draw_paths(pieces)
+                piece.draw_paths(board.get_pieces())
     if grabbed_piece:
-        grabbed_piece.draw_moves(pieces)
+        grabbed_piece.draw_moves(board.get_pieces())
 
     screen.blit(see_through, (0, 0))
 
     screen.blit(see_through2, (0, 0))
 
-    for piece in pieces:
-        # pass
+    for piece in board.get_pieces():
         piece.draw()
 
     # draw grabbed piece last so it will show up on top
@@ -227,14 +141,4 @@ while not done:
 
     see_through2.fill((0, 0, 0, 0))
 
-    
-    # list_directions_white, list_directions_black = get_all_directions_all_in_one(pieces)
-    # print("list_directions_white: ", list_directions_white)
-    # print("list_directions_black: ", list_directions_black)
-
-    # print("\n\n\n")
-    # all_point_white = get_all_moves_from_distance(list_directions_white)
-    # print("all_point_white: ", all_point_white)
-
-    # print("action: ", actions(pieces, whites_turn))
     
