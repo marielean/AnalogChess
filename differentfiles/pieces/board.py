@@ -5,9 +5,12 @@ import numpy as np
 
 class Board:
 
-    def __init__(self):
+    def __init__(self, pieces = None):
         self.pieces = []
         self.pieces1 = []
+
+        if pieces is not None:
+            self.set_pieces(pieces)
         self.whiteTurn = True
 
     # settare i pezzi con uno stato nuovo della classe Piece
@@ -29,44 +32,43 @@ class Board:
                 print("ERROR: Piece not found")
         
     # metodo che resituisce se la partita è finita 
-    def is_terminal(self, pieces: dict, whites_turn: bool):
+    def is_terminal(self, whites_turn: bool):
         if whites_turn:
-            for p in pieces:
+            for p in self.get_pieces():
                 if p.color == black and p.id == "K" and p.deleted:
                     return True, "bianco ha vinto"
         else:
-            for p in pieces:
+            for p in self.get_pieces():
                 if p.color == white and p.id == "K" and p.deleted:
                     return True, "nero ha vinto"
         return False
     
     # applichi una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo
-    def board_apply_move(self, board, move: dict):
+    def apply_move(self, move):
         '''
         ## applichi una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo\n
         board: stato della scacchiera\n
         restituisce la stessa istanza della board ma con le coordinate modificate del pezzo interessato
         '''
-        pieces = board.get_pieces()
-        print("pieces:", pieces[0].id)
+        pieces = self.get_pieces()
+        # print("pieces:", pieces[0].id)
         for p in pieces:
             if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
                 #print(move[0], move[1], move[2][0], move[2][1])
                 p.x = move[3][0]
                 p.y = move[3][1]
                 break
-        return board
     
     # metodo che restituisce la nuova disposizione dei pezzi in base alla mossa effettuata (move del tipo [id, colore, (x_start, y_start), (x_end, y_end)])
-    def apply_move(self, pieces, move):
-        #print("apply_move: ", move)
-        for p in pieces:
-            if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-                #print(move[0], move[1], move[2][0], move[2][1])
-                p.x = move[3][0]
-                p.y = move[3][1]
-                break
-        return pieces
+    # def apply_move(self, pieces, move):
+    #     #print("apply_move: ", move)
+    #     for p in pieces:
+    #         if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
+    #             #print(move[0], move[1], move[2][0], move[2][1])
+    #             p.x = move[3][0]
+    #             p.y = move[3][1]
+    #             break
+    #     return pieces
 
     def set_turn(self, whiteTurn: bool):
         self.whiteTurn = whiteTurn
@@ -192,7 +194,15 @@ class Board:
         return list_moves
 
     # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self, pieces):
+    def get_all_directions_all_in_one(self, pieces = None):
+        '''
+        DA FARE: non ha senso passare pieces visto che siamo nella classe board.
+        Dopo aver adattato tutto si può togliere. Nel mentre ho messo un valore
+        default e si può non usare il parametro (scelta migliore).
+        '''
+        if pieces == None:
+            pieces = self.get_pieces()
+
         list_directions_white = []
         list_directions_black = []
         for p in pieces:
@@ -205,3 +215,25 @@ class Board:
                     list_directions_white.append([p.id, p.color, (p.x, p.y), direction])
         
         return list_directions_white, list_directions_black
+    
+    def get_all_moves(self, turn):
+        '''
+        board.get_all_moves(self, turn)
+        
+        This method returns all the possible moves for the selected player in
+        the following format: [id, color, (x_start, y_start), [(x_end, y_end),
+        (x_end, y_end), ...]]
+        turn: boolean that is true if is white turn, false if it is black turn
+        '''
+
+        white_directions, black_directions = self.get_all_directions_all_in_one()
+        if turn:
+            '''
+            white turn
+            '''
+            return self.get_all_moves_from_distance(white_directions)
+        
+        '''
+        black turn
+        '''
+        return self.get_all_moves_from_distance(black_directions)
