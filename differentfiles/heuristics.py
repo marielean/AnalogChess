@@ -1,6 +1,12 @@
 from .colors import *
 import numpy as np
-from pieces.knight import *
+from differentfiles.pieces.knight import *
+from differentfiles.pieces.pawn import *
+from differentfiles.pieces.queen import *
+from differentfiles.pieces.rook import *
+from differentfiles.pieces.king import *
+from differentfiles.pieces.bishop import *
+
 
 def mean_path(piece):
     '''
@@ -10,12 +16,12 @@ def mean_path(piece):
     function is an hypothesis and technically represents an hyperparameter of
     the AI algorithm.
     '''
-    if isinstance(piece, pawn): return 1.2
-    elif isinstance(piece, king): return 0.5
-    elif isinstance(piece, rook): return 10
-    elif isinstance(piece, queen): return 15
-    elif isinstance(piece, knight): return 7
-    elif isinstance(piece, bishop): return 10
+    if isinstance(piece, Pawn): return 1.2
+    elif isinstance(piece, King): return 0.5
+    elif isinstance(piece, Rook): return 10
+    elif isinstance(piece, Queen): return 15
+    elif isinstance(piece, Knight): return 7
+    elif isinstance(piece, Bishop): return 10
 
 
 def total_path_len(piece, edge_positions):
@@ -32,7 +38,7 @@ def total_path_len(piece, edge_positions):
     '''
     curr_pos = (piece.x, piece.y)
     weight = piece.weight
-    is_knight = isinstance(piece, knight)
+    is_knight = isinstance(piece, Knight)
 
     total_len = 0
     if is_knight:
@@ -45,20 +51,38 @@ def total_path_len(piece, edge_positions):
     return total_len
 
 
-def custom_heuristic_1(pieces, maximizingPlayer):
+def custom_heuristic_1(board, player):
     '''
-    custom_heuristic_1(pieces, maximizingPlayer)
+    custom_heuristic_1(pieces, player)
     This function calculates a score for players based on a custom heuristic
     function. The function is based on the total length of the avaiable path per
     piece, weighted on the piece weight, and normalized on the mean path of the piece
     '''
+    pieces = board.get_pieces()
     white_score = 0 # white score
     black_score = 0 # white score
 
     for piece in pieces:
-        if piece.color == white and piece.deleted == False and maximizingPlayer:
+        if piece.color == white and piece.deleted == False and player:
             white_score += total_path_len(piece, piece.get_all_directions_per_piece(pieces))
-        if piece.color == black and piece.deleted == False and not maximizingPlayer:
+        if piece.color == black and piece.deleted == False and not player:
             black_score += total_path_len(piece, piece.get_all_directions_per_piece(pieces))
 
-    return white_score if maximizingPlayer else black_score 
+    return white_score-black_score if player else black_score-white_score
+
+def custom_heuristic_0(board, player):
+    '''
+    custom_heuristic_0(pieces, player)
+    This function calculates a score for players based on a custom heuristic
+    function. The function is based on the pieces weight difference
+    '''
+    pieces = board.get_pieces()
+
+    white_score = 0
+    black_score = 0
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            white_score += piece.weight
+        if piece.color == black and piece.deleted == False:
+            black_score += piece.weight
+    return white_score-black_score if player else black_score-white_score
