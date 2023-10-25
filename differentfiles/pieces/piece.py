@@ -2,9 +2,7 @@ import math
 import pygame
 from differentfiles.utils import width, height, dist, to_game_coords
 from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
-from differentfiles.AB import *
 from differentfiles.colors import *
-
 
 class Piece:
     # x pos and y pos are on a grid of size 8, normal cartesian coordinates
@@ -186,11 +184,15 @@ class Piece:
     def overlaps(self, piece):
         return dist((self.x, self.y), (piece.x, piece.y)) < self.radius * 2
 
+    def apply_granularity(self, coordinate, granularity=1):
+        rounded = round(coordinate, granularity)
+        return rounded
+
     # math shit
     def slide(self, dx, dy, pieces, capture=True, fake=False):
 
-        dx = apply_granularity(dx)
-        dy = apply_granularity(dy)
+        dx = self.apply_granularity(dx)
+        dy = self.apply_granularity(dy)
 
         all_pieces = pieces
         if capture:

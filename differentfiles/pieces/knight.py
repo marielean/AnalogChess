@@ -2,7 +2,6 @@ from .piece import Piece
 from differentfiles.colors import *
 from differentfiles.utils import *
 from differentfiles.drawing import arc, see_through, see_through2, pygame_draw_circle
-from differentfiles.AB import *
 import numpy as np
 
 
@@ -87,8 +86,8 @@ class Knight(Piece):
     def drag(self, new_p, pieces):
         if self.grabbed:
 
-            x = apply_granularity(new_p[0] - self.start_x)
-            y = apply_granularity(new_p[1] - self.start_y)
+            x = self.apply_granularity(new_p[0] - self.start_x)
+            y = self.apply_granularity(new_p[1] - self.start_y)
 
             Radius = math.sqrt(5)
 

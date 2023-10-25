@@ -14,10 +14,6 @@ class IA:
     def set_turn(self, whiteTurn):
         self.whiteTurn = whiteTurn
 
-    def apply_granularity(self, coordinate, granularity=1):
-        rounded = round(coordinate, granularity)
-        return rounded
-
     # function for best move
     def get_best_move(self, board):
         if self.algorithm == "MiniMax":
