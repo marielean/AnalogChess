@@ -63,9 +63,9 @@ def custom_heuristic_1(board, player):
     black_score = 0 # white score
 
     for piece in pieces:
-        if piece.color == white and piece.deleted == False and player:
+        if piece.color == white and piece.deleted == False:
             white_score += total_path_len(piece, piece.get_all_directions_per_piece(pieces))
-        if piece.color == black and piece.deleted == False and not player:
+        if piece.color == black and piece.deleted == False:
             black_score += total_path_len(piece, piece.get_all_directions_per_piece(pieces))
 
     return white_score-black_score if player else black_score-white_score
