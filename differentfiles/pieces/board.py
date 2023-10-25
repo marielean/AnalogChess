@@ -40,15 +40,10 @@ class Board:
                 print("ERROR: Piece not found")
         
     # metodo che resituisce se la partita è finita 
-    def is_terminal(self, whites_turn: bool):
-        if whites_turn:
-            for p in self.get_pieces():
-                if p.color == black and p.id == "Ki" and p.deleted:
-                    return True, "bianco ha vinto"
-        else:
-            for p in self.get_pieces():
-                if p.color == white and p.id == "Ki" and p.deleted:
-                    return True, "nero ha vinto"
+    def is_terminal(self):
+        for p in self.get_pieces():
+            if p.id == king and p.deleted:
+                return True
         return False
     
     def apply_move(self, move):
@@ -59,12 +54,32 @@ class Board:
         '''
         pieces = self.get_pieces()
         # print("pieces:", pieces[0].id)
-        for p in pieces:
-            if p.id == move[0] and p.color == move[1] and p.x == move[2][0] and p.y == move[2][1]:
-                p.x = move[3][0]
-                p.y = move[3][1]
+        for i in range(len(pieces)):
+            if pieces[i].id == move[0] and pieces[i].color == move[1] and pieces[i].x == move[2][0] and pieces[i].y == move[2][1]:
+                # Move the piece
+                pieces[i].x = move[3][0]
+                pieces[i].y = move[3][1]
+
+                for j in range(len(pieces)):
+                    if (j != i) and (((pieces[i].x - pieces[j].x)**2 + (pieces[i].y - pieces[j].y)**2) < (2*pieces[i].radius)**2):
+                        pieces[i].deleted = True
+                        break
                 break
 
+        self.__update_state() # Update state
+
+    def __update_state(self):
+        new_pieces_list = []
+        pieces = self.get_pieces()
+        for p in pieces:
+            if p.can_promote():
+                new_pieces_list.append(Queen(p.x, p.y, p.color))
+            else:
+                new_pieces_list.append(p)
+        self.set_pieces(new_pieces_list)
+
+        for p in self.get_pieces():
+            p.calc_paths(self.get_pieces())
 
     def set_turn(self, whiteTurn: bool):
         self.whiteTurn = whiteTurn
