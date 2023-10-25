@@ -19,7 +19,7 @@ class Knight(Piece):
     def get_all_directions_per_piece(self, pieces):
         list_arc = []
         if self.draw_first_arc:
-            list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(0,len(self.edge_position_angles),2)]
+            list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(0,len(self.edge_position_angles)-1,2)]
         else:
             list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(1,len(self.edge_position_angles)-1,2)]
             list_arc.append((self.edge_position_angles[-1]-2*np.pi, self.edge_position_angles[0]))
