@@ -121,6 +121,16 @@ class Board:
             Pawn(6.5, 6.5, black),
             Pawn(7.5, 6.5, black),
         ] 
+        # self.pieces = [
+        #     Rook(0.5, 0.5, white),
+        #     Knight(1.5, 0.5, white),
+        #     King(4.5, 0.5, white),
+        #     Pawn(0.5, 1.5, white),
+        #     Rook(0.5, 7.5, black),
+        #     Knight(6.5, 7.5, black),
+        #     King(4.5, 7.5, black),
+        #     Pawn(0.5, 6.5, black)
+        # ] 
 
     #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
     def get_chess_board_status(self, pieces):
