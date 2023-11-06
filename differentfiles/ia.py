@@ -101,7 +101,6 @@ class IA:
         board: current board instance (current state)
         '''
         max_player = board.is_white_turn()
-        depth = self.depth
 
         def max(curr_board, alpha, beta, depth):
             
@@ -157,5 +156,5 @@ class IA:
                         beta = min_value
             return min_move, min_value
 
-        move, value = max(board, -np.inf, np.inf, depth)
+        move, value = max(board, -np.inf, np.inf, self.depth)
         return move
