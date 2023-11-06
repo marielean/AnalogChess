@@ -24,7 +24,11 @@ class Bishop(Piece):
             end_positions.append((fake_piece.x, fake_piece.y))
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
 
-        return end_positions
+        end_positions_purified = []
+        for end_position in end_positions:
+            if end_position != (self.start_x, self.start_y):
+                end_positions_purified.append(end_position)
+        return end_positions_purified
 
 
     def draw_moves(self, pieces):

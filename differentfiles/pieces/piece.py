@@ -143,12 +143,7 @@ class Piece:
                         pygame.quit()
                         quit()
                     if event.type == pygame.MOUSEBUTTONUP:
-                        if (
-                            dist(
-                                to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)
-                            )
-                            < self.radius
-                        ):
+                        if (dist(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.radius):
                             self.confirm(pieces)
                             print("Pezzo giocato", self.id)
                                 
