@@ -15,8 +15,15 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
-board = Board()
+final_pieces = [
+    King(1.5,1.5,white),
+    King(6.5,6.5,black),
+    Bishop(4,2,white),
+    Bishop(3,7,black)
+]
+
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 4)
+board = Board(final_pieces, granularity=20)
 
 done = False
 clock = pygame.time.Clock()
@@ -120,9 +127,16 @@ while not done:
 
     # Il giocatore nero gioca solamente quando il bianco ha appena finito di giocare
     if just_played:
+
+        # print("Before:\n",board.get_chess_board_status())
+
         best_move = ia.get_best_move(board)
 
         board.apply_move(best_move)
+
+        print("Mossa selezionata: ", best_move)
+        print("Pezzo giocato dal computer", best_move[0])
+        # print("After:\n", board.get_chess_board_status())
         
         board.set_turn(True)
         just_played = False
