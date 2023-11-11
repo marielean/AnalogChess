@@ -226,6 +226,29 @@ class King(Piece):
 
     def confirm(self, pieces):
         super().confirm(pieces)
+        new_pieces = []
+        if self.grabbed:
+            self.grabbed = False
+            for piece in pieces:
+                if piece.targeted:
+                    piece.deleted = True
+                    piece.x = 100
+                    piece.start_x = 100
+                    piece.delete()
+                else:
+                    new_pieces.append(piece)
+            self.direction = False
+            self.text = self.font.render(
+                self.letter,
+                True,
+                (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
+            )
+
+            self.start_x = self.x
+            self.start_y = self.y
+            self.turn += 1
+
+        pieces = new_pieces
 
         # this is so any rooks moved by castling get updated correctly
         for p in pieces:

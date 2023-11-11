@@ -15,15 +15,8 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-final_pieces = [
-    King(1.5,1.5,white),
-    King(6.5,6.5,black),
-    Bishop(4,2,white),
-    Bishop(3,7,black),
-]
-
 ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 4)
-board = Board(final_pieces, granularity=20)
+board = Board(pieces=False, granularity=20)
 
 done = False
 clock = pygame.time.Clock()

@@ -5,14 +5,19 @@ import numpy as np
 
 class Board:
 
-    def __init__(self, pieces = None, granularity = 1):
+    def __init__(self, pieces = True, granularity = 1):
+        '''
+        ### init method to create new Board instance. 
+        pieces: boolean flag. It must be true if you want to create a new board with all the pieces, false otherway. Default=True.
+        granularity: number of points for each direction. Default=1.
+        '''
         self.pieces = []
         self.granularity = granularity
         
-        if pieces is None:
+        if pieces:
             self.new_board()
         else:
-            self.set_pieces(pieces)
+            self.finite_pieces()
 
         self.whiteTurn = True
 
@@ -91,6 +96,13 @@ class Board:
     def is_white_turn(self):
         return self.whiteTurn
 
+    def finite_pieces(self):
+        self.pieces = [
+            King(1.5,1.5,white),
+            King(6.5,6.5,black),
+            Bishop(4,2,white),
+            Bishop(3,7,black),
+        ]
     def new_board(self):
         self.pieces = [
             Rook(0.5, 0.5, white),
