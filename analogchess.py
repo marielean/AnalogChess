@@ -19,10 +19,10 @@ final_pieces = [
     King(1.5,1.5,white),
     King(6.5,6.5,black),
     Bishop(4,2,white),
-    Bishop(3,7,black)
+    Bishop(3,7,black),
 ]
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 4)
+ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 4)
 board = Board(final_pieces, granularity=20)
 
 done = False
@@ -63,6 +63,7 @@ while not done:
             elif event.type == pygame.MOUSEBUTTONUP:
 
                 new_pieces = []
+                new_new_pieces = []
 
                 for piece in board.get_pieces():
                     sol = piece.ungrab(board.get_pieces())
@@ -72,9 +73,9 @@ while not done:
                             board.set_turn(not board.is_white_turn())
                             just_played = True
 
-                    if piece.can_promote():
+                    if piece.can_promote() and not piece.deleted:
                         new_pieces.append(Queen(piece.x, piece.y, piece.color))
-                    else:
+                    elif not piece.deleted:
                         new_pieces.append(piece)
 
                 board.set_pieces(new_pieces)
@@ -137,6 +138,8 @@ while not done:
         print("Mossa selezionata: ", best_move)
         print("Pezzo giocato dal computer", best_move[0])
         # print("After:\n", board.get_chess_board_status())
+        _, black_pieces = board.get_chess_board_status()
+        print("pieces: ", black_pieces)
         
         board.set_turn(True)
         just_played = False

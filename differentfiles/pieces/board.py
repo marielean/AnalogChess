@@ -25,7 +25,7 @@ class Board:
         '''
         self.pieces = []
         for p in new_pieces:
-            if p.id == pawn:
+            if isinstance(p, Pawn):
                 self.pieces.append(Pawn(p.start_x, p.start_y, p.color))
             elif p.id == rook:
                 self.pieces.append(Rook(p.start_x, p.start_y, p.color))
@@ -42,10 +42,12 @@ class Board:
         
     # metodo che resituisce se la partita è finita 
     def is_terminal(self):
+        cont = 0
         for p in self.get_pieces():
-            if p.id == king and p.deleted:
-                return True
-        return False
+            if p.id == king and p.deleted == False:
+                cont += 1
+        print("cont: ", cont)
+        return True if cont < 2 else False
     
     def apply_move(self, move):
         '''

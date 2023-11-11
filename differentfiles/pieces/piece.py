@@ -32,6 +32,9 @@ class Piece:
 
         self.white_turn = True
 
+    def delete(self):
+        del self
+
     def set_id(self, id):
         self.id = id
 
@@ -103,6 +106,7 @@ class Piece:
 
     def confirm(self, pieces):
 
+        new_pieces = []
         if self.grabbed:
             self.grabbed = False
             for piece in pieces:
@@ -110,6 +114,9 @@ class Piece:
                     piece.deleted = True
                     piece.x = 100
                     piece.start_x = 100
+                    piece.delete()
+                else:
+                    new_pieces.append(piece)
             self.direction = False
             self.text = self.font.render(
                 self.letter,
@@ -120,6 +127,11 @@ class Piece:
             self.start_x = self.x
             self.start_y = self.y
             self.turn += 1
+
+        pieces = new_pieces
+        
+        return new_pieces
+
 
     def ungrab(self, pieces):
         if self.grabbed:
@@ -144,7 +156,7 @@ class Piece:
                         quit()
                     if event.type == pygame.MOUSEBUTTONUP:
                         if (dist(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.radius):
-                            self.confirm(pieces)
+                            pieces = self.confirm(pieces)
                             print("Pezzo giocato", self.id)
                                 
                             if self.white_turn and self.color == white:
