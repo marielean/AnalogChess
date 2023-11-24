@@ -15,6 +15,9 @@ class Bishop(Piece):
         self.set_id(bishop)
         self.set_weight(3)
 
+    def delete(self):
+        return super().delete()
+
     def get_all_directions_per_piece(self, pieces):
         fake_piece = Bishop(self.start_x, self.start_y, self.color)
         directions = [[10, 10], [-10, -10], [10, -10], [-10, 10]]

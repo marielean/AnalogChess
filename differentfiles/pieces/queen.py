@@ -14,6 +14,9 @@ class Queen(Piece):
         self.set_letter("♕")
         self.set_id(queen)
         self.set_weight(9)
+    
+    def delete(self):
+        return super().delete()
 
     def get_all_directions_per_piece(self, pieces):
         fake_piece = Queen(self.start_x, self.start_y, self.color)

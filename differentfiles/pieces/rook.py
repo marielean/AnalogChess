@@ -14,6 +14,9 @@ class Rook(Piece):
         self.set_letter("♖")
         self.set_id(rook)
         self.set_weight(5)
+    
+    def delete(self):
+        return super().delete()
 
     def draw_moves(self, pieces):
         fake_piece = Rook(self.start_x, self.start_y, self.color)

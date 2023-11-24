@@ -15,6 +15,10 @@ class Knight(Piece):
         self.edge_positions=[]
         self.set_weight(3)
 
+    
+    def delete(self):
+        return super().delete()
+    
     def get_all_directions_per_piece(self, pieces):
         list_arc = []
         if self.draw_first_arc:

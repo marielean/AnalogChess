@@ -18,6 +18,9 @@ class King(Piece):
         self.set_id(king)
         self.set_weight(100)
 
+    def delete(self):
+        return super().delete()
+
     def get_all_directions_per_piece(self, pieces):
         fake_piece = King(self.start_x, self.start_y, self.color)
 

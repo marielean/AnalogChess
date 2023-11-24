@@ -16,7 +16,7 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 pygame.init()
 
 ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 4)
-board = Board(pieces=False, granularity=20)
+board = Board(pieces=True, granularity=20)
 
 done = False
 clock = pygame.time.Clock()
@@ -143,3 +143,4 @@ while not done:
             confirm_text = font.render("Wiiiiiiin", True, black)
             draw_center_text(confirm_text)
             pygame.display.flip()
+

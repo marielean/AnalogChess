@@ -11,6 +11,9 @@ class Pawn(Piece):
         self.set_id(pawn)
         self.set_weight(1)
 
+    def delete(self):
+        return super().delete()
+
     def get_all_directions_per_piece(self, pieces):
         fake_piece = Pawn(self.start_x, self.start_y, self.color)
 
