@@ -94,7 +94,6 @@ class King(Piece):
         return end_positions_purified
 
     def draw_moves(self, pieces):
-
         fake_piece = King(self.start_x, self.start_y, self.color)
 
         long_castle = True
@@ -102,9 +101,7 @@ class King(Piece):
         left_rook = None
         right_rook = None
 
-        back_row = 0.5
-        if self.color == black:
-            back_row = 7.5
+        back_row = 0.5 if self.color == black else 7.5
 
         for p in pieces:
             if isinstance(p, Rook) and p.color == self.color and p.turn == 0:
@@ -120,28 +117,25 @@ class King(Piece):
                     long_castle = False
                 if 4.5 < p.x < 7.5:
                     short_castle = False
-        if self.turn == 0:
-            if long_castle:
-                if left_rook:
-                    if left_rook.turn == 0:
-                        pygame_draw_circle(
-                            see_through2,
-                            GREEN_HIGHLIGHT,
-                            to_screen_coords((self.start_x - 2, self.start_y)),
-                            self.radius / 8 * 640,
-                        )
-            if short_castle:
-                if right_rook:
-                    if right_rook.turn == 0:
-                        pygame_draw_circle(
-                            see_through2,
-                            GREEN_HIGHLIGHT,
-                            to_screen_coords((self.start_x + 2, self.start_y)),
-                            self.radius / 8 * 640,
-                        )
 
         if self.turn == 0:
-            pieces = [p for p in pieces if (p != left_rook and p != right_rook)]
+            if long_castle and left_rook and left_rook.turn == 0:
+                pygame_draw_circle(
+                    see_through2,
+                    GREEN_HIGHLIGHT,
+                    to_screen_coords((self.start_x - 2, self.start_y)),
+                    self.radius / 8 * 640,
+                )
+            if short_castle and right_rook and right_rook.turn == 0:
+                pygame_draw_circle(
+                    see_through2,
+                    GREEN_HIGHLIGHT,
+                    to_screen_coords((self.start_x + 2, self.start_y)),
+                    self.radius / 8 * 640,
+                )
+
+        if self.turn == 0:
+            pieces = [p for p in pieces if p != left_rook and p != right_rook]
 
         directions = [
             [1, 1],
@@ -170,15 +164,12 @@ class King(Piece):
 
     def drag(self, new_p, pieces):
         if self.grabbed:
-
             long_castle = True
             short_castle = True
             left_rook = None
             right_rook = None
+            back_row = 0.5 if self.color == black else 7.5
 
-            back_row = 0.5
-            if self.color == black:
-                back_row = 7.5
             for p in pieces:
                 if isinstance(p, Rook) and p.color == self.color and p.turn == 0:
                     if p.x < 4:
@@ -212,24 +203,17 @@ class King(Piece):
             )
 
             if self.turn == 0:
-                if long_castle:
-                    if left_rook:
-                        if left_rook.turn == 0:
-                            if new_p[0] < self.start_x - 1.5:
-                                self.slide(0, 0, pieces)
-                                self.slide(-2, 0, pieces)
-                                left_rook.x = self.x + 1
+                if long_castle and left_rook and left_rook.turn == 0 and new_p[0] < self.start_x - 1.5:
+                    self.slide(0, 0, pieces)
+                    self.slide(-2, 0, pieces)
+                    left_rook.x = self.x + 1
 
-                if short_castle:
-                    if right_rook:
-                        if right_rook.turn == 0:
-                            if new_p[0] > self.start_x + 1.5:
-                                self.slide(0, 0, pieces)
-                                self.slide(2, 0, pieces)
-                                right_rook.x = self.x - 1
+                if short_castle and right_rook and right_rook.turn == 0 and new_p[0] > self.start_x + 1.5:
+                    self.slide(0, 0, pieces)
+                    self.slide(2, 0, pieces)
+                    right_rook.x = self.x - 1
 
     def confirm(self, pieces):
-        #super().confirm(pieces)
         new_pieces = []
         if self.grabbed:
             self.grabbed = False
@@ -252,41 +236,34 @@ class King(Piece):
             self.start_y = self.y
             self.turn += 1
 
-        pieces = new_pieces
-        
-
-        # this is so any rooks moved by castling get updated correctly
-        for p in pieces:
+        # Update start positions and turns for pieces that have moved
+        for p in new_pieces:
             if p.x != p.start_x or p.y != p.start_y:
                 p.start_x = p.x
                 p.start_y = p.y
                 p.turn += 1
-        return pieces
+
+        return new_pieces
 
     def draw_paths(self, pieces):
-
-        if self.targeted:
+        if self.targeted or self.deleted:
             return
-        if self.deleted:
-            return
-
-        fake_piece = Queen(self.start_x, self.start_y, self.color)
 
         directions = [
-            [1, 1],
-            [-1, -1],
-            [1, -1],
-            [-1, 1],
-            [0, 1],
-            [0, -1],
-            [1, 0],
-            [-1, 0],
+            (1, 1),
+            (-1, -1),
+            (1, -1),
+            (-1, 1),
+            (0, 1),
+            (0, -1),
+            (1, 0),
+            (-1, 0),
         ]
         end_positions = []
-        for d in directions:
-            fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
-            end_positions.append((fake_piece.x, fake_piece.y))
-            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+        for dx, dy in directions:
+            end_x = self.start_x + dx
+            end_y = self.start_y + dy
+            end_positions.append((end_x, end_y))
 
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
