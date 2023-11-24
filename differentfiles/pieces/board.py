@@ -49,7 +49,7 @@ class Board:
     def is_terminal(self):
         cont = 0
         for p in self.get_pieces():
-            if p.id == king and p.deleted == False:
+            if isinstance(p, King) and p.deleted == False:
                 cont += 1
         print("cont: ", cont)
         return True if cont < 2 else False
