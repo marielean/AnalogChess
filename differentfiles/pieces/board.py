@@ -32,15 +32,15 @@ class Board:
         for p in new_pieces:
             if isinstance(p, Pawn):
                 self.pieces.append(Pawn(p.start_x, p.start_y, p.color))
-            elif p.id == rook:
+            elif isinstance(p, Rook):
                 self.pieces.append(Rook(p.start_x, p.start_y, p.color))
-            elif p.id == knight:
+            elif isinstance(p, Knight):
                 self.pieces.append(Knight(p.start_x, p.start_y, p.color))
-            elif p.id == bishop:
+            elif isinstance(p, Bishop):
                 self.pieces.append(Bishop(p.start_x, p.start_y, p.color))
-            elif p.id == queen:
+            elif isinstance(p, Queen):
                 self.pieces.append(Queen(p.start_x, p.start_y, p.color))
-            elif p.id == king:
+            elif isinstance(p, King):
                 self.pieces.append(King(p.start_x, p.start_y, p.color))
             else:
                 print("ERROR: Piece not found")
