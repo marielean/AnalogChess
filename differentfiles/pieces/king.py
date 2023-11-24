@@ -17,6 +17,7 @@ class King(Piece):
         self.set_letter("♔")
         self.set_id(king)
         self.set_weight(100)
+        self.turn = 0
 
     def delete(self):
         return super().delete()
@@ -228,7 +229,7 @@ class King(Piece):
                                 right_rook.x = self.x - 1
 
     def confirm(self, pieces):
-        super().confirm(pieces)
+        #super().confirm(pieces)
         new_pieces = []
         if self.grabbed:
             self.grabbed = False
@@ -252,6 +253,7 @@ class King(Piece):
             self.turn += 1
 
         pieces = new_pieces
+        
 
         # this is so any rooks moved by castling get updated correctly
         for p in pieces:
@@ -259,6 +261,7 @@ class King(Piece):
                 p.start_x = p.x
                 p.start_y = p.y
                 p.turn += 1
+        return pieces
 
     def draw_paths(self, pieces):
 
