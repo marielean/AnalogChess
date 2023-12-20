@@ -6,9 +6,6 @@ from differentfiles.heuristics import custom_heuristic_0
 
 class IA:
     def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1):
-        '''
-        Possible algorithms: MiniMax, AlphaBeta, Random
-        '''
         self.whiteTurn = True
         self.utility = utility
         self.algorithm = algorithm

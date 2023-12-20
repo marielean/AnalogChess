@@ -53,9 +53,8 @@ class Pawn(Piece):
         fake_piece = Pawn(self.start_x, self.start_y, self.color)
 
         end_positions = []
-        forward_dist = 1
-        if self.turn == 0:
-            forward_dist = 2
+        # Determine forward distance based on the turn
+        forward_dist = 2 if self.turn == 0 else 1
 
         if self.color == white:
             directions = [[1, 1], [-1, 1]]
@@ -85,6 +84,7 @@ class Pawn(Piece):
                 GREEN_HIGHLIGHT,
                 self.radius * 2 * 640 / 8,
             )
+
 
     def drag(self, new_p, pieces):
         if self.grabbed:

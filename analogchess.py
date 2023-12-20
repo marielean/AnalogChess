@@ -15,7 +15,7 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 4)
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1)
 board = Board(pieces=True, granularity=20)
 
 done = False
