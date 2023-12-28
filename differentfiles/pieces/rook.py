@@ -19,7 +19,7 @@ class Rook(Piece):
         return super().delete()
 
     def draw_moves(self, pieces):
-        fake_piece = Rook(self.start_x, self.start_y, self.color)
+        '''fake_piece = Rook(self.start_x, self.start_y, self.color)
 
         end_positions = []
 
@@ -28,8 +28,9 @@ class Rook(Piece):
             fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
             end_positions.append((fake_piece.x, fake_piece.y))
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
-        #print("end_positions rook", end_positions)
+        #print("end_positions rook", end_positions)'''
 
+        end_positions = self.get_all_directions_per_piece(pieces)
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
                 see_through2,

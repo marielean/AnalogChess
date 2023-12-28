@@ -166,7 +166,7 @@ class Board:
 
     # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
     # granularity è il numero di punti che si vogliono ottenere per ogni direzione
-    def get_points_from_distance(self, x_start, y_start, x_end, y_end, knight_flag=False):
+    def get_points_from_distance(self, x_start, y_start, x_end, y_end, knight_flag=False, king_rook_flag=False):
         '''
         get_points_from_distance(x_start, y_start, x_end, y_end, knight_flag=False)
         The function returns all the possible moves in the following format:
@@ -179,6 +179,11 @@ class Board:
         '''
         list_points = []
         x_new, y_new = None, None
+        if king_rook_flag:
+            #if the turn of king is first then we can do castling
+
+
+            return list_points
         if not knight_flag:
             # If the piece is not a knight, the movement can be on a point in a line. 
             # In this case (x_start, y_start) are the coordinate of the first point of the line and (x_end, y_end) is the final point
@@ -221,7 +226,8 @@ class Board:
             for final_pos in curr_piece[3]: 
                 
                 is_knight = (curr_piece[0]==knight)
-                list_point = self.get_points_from_distance(curr_piece[2][0], curr_piece[2][1], final_pos[0], final_pos[1], knight_flag=is_knight)
+                is_king_rook = (curr_piece[0]==king) and curr_piece
+                list_point = self.get_points_from_distance(curr_piece[2][0], curr_piece[2][1], final_pos[0], final_pos[1], knight_flag=is_knight, king_rook_flag=is_king_rook)
                 
                 list_moves[-1][-1] += list_point # list_moves
         return list_moves
@@ -241,10 +247,10 @@ class Board:
             if not p.deleted:
                 if p.color == black:
                     direction = p.get_all_directions_per_piece(pieces)
-                    list_directions_black.append([p.id, p.color, (p.start_x, p.start_y), direction])
+                    list_directions_black.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
                 elif p.color == white:
                     direction = p.get_all_directions_per_piece(pieces)
-                    list_directions_white.append([p.id, p.color, (p.start_x, p.start_y), direction])
+                    list_directions_white.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
         
         return list_directions_white, list_directions_black
     
@@ -269,3 +275,7 @@ class Board:
         black turn
         '''
         return self.get_all_moves_from_distance(black_directions)
+    
+
+
+    

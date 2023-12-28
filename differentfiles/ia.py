@@ -161,3 +161,5 @@ class IA:
 
         move, value = max(board, -np.inf, np.inf, self.depth)
         return move
+    
+    

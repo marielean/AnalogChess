@@ -50,7 +50,9 @@ class Pawn(Piece):
 
     def draw_moves(self, pieces):
 
-        fake_piece = Pawn(self.start_x, self.start_y, self.color)
+        end_positions = self.get_all_directions_per_piece(pieces)
+
+        '''fake_piece = Pawn(self.start_x, self.start_y, self.color)
 
         end_positions = []
         # Determine forward distance based on the turn
@@ -74,7 +76,7 @@ class Pawn(Piece):
         for d in directions:
             fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
             end_positions.append((fake_piece.x, fake_piece.y))
-            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)'''
 
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
@@ -200,3 +202,4 @@ class Pawn(Piece):
                 RED_HIGHLIGHT,
                 self.radius * 2 * 640 / 8,
             )
+

@@ -48,7 +48,7 @@ class King(Piece):
                     long_castle = False
                 if 4.5 < p.x < 7.5:
                     short_castle = False
-        '''if self.turn == 0:
+        if self.turn == 0:
             if long_castle:
                 if left_rook:
                     if left_rook.turn == 0:
@@ -67,7 +67,7 @@ class King(Piece):
                             to_screen_coords((self.start_x + 2, self.start_y)),
                             self.radius / 8 * 640,
                         )
-'''
+
         if self.turn == 0:
             pieces = [p for p in pieces if (p != left_rook and p != right_rook)]
 
@@ -91,10 +91,11 @@ class King(Piece):
         for end_position in end_positions:
             if end_position != (self.start_x, self.start_y):
                 end_positions_purified.append(end_position)
+        #print("end_king", end_positions_purified)
         return end_positions_purified
 
     def draw_moves(self, pieces):
-        fake_piece = King(self.start_x, self.start_y, self.color)
+        '''fake_piece = King(self.start_x, self.start_y, self.color)
 
         long_castle = True
         short_castle = True
@@ -151,8 +152,9 @@ class King(Piece):
         for d in directions:
             fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
             end_positions.append((fake_piece.x, fake_piece.y))
-            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
+            fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)'''
 
+        end_positions = self.get_all_directions_per_piece(pieces)
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
                 see_through2,
@@ -249,7 +251,7 @@ class King(Piece):
         if self.targeted or self.deleted:
             return
 
-        directions = [
+        '''directions = [
             (1, 1),
             (-1, -1),
             (1, -1),
@@ -263,7 +265,9 @@ class King(Piece):
         for dx, dy in directions:
             end_x = self.start_x + dx
             end_y = self.start_y + dy
-            end_positions.append((end_x, end_y))
+            end_positions.append((end_x, end_y))'''
+        
+        end_positions = self.get_all_directions_per_piece(pieces)
 
         for end_pos in end_positions:
             draw_line_round_corners_polygon(
