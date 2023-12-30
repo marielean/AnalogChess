@@ -46,7 +46,7 @@ class Piece:
 
     def set_letter(self, letter):
         self.letter = letter
-        if not self.grabbed:
+        if self.grabbed is False:
             self.text = self.font.render(
                 self.letter,
                 True,
@@ -115,6 +115,9 @@ class Piece:
                     piece.x = 100
                     piece.start_x = 100
                     piece.delete()
+
+                    # elimino il pezzo dal vettore di pezzi quindi elimino proprio l'oggetto
+                    del piece
                 else:
                     new_pieces.append(piece)
             self.direction = False
@@ -165,7 +168,7 @@ class Piece:
                                 for one_piece in pieces:
                                     one_piece.white_turn = False
                                 return True
-                            elif not self.white_turn and self.color == black:
+                            elif self.white_turn is False and self.color == black:
                                 #print("black turn, next turn white")
                                 self.white_turn = True
                                 for one_piece in pieces:
@@ -206,6 +209,7 @@ class Piece:
             pieces = [
                 p
                 for p in pieces
+                # verifico se il prodotto scalare tra p e se stesso è positivo
                 if (p.x - self.start_x) * dx + (p.y - self.start_y) * dy > 0
                 and p != self
                 and p.color == self.color
@@ -214,6 +218,7 @@ class Piece:
             pieces = [
                 p
                 for p in pieces
+                # verifico se il prodotto scalare tra p e se stesso è positivo
                 if (p.x - self.start_x) * dx + (p.y - self.start_y) * dy > 0
                 and p != self
                 and p.color == self.color
@@ -223,14 +228,19 @@ class Piece:
             pieces = [
                 p
                 for p in pieces
+                # verifico se il prodotto scalare tra p e se stesso è positivo
                 if (p.x - self.start_x) * dx + (p.y - self.start_y) * dy > 0
                 and p != self
             ]
 
+        # viene calcolato l'angolo dello spostamento desiderato del pezzo in base a dx e dy
         angle = math.atan2(dy, dx)
 
         # resolve wall collisions
         # dont do this if the piece is off the board it wont work right
+
+        # questo serve per verificare se lo spostamento desiderato è fuori dalla scacchiera
+        # se è così allora vengono calcolati i nuovi dx e dy in modo che il pezzo non esca dalla scacchiera
         if 0 <= self.start_x <= 8 and 0 <= self.start_y <= 8:
             if abs(dx) > 0:
                 if self.start_x + dx + self.radius > 8:
@@ -365,19 +375,19 @@ class Piece:
                     perp_dist = h
                     first_piece_hit = piece
 
-        if not fake:
+        if fake is False:
             for piece in all_pieces:
                 piece.untarget()
 
         if first_piece_hit:
             if self.overlaps(first_piece_hit):
-                if not fake:
+                if fake is False:
                     first_piece_hit.target()
             elif dist(
                 (self.x, self.y), (self.start_x, self.start_y)
             ) > first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2):
                 new_dist = first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2)
-                if not fake:
+                if fake is False:
                     first_piece_hit.target()
 
         if abs(full_dist) > 0:
@@ -385,7 +395,7 @@ class Piece:
             self.y = self.start_y + dy * new_dist / full_dist
 
         # Still could be colliding with pieces, check collisions with all other pieces and target them
-        if not fake:
+        if fake is False:
             for piece in pieces:
                 if self.overlaps(piece):
                     piece.target()

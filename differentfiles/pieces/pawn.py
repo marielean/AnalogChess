@@ -16,11 +16,14 @@ class Pawn(Piece):
 
     def get_all_directions_per_piece(self, pieces):
         fake_piece = Pawn(self.start_x, self.start_y, self.color)
+        print("self ", self.start_x, self.start_y)
 
         end_positions = []
         forward_dist = 1
         if self.turn == 0:
             forward_dist = 2
+        
+        color = self.color
 
         if self.color == white:
             directions = [[1, 1], [-1, 1]]
@@ -28,7 +31,9 @@ class Pawn(Piece):
                 0, forward_dist, [p for p in pieces if p != self], capture=False
             )
             end_positions.append((fake_piece.x, fake_piece.y))
+            print("fake piece1", fake_piece.x, fake_piece.y)
             fake_piece.slide(0, 0, [p for p in pieces if p != self], capture=False)
+            print("fake piece2", fake_piece.x, fake_piece.y)
         else:
             directions = [[-1, -1], [1, -1]]
             fake_piece.slide(
@@ -39,13 +44,20 @@ class Pawn(Piece):
 
         for d in directions:
             fake_piece.slide(d[0], d[1], [p for p in pieces if p != self], fake=True)
-            end_positions.append((fake_piece.x, fake_piece.y))
+            '''
+            In questo punto controllo se la casella in cui si trova la pedina fittizia è occupata da una pedina di colore diverso
+            Se si allora la aggiungo alla lista delle posizioni finali altrimenti non ha senso aggiungerla perchè non può mangiare una pedina
+            '''
+            if any(p.color != color and fake_piece.overlaps(p) for p in pieces):
+                end_positions.append((fake_piece.x, fake_piece.y))
+            print("fake piece", d, fake_piece.x, fake_piece.y)
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
 
         end_positions_purified = []
         for end_position in end_positions:
             if end_position != (self.start_x, self.start_y):
                 end_positions_purified.append(end_position)
+        print("end positions", end_positions_purified)
         return end_positions_purified
 
     def draw_moves(self, pieces):
