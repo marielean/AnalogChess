@@ -70,7 +70,7 @@ class Board:
                 pieces[i].start_y = move[3][1]
 
                 for j in range(len(pieces)):
-                    if (j != i) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) < (2*pieces[i].radius)**2):
+                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= (2*pieces[i].radius)**2*1.001):
                         pieces[j].deleted = True
                         pieces[j].start_x, pieces[j].x = 100, 100 # Render outside the board
                 break
@@ -95,13 +95,6 @@ class Board:
     def is_white_turn(self):
         return self.whiteTurn
 
-    def finite_pieces(self):
-        self.pieces = [
-            King(1.5,1.5,white),
-            King(6.5,6.5,black),
-            Bishop(4,2,white),
-            Bishop(3,7,black),
-        ]
     def new_board(self):
         self.pieces = [
             Rook(0.5, 0.5, white),
@@ -138,15 +131,11 @@ class Board:
             Pawn(7.5, 6.5, black),
         ] 
         # self.pieces = [
-        #     Rook(0.5, 0.5, white),
-        #     Knight(1.5, 0.5, white),
-        #     King(4.5, 0.5, white),
-        #     Pawn(0.5, 1.5, white),
-        #     Rook(0.5, 7.5, black),
-        #     Knight(6.5, 7.5, black),
-        #     King(4.5, 7.5, black),
-        #     Pawn(0.5, 6.5, black)
-        # ] 
+        #     King(1.5,1.5,white),
+        #     King(6.5,6.5,black),
+        #     Bishop(3,7,black),
+        #     Knight(2,2,white)
+        # ]
 
     #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
     def get_chess_board_status(self):
@@ -178,11 +167,11 @@ class Board:
         '''
         list_points = []
         x_new, y_new = None, None
-        if king_rook_flag:
-            #if the turn of king is first then we can do castling
+        # if king_rook_flag:
+        #     #if the turn of king is first then we can do castling
 
 
-            return list_points
+        #     return list_points
         if not knight_flag:
             # If the piece is not a knight, the movement can be on a point in a line. 
             # In this case (x_start, y_start) are the coordinate of the first point of the line and (x_end, y_end) is the final point

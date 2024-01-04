@@ -15,8 +15,8 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
-board = Board(granularity=4)
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 3)
+board = Board(granularity=5)
 
 done = False
 clock = pygame.time.Clock()
@@ -73,13 +73,13 @@ while not done:
 
                 board.set_pieces(new_pieces)
 
-                if board.is_terminal():
-                    print("This is the end...")
-                    done = True
-                    font = pygame.font.SysFont("oldenglishtext", int(80))
-                    confirm_text = font.render("Wiiiiiiin", True, black)
-                    draw_center_text(confirm_text)
-                    pygame.display.flip()
+                # if board.is_terminal():
+                #     print("This is the end...")
+                #     done = True
+                #     font = pygame.font.SysFont("oldenglishtext", int(80))
+                #     confirm_text = font.render("Wiiiiiiin", True, black)
+                #     draw_center_text(confirm_text)
+                #     pygame.display.flip()
 
                 for piece in board.get_pieces():
                     piece.calc_paths(board.get_pieces())
@@ -123,16 +123,15 @@ while not done:
     if just_played:
 
         # print("Before:\n",board.get_chess_board_status())
+        if not board.is_terminal():
+            best_move = ia.get_best_move(board)
+            board.apply_move(best_move)
 
-        best_move = ia.get_best_move(board)
-
-        board.apply_move(best_move)
-
-        print("Mossa selezionata: ", best_move)
-        print("Pezzo giocato dal computer", best_move[0])
-        # print("After:\n", board.get_chess_board_status())
-        _, black_pieces = board.get_chess_board_status()
-        # print("pieces: ", black_pieces)
+            print("Mossa selezionata: ", best_move)
+            print("Pezzo giocato dal computer", best_move[0])
+            # print("After:\n", board.get_chess_board_status())
+            # _, black_pieces = board.get_chess_board_status()
+            # print("pieces: ", black_pieces)
         
         board.set_turn(True)
         just_played = False
