@@ -6,7 +6,7 @@ from differentfiles.colors import *
 
 class Piece:
     # x pos and y pos are on a grid of size 8, normal cartesian coordinates
-    def __init__(self, x_pos, y_pos, color):
+    def __init__(self, x_pos, y_pos, color, deleted=False):
         diameter = 0.7
         self.x = x_pos
         self.y = y_pos
@@ -27,7 +27,7 @@ class Piece:
         self.direction = False
         self.targeted = False
         self.turn = 0
-        self.deleted = False
+        self.deleted = deleted
         self.weight = 0
 
         self.white_turn = True
@@ -209,7 +209,7 @@ class Piece:
             pieces = [
                 p
                 for p in pieces
-                # verifico se il prodotto scalare tra p e se stesso è positivo
+                # verifico se il prodotto scalare tra p e il pezzo che sto muovendo è positivo
                 if (p.x - self.start_x) * dx + (p.y - self.start_y) * dy > 0
                 and p != self
                 and p.color == self.color

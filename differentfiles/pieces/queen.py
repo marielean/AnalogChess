@@ -9,8 +9,8 @@ from differentfiles.drawing import (
 
 
 class Queen(Piece):
-    def __init__(self, x, y, c):
-        super().__init__(x, y, c)
+    def __init__(self, x, y, c, deleted=False):
+        super().__init__(x, y, c, deleted)
         self.set_letter("♕")
         self.set_id(queen)
         self.set_weight(9)

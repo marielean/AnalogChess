@@ -15,8 +15,8 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 1)
-board = Board(pieces=True, granularity=20)
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
+board = Board(granularity=4)
 
 done = False
 clock = pygame.time.Clock()
@@ -132,7 +132,7 @@ while not done:
         print("Pezzo giocato dal computer", best_move[0])
         # print("After:\n", board.get_chess_board_status())
         _, black_pieces = board.get_chess_board_status()
-        print("pieces: ", black_pieces)
+        # print("pieces: ", black_pieces)
         
         board.set_turn(True)
         just_played = False

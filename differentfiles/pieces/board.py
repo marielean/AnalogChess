@@ -5,7 +5,7 @@ import numpy as np
 
 class Board:
 
-    def __init__(self, pieces = True, granularity = 1):
+    def __init__(self, pieces = None, granularity = 1):
         '''
         ### init method to create new Board instance. 
         pieces: boolean flag. It must be true if you want to create a new board with all the pieces, false otherway. Default=True.
@@ -15,9 +15,9 @@ class Board:
         self.granularity = granularity
         
         if pieces:
-            self.new_board()
+            self.set_pieces(pieces)
         else:
-            self.finite_pieces()
+            self.new_board()
 
         self.whiteTurn = True
 
@@ -31,28 +31,27 @@ class Board:
         self.pieces = []
         for p in new_pieces:
             if isinstance(p, Pawn):
-                self.pieces.append(Pawn(p.start_x, p.start_y, p.color))
+                self.pieces.append(Pawn(p.start_x, p.start_y, p.color, p.deleted))
             elif isinstance(p, Rook):
-                self.pieces.append(Rook(p.start_x, p.start_y, p.color))
+                self.pieces.append(Rook(p.start_x, p.start_y, p.color, p.deleted))
             elif isinstance(p, Knight):
-                self.pieces.append(Knight(p.start_x, p.start_y, p.color))
+                self.pieces.append(Knight(p.start_x, p.start_y, p.color, p.deleted))
             elif isinstance(p, Bishop):
-                self.pieces.append(Bishop(p.start_x, p.start_y, p.color))
+                self.pieces.append(Bishop(p.start_x, p.start_y, p.color, p.deleted))
             elif isinstance(p, Queen):
-                self.pieces.append(Queen(p.start_x, p.start_y, p.color))
+                self.pieces.append(Queen(p.start_x, p.start_y, p.color, p.deleted))
             elif isinstance(p, King):
-                self.pieces.append(King(p.start_x, p.start_y, p.color))
+                self.pieces.append(King(p.start_x, p.start_y, p.color, p.deleted))
             else:
                 print("ERROR: Piece not found")
         
     # metodo che resituisce se la partita è finita 
     def is_terminal(self):
-        cont = 0
+        count = 0
         for p in self.get_pieces():
             if isinstance(p, King) and p.deleted == False:
-                cont += 1
-        print("cont: ", cont)
-        return True if cont < 2 else False
+                count += 1
+        return True if count < 2 else False
     
     def apply_move(self, move):
         '''
@@ -75,7 +74,7 @@ class Board:
                         pieces[j].deleted = True
                         pieces[j].start_x, pieces[j].x = 100, 100 # Render outside the board
                 break
-
+        self.set_pieces(pieces)
         self.__update_state() # Update state
 
     def __update_state(self):

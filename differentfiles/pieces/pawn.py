@@ -5,8 +5,8 @@ from differentfiles.drawing import draw_line_round_corners_polygon, see_through,
 
 
 class Pawn(Piece):
-    def __init__(self, x, y, d):
-        super().__init__(x, y, d)
+    def __init__(self, x, y, c, deleted=False):
+        super().__init__(x, y, c, deleted)
         self.set_letter("♙")
         self.set_id(pawn)
         self.set_weight(1)
@@ -16,7 +16,7 @@ class Pawn(Piece):
 
     def get_all_directions_per_piece(self, pieces):
         fake_piece = Pawn(self.start_x, self.start_y, self.color)
-        print("self ", self.start_x, self.start_y)
+        # print("self ", self.start_x, self.start_y)
 
         end_positions = []
         forward_dist = 1
@@ -31,9 +31,9 @@ class Pawn(Piece):
                 0, forward_dist, [p for p in pieces if p != self], capture=False
             )
             end_positions.append((fake_piece.x, fake_piece.y))
-            print("fake piece1", fake_piece.x, fake_piece.y)
+            # print("fake piece1", fake_piece.x, fake_piece.y)
             fake_piece.slide(0, 0, [p for p in pieces if p != self], capture=False)
-            print("fake piece2", fake_piece.x, fake_piece.y)
+            # print("fake piece2", fake_piece.x, fake_piece.y)
         else:
             directions = [[-1, -1], [1, -1]]
             fake_piece.slide(
@@ -50,14 +50,14 @@ class Pawn(Piece):
             '''
             if any(p.color != color and fake_piece.overlaps(p) for p in pieces):
                 end_positions.append((fake_piece.x, fake_piece.y))
-            print("fake piece", d, fake_piece.x, fake_piece.y)
+            # print("fake piece", d, fake_piece.x, fake_piece.y)
             fake_piece.slide(0, 0, [p for p in pieces if p != self], fake=True)
 
         end_positions_purified = []
         for end_position in end_positions:
             if end_position != (self.start_x, self.start_y):
                 end_positions_purified.append(end_position)
-        print("end positions", end_positions_purified)
+        # print("end positions", end_positions_purified)
         return end_positions_purified
 
     def draw_moves(self, pieces):

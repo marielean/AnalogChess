@@ -9,8 +9,8 @@ from differentfiles.drawing import (
 
 
 class Rook(Piece):
-    def __init__(self, x, y, d):
-        super().__init__(x, y, d)
+    def __init__(self, x, y, c, deleted=False):
+        super().__init__(x, y, c, deleted)
         self.set_letter("♖")
         self.set_id(rook)
         self.set_weight(5)

@@ -103,6 +103,7 @@ class IA:
         Metodo che implementa l'algoritmo alpha-beta.
         board: current board instance (current state)
         '''
+        
         max_player = board.is_white_turn()
 
         def max(curr_board, alpha, beta, depth):
@@ -117,7 +118,6 @@ class IA:
             # algorithm iteration (max is the turn player)
             possible_moves = curr_board.get_all_moves(max_player)
             for piece in possible_moves:
-                # print(piece)
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(curr_board.get_pieces())

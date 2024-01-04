@@ -6,8 +6,8 @@ import numpy as np
 
 
 class Knight(Piece):
-    def __init__(self, x, y, d):
-        super().__init__(x, y, d)
+    def __init__(self, x, y, c, deleted=False):
+        super().__init__(x, y, c, deleted)
         self.set_letter("♘")
         self.set_id(knight)
         self.edge_position_angles=[]
