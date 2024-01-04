@@ -15,6 +15,7 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
+# inizia il gioco con il turno del bianco
 ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
 board = Board(granularity=4)
 
