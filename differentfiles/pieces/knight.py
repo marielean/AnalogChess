@@ -20,6 +20,12 @@ class Knight(Piece):
         return super().delete()
     
     def get_all_directions_per_piece(self, pieces):
+        '''
+        get_all_directions_per_piece(self, pieces)
+        Restituisce una lista i cui elementi sono coppie di angoli che delimitano gli archi di movimento.
+        Nota: Gli angoli sono espressi in radianti prendendo come riferimento 0 il semiasse positivo delle y e come 
+        direzione di rotazione positiva quella oraria.
+        '''
         list_arc = []
         if self.draw_first_arc:
             list_arc = [(self.edge_position_angles[i], self.edge_position_angles[i+1]) for i in range(0,len(self.edge_position_angles)-1,2)]

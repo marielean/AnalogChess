@@ -16,7 +16,7 @@ class King(Piece):
         super().__init__(x, y, c, deleted)
         self.set_letter("♔")
         self.set_id(king)
-        self.set_weight(100)
+        self.set_weight(1000)
         self.turn = 0
 
     def delete(self):
@@ -91,7 +91,7 @@ class King(Piece):
         for end_position in end_positions:
             if end_position != (self.start_x, self.start_y):
                 end_positions_purified.append(end_position)
-        #print("end_king", end_positions_purified)
+        # print("end_king", end_positions_purified)
         return end_positions_purified
 
     def draw_moves(self, pieces):
