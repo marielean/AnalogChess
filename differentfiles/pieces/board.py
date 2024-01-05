@@ -197,7 +197,6 @@ class Board:
                 # The two previous lines calculate the coordinates x and y of the avaiable moves from the possible angles. 
                 # The main problems are that the angles are calculated from the positive y semi-axis and that are considered positives the clock-wise angles (the opposite of "normal" algebra). 
                 # Then the formulas are not very trivial... The idea is to firstly transform the angles in a "conventional" representation and then compute the sin or cos.
-
         list_points = [(x_new[i], y_new[i]) for i in range(len(x_new))]
         return list_points
 

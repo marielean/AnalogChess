@@ -15,7 +15,10 @@ from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1
 
 pygame.init()
 
-ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 3)
+from chessboardex import *
+
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
+# board = Board(granularity=10, pieces=chessboard_1) # Use this if you want to test a specific chessboard
 board = Board(granularity=5)
 
 done = False

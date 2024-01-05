@@ -64,7 +64,7 @@ class IA:
                 # print(piece)
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
                     _, value = min(next_board, depth-1)
@@ -86,7 +86,7 @@ class IA:
             for piece in possible_moves:
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
                     _, value = max(next_board, depth-1)
@@ -106,8 +106,7 @@ class IA:
         
         max_player = board.is_white_turn()
 
-        def max(curr_board, alpha, beta, depth):
-            
+        def max(curr_board, alpha, beta, depth):            
             if (depth == 0 or curr_board.is_terminal()):
                 return None, self.utility(curr_board, max_player)
             
@@ -120,7 +119,7 @@ class IA:
             for piece in possible_moves:
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
                     _, value = min(next_board, alpha, beta, depth-1)
@@ -131,6 +130,7 @@ class IA:
                         return max_move, max_value
                     if max_value >= alpha:
                         alpha = max_value
+
             return max_move, max_value
         
         def min(curr_board, alpha, beta, depth):
@@ -146,7 +146,7 @@ class IA:
             for piece in possible_moves:
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
                     _, value = max(next_board, alpha, beta, depth-1)
@@ -160,6 +160,7 @@ class IA:
             return min_move, min_value
 
         move, value = max(board, -np.inf, np.inf, self.depth)
+        print("Value: ", value)
         return move
     
     
