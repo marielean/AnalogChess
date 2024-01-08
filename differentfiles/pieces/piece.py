@@ -1,6 +1,6 @@
 import math
 import pygame
-from differentfiles.utils import width, height, dist, to_game_coords
+from differentfiles.utils import width, height, dist, to_game_coords, dist2
 from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
 from differentfiles.colors import *
 
@@ -8,9 +8,11 @@ class Piece:
     # x pos and y pos are on a grid of size 8, normal cartesian coordinates
     def __init__(self, x_pos, y_pos, color, deleted=False):
         diameter = 0.69 # 0.69 anzichè 0.7 permette di ovviare ai problemi dovuti all'arrotondamento inevitabile dal momento che i calcoli sono fatti digitalmente
+        self.__diameter2 = diameter**2 # private variable useful to reduce the number of calculations
         self.x = x_pos
         self.y = y_pos
         self.radius = diameter / 2
+        self.__radius2 = self.radius**2 # private variable useful to reduce the number of calculations
         self.grabbed = False
         self.targeted = False
         self.color = color
@@ -85,7 +87,7 @@ class Piece:
         )
 
     def try_grab(self, pos):
-        if dist(pos, (self.x, self.y)) < self.radius:
+        if dist2(pos, (self.x, self.y)) < self.__radius2:
             self.grabbed = True
             self.text = self.font.render(self.letter, True, (0, 255, 0))
 
@@ -158,7 +160,7 @@ class Piece:
                         pygame.quit()
                         quit()
                     if event.type == pygame.MOUSEBUTTONUP:
-                        if (dist(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.radius):
+                        if (dist2(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.__radius2):
                             self.confirm(pieces)
                             print("Pezzo giocato", self.id)
                                 
@@ -192,7 +194,7 @@ class Piece:
                             return False
 
     def overlaps(self, piece):
-        return dist((self.x, self.y), (piece.x, piece.y)) < self.radius * 2
+        return dist2((self.x, self.y), (piece.x, piece.y)) < self.__diameter2
 
     # math shit
     def slide(self, dx, dy, pieces, capture=True, fake=False):
@@ -286,7 +288,7 @@ class Piece:
             if math.sqrt(dx**2 + dy**2) > block_dist:
                 hit_first_block = True
                 new_dist = block_dist - math.sqrt(
-                    4 * self.radius**2 - block_perp_dist**2
+                    4 * self.__radius2 - block_perp_dist**2
                 )
 
         if abs(full_dist) > 0:
@@ -307,7 +309,7 @@ class Piece:
                     - block_perp_dist**2
                 )
                 new_new_dist = block_dist - math.sqrt(
-                    4 * self.radius**2 - block_perp_dist**2
+                    4 * self.__radius2 - block_perp_dist**2
                 )
                 if new_new_dist < new_dist:
                     new_dist = new_new_dist
@@ -360,7 +362,7 @@ class Piece:
             if h < piece.radius * 2:
                 d = dist((piece.x, piece.y), (self.start_x, self.start_y))
                 hit_dist = math.sqrt(d**2 - h**2) - math.sqrt(
-                    4 * piece.radius**2 - h**2
+                    4 * piece.__radius2 - h**2
                 )
                 if hit_dist < first_hit_dist:
                     first_hit_dist = hit_dist
@@ -377,8 +379,8 @@ class Piece:
                     first_piece_hit.target()
             elif dist(
                 (self.x, self.y), (self.start_x, self.start_y)
-            ) > first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2):
-                new_dist = first_hit_dist + 2 * math.sqrt(4 * piece.radius**2 - perp_dist**2)
+            ) > first_hit_dist + 2 * math.sqrt(4 * piece.__radius2 - perp_dist**2):
+                new_dist = first_hit_dist + 2 * math.sqrt(4 * piece.__radius2 - perp_dist**2)
                 if fake is False:
                     first_piece_hit.target()
 
