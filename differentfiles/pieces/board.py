@@ -70,7 +70,7 @@ class Board:
                 pieces[i].start_y = move[3][1]
 
                 for j in range(len(pieces)):
-                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= (2*pieces[i].radius)**2*(1-1e-6)): # Il fattore 1-1e-6 serve per far sì che il pezzo venga mangiato solo se si sovrappone anche solo minimamente e non se tange (o comunque per non lasciare al troncamento della variabile la decisione)
+                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= ((2*pieces[i].radius)*(1-1e-15))**2): # Il fattore 1-1e-15 serve per far sì che il pezzo venga mangiato solo se si sovrappone anche solo minimamente e non se tange (o comunque per non lasciare al troncamento della variabile la decisione)
                         pieces[j].deleted = True
                         pieces[j].start_x, pieces[j].x = 100, 100 # Render outside the board
                 break

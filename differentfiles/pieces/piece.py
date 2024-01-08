@@ -194,16 +194,8 @@ class Piece:
     def overlaps(self, piece):
         return dist((self.x, self.y), (piece.x, piece.y)) < self.radius * 2
 
-    def apply_granularity(self, coordinate, granularity=1):
-        rounded = round(coordinate, granularity)
-        return rounded
-
     # math shit
     def slide(self, dx, dy, pieces, capture=True, fake=False):
-
-        dx = self.apply_granularity(dx)
-        dy = self.apply_granularity(dy)
-
         all_pieces = pieces
         if capture:
             pieces = [
