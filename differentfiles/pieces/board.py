@@ -70,7 +70,7 @@ class Board:
                 pieces[i].start_y = move[3][1]
 
                 for j in range(len(pieces)):
-                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= (2*pieces[i].radius)**2*1.001):
+                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= (2*pieces[i].radius)**2*(1-1e-6)): # Il fattore 1-1e-6 serve per far sì che il pezzo venga mangiato solo se si sovrappone anche solo minimamente e non se tange (o comunque per non lasciare al troncamento della variabile la decisione)
                         pieces[j].deleted = True
                         pieces[j].start_x, pieces[j].x = 100, 100 # Render outside the board
                 break
@@ -130,12 +130,6 @@ class Board:
             Pawn(6.5, 6.5, black),
             Pawn(7.5, 6.5, black),
         ] 
-        # self.pieces = [
-        #     King(1.5,1.5,white),
-        #     King(6.5,6.5,black),
-        #     Bishop(3,7,black),
-        #     Knight(2,2,white)
-        # ]
 
     #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
     def get_chess_board_status(self):
