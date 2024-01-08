@@ -61,7 +61,7 @@ class IA:
                 # print(piece)
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.get_granularity())
                     next_board.apply_move(move)
 
                     _, value = min(next_board, depth-1)
@@ -83,7 +83,7 @@ class IA:
             for piece in possible_moves:
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.get_granularity())
                     next_board.apply_move(move)
 
                     _, value = max(next_board, depth-1)
@@ -117,7 +117,7 @@ class IA:
                 # print(piece)
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.get_granularity())
                     next_board.apply_move(move)
 
                     _, value = min(next_board, alpha, beta, depth-1)
@@ -143,7 +143,7 @@ class IA:
             for piece in possible_moves:
                 for next_position in piece[3]:
                     move = [piece[0],piece[1],piece[2],next_position]
-                    next_board = Board(curr_board.get_pieces())
+                    next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.get_granularity())
                     next_board.apply_move(move)
 
                     _, value = max(next_board, alpha, beta, depth-1)
