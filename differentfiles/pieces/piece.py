@@ -7,7 +7,7 @@ from differentfiles.colors import *
 class Piece:
     # x pos and y pos are on a grid of size 8, normal cartesian coordinates
     def __init__(self, x_pos, y_pos, color, deleted=False):
-        diameter = 0.7
+        diameter = 0.69 # 0.69 anzichè 0.7 permette di ovviare ai problemi dovuti all'arrotondamento inevitabile dal momento che i calcoli sono fatti digitalmente
         self.x = x_pos
         self.y = y_pos
         self.radius = diameter / 2
