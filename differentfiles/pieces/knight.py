@@ -96,8 +96,8 @@ class Knight(Piece):
     def drag(self, new_p, pieces):
         if self.grabbed:
 
-            x = self.apply_granularity(new_p[0] - self.start_x)
-            y = self.apply_granularity(new_p[1] - self.start_y)
+            x = (new_p[0] - self.start_x)
+            y = (new_p[1] - self.start_y)
 
             Radius = math.sqrt(5)
 
