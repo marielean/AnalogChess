@@ -31,9 +31,11 @@ chessboard_3 = [
 chessboard_4 = [
     King(0.5,1.5,white),
     King(7.5,6.5,black),
-    Bishop(5.5,3.5,white),
-    # Bishop(3,6,black),
-    # Pawn(3,5,white),
-    # Pawn(2,2,white),
-    # Pawn(0.5,2.5,black)
+    Bishop(5.5,3.5,white)
+    ]
+
+chessboard_5 = [
+    King(0.5,1.5,white),
+    King(7.5,6.5,black),
+    Knight(5.5,3.5,white)
 ]
