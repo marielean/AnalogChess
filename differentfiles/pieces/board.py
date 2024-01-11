@@ -7,7 +7,9 @@ class Board:
 
     def __init__(self, pieces = None, granularity = 1):
         '''
-        ### init method to create new Board instance. 
+        BOARD class constructor
+        :param  pieces: list of pieces
+                granularity: granularity of possible moves in each direction
         pieces: boolean flag. It must be true if you want to create a new board with all the pieces, false otherway. Default=True.
         granularity: number of points for each direction. Default=1.
         '''
