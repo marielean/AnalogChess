@@ -17,7 +17,9 @@ pygame.init()
 
 from chessboardex import *
 
-# inizia il gioco con il turno del bianco
+# Possible heuristics: custom_heuristic_0, custom_heuristic_1
+# Possible algorithms: MiniMax, AlphaBeta, Random
+
 ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
 # board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
 board = Board(granularity=1)
