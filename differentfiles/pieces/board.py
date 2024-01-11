@@ -264,7 +264,7 @@ class Board:
         return list_moves
 
     # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self) -> tuple[list, list]:
+    def get_all_directions_all_in_one(self, turn) -> tuple[list, list]:
         '''
         Returns all the possible directions for all the pieces in the board divided by color. \n
         :return
@@ -273,18 +273,22 @@ class Board:
         '''
         pieces = self.get_pieces()
 
-        list_directions_white = []
-        list_directions_black = []
+        color = white if turn else black
+
+        list_directions = []
         for p in pieces:
             if not p.deleted:
-                if p.color == black:
+                '''if p.color == black:
                     direction = p.get_all_directions_per_piece(pieces)
                     list_directions_black.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
                 elif p.color == white:
                     direction = p.get_all_directions_per_piece(pieces)
-                    list_directions_white.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
+                    list_directions_white.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])'''
+                if p.color == color:
+                    direction = p.get_all_directions_per_piece(pieces)
+                    list_directions.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
         
-        return list_directions_white, list_directions_black
+        return list_directions
     
     def get_all_moves(self, turn: bool) -> list[list]:
         '''
@@ -295,17 +299,9 @@ class Board:
             list_moves: list of all the possible moves for the selected player in the format -> [piece1, piece2, ...] where piece(i) is a list in the format -> [id, color, (x_start, y_start), [(x_new, y_new), (x_new, y_new), ...]]
         '''
 
-        white_directions, black_directions = self.get_all_directions_all_in_one()
-        if turn:
-            '''
-            white turn
-            '''
-            return self.get_all_moves_from_distance(white_directions)
+        directions = self.get_all_directions_all_in_one(turn)
         
-        '''
-        black turn
-        '''
-        return self.get_all_moves_from_distance(black_directions)
+        return self.get_all_moves_from_distance(directions)
     
 
 
