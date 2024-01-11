@@ -19,10 +19,30 @@ from chessboardex import *
 
 from chessboardex import *
 
+import configparser
+
+# Create a ConfigParser object to read configuration file
+config = configparser.RawConfigParser()
+
+# Read the properties file
+config.read('config.properties')
+
+
+
+# Get the values
+custom_utility = config.get('CONFIG', 'custom_utility')
+custom_algorithm = config.get('CONFIG', 'custom_algorithm')
+custom_depth = int(config.get('CONFIG', 'custom_depth'))
+custom_granularity = int(config.get('CONFIG', 'custom_granularity'))
+
+import differentfiles.heuristics as other_heuristics
+func_to_run = getattr(other_heuristics, custom_utility)
+
+
 # inizia il gioco con il turno del bianco
-ia = IA(utility=custom_heuristic_2, algorithm = 'AlphaBeta', depth = 2)
+ia = IA(utility=func_to_run, algorithm = custom_algorithm, depth = custom_depth)
 # board = Board(granularity=10, pieces=chessboard_4) # Use this if you want to test a specific chessboard
-board = Board(granularity=1)
+board = Board(granularity=custom_granularity)
 
 done = False
 clock = pygame.time.Clock()
