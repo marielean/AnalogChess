@@ -7,6 +7,13 @@ from differentfiles.heuristics import custom_heuristic_0
 class IA:
     def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1):
         '''
+        IA class constructor
+        :param  
+            utility: utility function
+            algorithm: algorithm to use
+            depth: maximum depth of the algorithm
+            
+        Possible heuristics: custom_heuristic_0, custom_heuristic_1
         Possible algorithms: MiniMax, AlphaBeta, Random
         '''
         self.whiteTurn = True
@@ -15,10 +22,19 @@ class IA:
         self.depth = depth
 
     def set_turn(self, whiteTurn):
+        '''
+        Sets the turn.
+        '''
         self.whiteTurn = whiteTurn
-
-    # function for best move
-    def get_best_move(self, board):
+    
+    def get_best_move(self, board) -> list:
+        '''
+        Returns the best move for the current player, based on the algorithm and the depth set in the constructor.
+        :param
+            board: current board instance (current state)
+        :return: 
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
+        '''
         if self.algorithm == "MiniMax":
             return self.__minimax_search(board)
         elif self.algorithm == "AlphaBeta":
@@ -27,11 +43,13 @@ class IA:
             return self.__random_search(board)
 
     
-    def __random_search(self, board: Board):
+    def __random_search(self, board: Board) -> list:
         """
-        Selects a random move from the valid moves for the current players turn
-        :param board: the current board being used for the game (pieces)
-        :return: list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
+        Returns a random move from the list of all possible moves.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         """
         list_moves = board.get_all_moves(board.is_white_turn())
 
@@ -40,11 +58,13 @@ class IA:
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move         
 
-    def __minimax_search(self, board: Board):
+    def __minimax_search(self, board: Board) -> list:
         '''
-        Metodo che implementa la funzione minimax.
-        board: current board instance (current state)
-        depth: maximum depth of the algorithm
+        Returns the best move for the current player, based on the minimax algorithm.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         '''
         max_player = board.is_white_turn()
         depth = self.depth
@@ -98,10 +118,13 @@ class IA:
         move, value = max(board, depth)
         return move
     
-    def __alphabeta_search(self, board: Board):
+    def __alphabeta_search(self, board: Board) -> list:
         '''
-        Metodo che implementa l'algoritmo alpha-beta.
-        board: current board instance (current state)
+        Returns the best move for the current player, based on the alpha-beta pruning algorithm.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         '''
         
         max_player = board.is_white_turn()

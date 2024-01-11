@@ -17,11 +17,9 @@ pygame.init()
 
 from chessboardex import *
 
-from chessboardex import *
-
 # inizia il gioco con il turno del bianco
 ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
-# board = Board(granularity=10, pieces=chessboard_4) # Use this if you want to test a specific chessboard
+# board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
 board = Board(granularity=1)
 
 done = False
@@ -78,14 +76,6 @@ while not done:
                         new_pieces.append(piece)
 
                 board.set_pieces(new_pieces)
-
-                # if board.is_terminal():
-                #     print("This is the end...")
-                #     done = True
-                #     font = pygame.font.SysFont("oldenglishtext", int(80))
-                #     confirm_text = font.render("Wiiiiiiin", True, black)
-                #     draw_center_text(confirm_text)
-                #     pygame.display.flip()
 
                 for piece in board.get_pieces():
                     piece.calc_paths(board.get_pieces())
