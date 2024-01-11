@@ -7,9 +7,10 @@ class Board:
 
     def __init__(self, pieces = None, granularity = 1):
         '''
-        ### init method to create new Board instance. 
-        pieces: boolean flag. It must be true if you want to create a new board with all the pieces, false otherway. Default=True.
-        granularity: number of points for each direction. Default=1.
+        Board class constructor
+        :param  
+            pieces: list of pieces (default None)
+            granularity: number of possibile moves in each direction (default 1)
         '''
         self.pieces = []
         self.granularity = granularity
@@ -22,11 +23,11 @@ class Board:
         self.whiteTurn = True
 
     
-    def set_pieces(self, new_pieces):
+    def set_pieces(self, new_pieces: list):
         '''
-        Board.set_pieces(self, new_pieces)
-        Metodo che setta i pezzi della Board a un nuovo stato.
-        new_pieces: lista di istanze Piece presenti nel nuovo stato
+        Sets the pieces of the Board to a custom state.
+        :param
+            new_pieces: list of pieces to set a custom state of the board istances
         '''
         self.pieces = []
         for p in new_pieces:
@@ -46,18 +47,23 @@ class Board:
                 print("ERROR: Piece not found")
         
     # metodo che resituisce se la partita è finita 
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
+        '''
+        Returns if the game is over by controlling the number of kings on the board
+        :return
+            True if the game is over, False otherwise
+        '''
         count = 0
         for p in self.get_pieces():
             if isinstance(p, King) and p.deleted == False:
                 count += 1
         return True if count < 2 else False
     
-    def apply_move(self, move):
+    def apply_move(self, move: list):
         '''
-        ## applica una mossa sulla scacchiera cambiando lo stato della board modificando le coordinate di un pezzo\n
-        board: stato della scacchiera\n
-        restituisce la stessa istanza della board ma con le coordinate modificate del pezzo interessato
+        Applies a move on the board by changing the state of the board modifying the coordinate of a piece
+        :param
+            move: move of a peice to apply on the board istance
         '''
         pieces = self.get_pieces()
         # print(pieces)
@@ -78,6 +84,9 @@ class Board:
         self.__update_state() # Update state
 
     def __update_state(self):
+        '''
+        Updates the state of the board by changing the turn and the possible promotion of a pawn
+        '''
         new_pieces_list = []
         for p in self.get_pieces():
             if p.can_promote():
@@ -90,12 +99,25 @@ class Board:
             p.calc_paths(self.get_pieces())
 
     def set_turn(self, whiteTurn: bool):
+        '''
+        Sets the turn of the board
+        :param
+            whiteTurn: boolean that is true if is white turn, false if it is black turn
+        '''
         self.whiteTurn = whiteTurn
 
-    def is_white_turn(self):
+    def is_white_turn(self) -> bool:
+        '''
+        Returns the turn of the board
+        :return
+            True if is white turn, false if it is black turn
+        '''
         return self.whiteTurn
 
     def new_board(self):
+        '''
+        Sets the board to the initial state with all the pieces in the correct position
+        '''
         self.pieces = [
             Rook(0.5, 0.5, white),
             Rook(7.5, 0.5, white),
@@ -132,7 +154,13 @@ class Board:
         ] 
 
     #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
-    def get_chess_board_status(self):
+    def get_chess_board_status(self) -> tuple[list, list]:
+        '''
+        Return the actual status of the chess board 
+        :return
+            white_status: status of the white pieces in the format -> [[id, x, y], [id, x, y], ...]
+            black_status: status of the white pieces in the format -> [[id, x, y], [id, x, y], ...]
+        '''
         white_status = []
         black_status = []
         for piece in self.get_pieces():
@@ -142,22 +170,36 @@ class Board:
                 black_status.append([piece.id, piece.start_x, piece.start_y])
         return white_status, black_status
     
-    def get_pieces(self):
+    def get_pieces(self) -> list:
+        '''
+        Returns the list of pieces on the board
+        :return
+            list of pieces on the board in the format -> [piece1, piece2, ...] where piece(i) is an instance of a piece class
+        '''
         return self.pieces
 
 
     # grazie a questa funzione si ottengono tutte le mosse possibili per un pezzo in base alla sua direzione
     # granularity è il numero di punti che si vogliono ottenere per ogni direzione
-    def get_points_from_distance(self, x_start, y_start, x_end, y_end, knight_flag=False, king_rook_flag=False):
+    def get_points_from_distance(self, 
+                                 x_start: float, 
+                                 y_start: float, 
+                                 x_end: float, 
+                                 y_end: float, 
+                                 knight_flag=False, 
+                                 king_rook_flag=False) -> list[tuple[float, float]]:
         '''
-        get_points_from_distance(x_start, y_start, x_end, y_end, knight_flag=False)
-        The function returns all the possible moves in the following format:
-        [(x1, y1), (x2, y2), ...]
-        x_start: starting x of the path (current x position if the piece is a knight)
-        y_start: starting y of the path (current y position if the piece is a knight)
-        x_end: final x of the path (start angle if the piece is a knight)
-        y_end: final y of the path (final angle if the piece is a knight)
-        knight_flag: boolean flag. It must be true if the piece is a knight, false otherway. Default=False.
+        Returns all the possible moves for a piece. The moves are calculated from the starting point (x_start, y_start) to the final point (x_end, y_end). \n
+            If the piece is a knight, the moves are calculated from the starting angle (x_start, y_start) to the final angle (x_end, y_end).
+            In this case the angles are calculated from the positive semi-axis of y. The knight is very powerful.
+        :param
+            x_start: starting x of the path for a piece (current x position if the piece is a knight)
+            y_start: starting y of the path for a piece (current y position if the piece is a knight)
+            x_end: final x of the path for a piece (start angle if the piece is a knight)
+            y_end: final y of the path for a piece (final angle if the piece is a knight)
+            knight_flag: boolean flag. It must be true if the piece is a knight, false otherway. Default=False.
+        :return
+            list_points: list of all the possible moves for a piece in the format -> [(x1, y1), (x2, y2), ...]. The length of the list is equal to the granularity set in the constructor.
         '''
         list_points = []
         x_new, y_new = None, None
@@ -196,7 +238,15 @@ class Board:
 
 
     # restituisce tutte le mosse possibili per tutti i pezzi presenti nella list_pieces nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_moves_from_distance(self, list_pieces):
+    def get_all_moves_from_distance(self, 
+                                    list_pieces: list) -> list[list]:
+        '''
+        Returns all the possible moves for all the pieces in the list_pieces. \n
+        :param
+            list_pieces: list of pieces in the format -> [piece1, piece2, ...] where piece(i) is an instance of a piece class
+        :return
+            list_moves: list of all the possible moves for all the pieces in the format -> [piece1, piece2, ...] where piece(i) is a list in the format -> [id, color, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
+        '''
         #print("list_pieces: ", list_pieces)
         list_moves = []
 
@@ -214,11 +264,12 @@ class Board:
         return list_moves
 
     # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self):
+    def get_all_directions_all_in_one(self) -> tuple[list, list]:
         '''
-        DA FARE: non ha senso passare pieces visto che siamo nella classe board.
-        Dopo aver adattato tutto si può togliere. Nel mentre ho messo un valore
-        default e si può non usare il parametro (scelta migliore).
+        Returns all the possible directions for all the pieces in the board divided by color. \n
+        :return
+            list_directions_white: list of all the possible directions for the white pieces in the format -> [piece1, piece2, ...] where piece(i) is a list in the format -> [id, color, (x_start, y_start), list_directions_of_the_piece, turn]
+            list_directions_black: list of all the possible directions for the black pieces in the format -> [piece1, piece2, ...] where piece(i) is a list in the format -> [id, color, (x_start, y_start), list_directions_of_the_piece, turn]
         '''
         pieces = self.get_pieces()
 
@@ -235,14 +286,13 @@ class Board:
         
         return list_directions_white, list_directions_black
     
-    def get_all_moves(self, turn):
+    def get_all_moves(self, turn: bool) -> list[list]:
         '''
-        board.get_all_moves(self, turn)
-        
-        This method returns all the possible moves for the selected player in
-        the following format: [id, color, (x_start, y_start), [(x_end, y_end),
-        (x_end, y_end), ...]]
-        turn: boolean that is true if is white turn, false if it is black turn
+        Return all the possible moves for the selected player
+        :param
+            turn: boolean that is true if is white turn, false if it is black turn
+        :return
+            list_moves: list of all the possible moves for the selected player in the format -> [piece1, piece2, ...] where piece(i) is a list in the format -> [id, color, (x_start, y_start), [(x_new, y_new), (x_new, y_new), ...]]
         '''
 
         white_directions, black_directions = self.get_all_directions_all_in_one()
