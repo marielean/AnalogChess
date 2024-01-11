@@ -98,11 +98,9 @@ def custom_heuristic_2(board, player):
 
     for piece in pieces:
         if piece.color == white and piece.deleted == False:
-            white_score += evaluate_piece(piece)
-            white_score += piece.weight
+            white_score += evaluate_piece(piece)*piece.weight
         if piece.color == black and piece.deleted == False:
-            black_score += evaluate_piece(piece)
-            black_score += piece.weight
+            black_score += evaluate_piece(piece)*piece.weight
 
     # Restituzione della differenza tra i punteggi del giocatore e dell'avversario
     return white_score-black_score if player else black_score-white_score
@@ -111,14 +109,14 @@ def custom_heuristic_2(board, player):
 def evaluate_piece(piece):
     # Esempio di valutazione di un pezzo in base alla sua posizione, tipo, ecc.
     # Puoi adattare questa funzione in base alle regole specifiche del tuo gioco
-    piece_value = 0
+    piece_value = 1
 
     # Ad esempio, assegna un valore più alto a pezzi che sono più avanzati sulla scacchiera
     if isinstance(piece, Pawn):
         if piece.color == white:
-            piece_value = 1 if piece.x > 1.5 else 0
+            piece_value = 10 if piece.y > 1.5 else 1
         else:
-            piece_value = 1 if piece.x < 6.5 else 0
+            piece_value = 10 if piece.y < 6.5 else 1
 
     # Altri criteri di valutazione specifici possono essere aggiunti in base alle regole del gioco
 
