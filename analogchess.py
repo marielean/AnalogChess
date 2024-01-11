@@ -77,14 +77,6 @@ while not done:
 
                 board.set_pieces(new_pieces)
 
-                # if board.is_terminal():
-                #     print("This is the end...")
-                #     done = True
-                #     font = pygame.font.SysFont("oldenglishtext", int(80))
-                #     confirm_text = font.render("Wiiiiiiin", True, black)
-                #     draw_center_text(confirm_text)
-                #     pygame.display.flip()
-
                 for piece in board.get_pieces():
                     piece.calc_paths(board.get_pieces())
             
