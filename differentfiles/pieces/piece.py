@@ -22,7 +22,7 @@ class Piece:
         text_scale = 0.85
         self.letter = "X"
         self.id = "XX"
-        if pygame.display.get_init():
+        if pygame.get_init():
             self.font = pygame.font.SysFont(
                 get_fontname(), int(diameter / 8 * 640 * text_scale)
             )
@@ -53,7 +53,7 @@ class Piece:
     def set_letter(self, letter):
         self.letter = letter
         if self.grabbed is False:
-            if pygame.display.get_init():
+            if pygame.get_init():
                 self.text = self.font.render(
                     self.letter,
                     True,
@@ -75,7 +75,7 @@ class Piece:
 
     def target(self):
         self.targeted = True
-        if pygame.display.get_init():
+        if pygame.get_init():
             self.text = self.font.render(self.letter, True, (255, 0, 0))
         else:
             self.text = None
@@ -95,7 +95,7 @@ class Piece:
         )
 
     def try_grab(self, pos):
-        if pygame.display.get_init():
+        if pygame.get_init():
             if dist2(pos, (self.x, self.y)) < self.__radius2:
                 self.grabbed = True
                 self.text = self.font.render(self.letter, True, (0, 255, 0))
@@ -107,7 +107,7 @@ class Piece:
                 if piece.targeted:
                     piece.untarget()
             self.direction = False
-            if pygame.display.get_init():
+            if pygame.get_init():
                 self.text = self.font.render(
                     self.letter,
                     True,
@@ -133,7 +133,7 @@ class Piece:
                 else:
                     new_pieces.append(piece)
             self.direction = False
-            if pygame.display.get_init():
+            if pygame.get_init():
                 self.text = self.font.render(
                     self.letter,
                     True,
@@ -158,7 +158,7 @@ class Piece:
             ):
                 self.cancel(pieces)
                 return
-            if pygame.display.get_init():
+            if pygame.get_init():
                 font = pygame.font.SysFont("oldenglishtext", int(80))
                 confirm_text = font.render("Confirm?", True, black)
                 draw_center_text(confirm_text)

@@ -31,7 +31,7 @@ def draw_checkers():
             color = dark_gray
             if (i + j) % 2 == 0:
                 color = light_gray
-            if pygame.display.get_init():
+            if pygame.get_init():
                 pygame.draw.rect(screen, color, (i * size, j * size, size, size))
 
 
