@@ -36,6 +36,8 @@ class IA:
         list_moves = board.get_all_moves(board.is_white_turn())
 
         random_piece = random.choice(list_moves)
+        while len(random_piece[-1]) == 0:
+            random_piece = random.choice(list_moves)
         r_move = random.choice(random_piece[-1])
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move         

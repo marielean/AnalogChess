@@ -22,10 +22,14 @@ class Piece:
         text_scale = 0.85
         self.letter = "X"
         self.id = "XX"
-        self.font = pygame.font.SysFont(
-            get_fontname(), int(diameter / 8 * 640 * text_scale)
-        )
-        self.text = self.font.render(self.letter, True, (255, 255, 255))
+        if pygame.display.get_init():
+            self.font = pygame.font.SysFont(
+                get_fontname(), int(diameter / 8 * 640 * text_scale)
+            )
+            self.text = self.font.render(self.letter, True, (255, 255, 255))
+        else:
+            self.font = None
+            self.text = None
         self.direction = False
         self.targeted = False
         self.turn = 0
@@ -49,11 +53,12 @@ class Piece:
     def set_letter(self, letter):
         self.letter = letter
         if self.grabbed is False:
-            self.text = self.font.render(
-                self.letter,
-                True,
-                (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
-            )
+            if pygame.display.get_init():
+                self.text = self.font.render(
+                    self.letter,
+                    True,
+                    (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
+                )
         else:
             self.text = self.font.render(self.letter, True, (0, 255, 0))
 
@@ -70,7 +75,10 @@ class Piece:
 
     def target(self):
         self.targeted = True
-        self.text = self.font.render(self.letter, True, (255, 0, 0))
+        if pygame.display.get_init():
+            self.text = self.font.render(self.letter, True, (255, 0, 0))
+        else:
+            self.text = None
 
     def untarget(self):
         self.targeted = False
@@ -87,9 +95,10 @@ class Piece:
         )
 
     def try_grab(self, pos):
-        if dist2(pos, (self.x, self.y)) < self.__radius2:
-            self.grabbed = True
-            self.text = self.font.render(self.letter, True, (0, 255, 0))
+        if pygame.display.get_init():
+            if dist2(pos, (self.x, self.y)) < self.__radius2:
+                self.grabbed = True
+                self.text = self.font.render(self.letter, True, (0, 255, 0))
 
     def cancel(self, pieces):
         if self.grabbed:
@@ -98,11 +107,12 @@ class Piece:
                 if piece.targeted:
                     piece.untarget()
             self.direction = False
-            self.text = self.font.render(
-                self.letter,
-                True,
-                (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
-            )
+            if pygame.display.get_init():
+                self.text = self.font.render(
+                    self.letter,
+                    True,
+                    (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
+                )
             self.x = self.start_x
             self.y = self.start_y
 
@@ -123,11 +133,12 @@ class Piece:
                 else:
                     new_pieces.append(piece)
             self.direction = False
-            self.text = self.font.render(
-                self.letter,
-                True,
-                (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
-            )
+            if pygame.display.get_init():
+                self.text = self.font.render(
+                    self.letter,
+                    True,
+                    (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
+                )
 
             self.start_x = self.x
             self.start_y = self.y
@@ -147,51 +158,51 @@ class Piece:
             ):
                 self.cancel(pieces)
                 return
+            if pygame.display.get_init():
+                font = pygame.font.SysFont("oldenglishtext", int(80))
+                confirm_text = font.render("Confirm?", True, black)
+                draw_center_text(confirm_text)
 
-            font = pygame.font.SysFont("oldenglishtext", int(80))
-            confirm_text = font.render("Confirm?", True, black)
-            draw_center_text(confirm_text)
-
-            pygame.display.flip()
-            # while not done:
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        quit()
-                    if event.type == pygame.MOUSEBUTTONUP:
-                        if (dist2(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.__radius2):
-                            self.confirm(pieces)
-                            print("Pezzo giocato", self.id)
-                                
-                            if self.white_turn and self.color == white:
-                                #print("white turn, next turn black")
-                                self.white_turn = False
-                                for one_piece in pieces:
-                                    one_piece.white_turn = False
+                pygame.display.flip()
+                # while not done:
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            quit()
+                        if event.type == pygame.MOUSEBUTTONUP:
+                            if (dist2(to_game_coords(pygame.mouse.get_pos()), (self.x, self.y)) < self.__radius2):
+                                self.confirm(pieces)
+                                print("Pezzo giocato", self.id)
+                                    
+                                if self.white_turn and self.color == white:
+                                    #print("white turn, next turn black")
+                                    self.white_turn = False
+                                    for one_piece in pieces:
+                                        one_piece.white_turn = False
+                                    return True
+                                elif self.white_turn is False and self.color == black:
+                                    #print("black turn, next turn white")
+                                    self.white_turn = True
+                                    for one_piece in pieces:
+                                        one_piece.white_turn = True
+                                    return True
+                                # print("confirm", self.white_turn)
                                 return True
-                            elif self.white_turn is False and self.color == black:
-                                #print("black turn, next turn white")
-                                self.white_turn = True
-                                for one_piece in pieces:
-                                    one_piece.white_turn = True
-                                return True
-                            # print("confirm", self.white_turn)
-                            return True
-                        else:
-                            self.cancel(pieces)
-                            # print("cancel", self.white_turn)
-                            return False
+                            else:
+                                self.cancel(pieces)
+                                # print("cancel", self.white_turn)
+                                return False
 
-                    elif event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_RETURN:
-                            self.confirm(pieces)
-                            print("confirm")
-                            return True
-                        elif event.key == pygame.K_ESCAPE:
-                            self.cancel(pieces)
-                            print("cancel")
-                            return False
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_RETURN:
+                                self.confirm(pieces)
+                                print("confirm")
+                                return True
+                            elif event.key == pygame.K_ESCAPE:
+                                self.cancel(pieces)
+                                print("cancel")
+                                return False
 
     def overlaps(self, piece):
         return dist2((self.x, self.y), (piece.x, piece.y)) < self.__diameter2

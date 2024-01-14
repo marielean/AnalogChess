@@ -40,9 +40,11 @@ func_to_run = getattr(other_heuristics, custom_utility)
 
 
 # inizia il gioco con il turno del bianco
-ia = IA(utility=func_to_run, algorithm = custom_algorithm, depth = custom_depth)
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
 # board = Board(granularity=10, pieces=chessboard_4) # Use this if you want to test a specific chessboard
-board = Board(granularity=custom_granularity)
+board = Board(granularity=1)
+
+# print(f"Analog chess is running with utility: {custom_utility}, algorithm: {custom_algorithm}, depth: {custom_depth} and granularity: {custom_granularity}")
 
 done = False
 clock = pygame.time.Clock()
