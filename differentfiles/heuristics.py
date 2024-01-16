@@ -83,3 +83,27 @@ def custom_heuristic_0(board, player):
         if piece.color == black and piece.deleted == False:
             black_score += piece.weight
     return white_score-black_score if player else black_score-white_score
+
+def custom_heuristic_2(board, player):
+    '''
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the weights of the pieces.
+    The weight of pawns is multiplied by a factor that depends on the advancement of pawns.
+    '''
+    pieces = board.get_pieces()
+
+    white_score = 0
+    black_score = 0
+    for piece in pieces:
+        if piece.color == white and piece.deleted == False:
+            if isinstance(piece, Pawn):
+                white_score += piece.weight*(piece.y/8)
+            else:
+                white_score += piece.weight
+        if piece.color == black and piece.deleted == False:
+            if isinstance(piece, Pawn):
+                black_score += piece.weight*(8-piece.y/8)
+            else:
+                black_score += piece.weight
+    
+    return white_score-black_score if player else black_score-white_score
