@@ -53,10 +53,8 @@ def total_path_len(piece, edge_positions):
 
 def custom_heuristic_1(board, player):
     '''
-    custom_heuristic_1(pieces, player)
-    This function calculates a score for players based on a custom heuristic
-    function. The function is based on the total length of the avaiable path per
-    piece, weighted on the piece weight, and normalized on the mean path of the piece
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the lengths of the paths of the pieces.
     '''
     pieces = board.get_pieces()
     white_score = 0 # white score
@@ -72,9 +70,8 @@ def custom_heuristic_1(board, player):
 
 def custom_heuristic_0(board, player):
     '''
-    custom_heuristic_0(pieces, player)
-    This function calculates a score for players based on a custom heuristic
-    function. The function is based on the pieces weight difference
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the weights of the pieces.
     '''
     pieces = board.get_pieces()
 
