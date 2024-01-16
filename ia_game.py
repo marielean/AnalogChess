@@ -32,12 +32,12 @@ white_depth = 2
 black_depth = 2
 
 white_ia_algorithm = rand
-black_ia_algorithm = alpha_beta
+black_ia_algorithm = rand
 
 granularity = 5
 
 import differentfiles.heuristics as get_heuristics
-white_heuristic = getattr(get_heuristics, heuristic_0)
+white_heuristic = getattr(get_heuristics, heuristic_2)
 black_heuristic = getattr(get_heuristics, heuristic_2)
 
 
@@ -54,17 +54,17 @@ white_turn = True
 
 
 done = False
-clock = pygame.time.Clock()
+# clock = pygame.time.Clock()
 confirmed = True
 
 turn_number = 1
 
-pygame.display.set_caption("Analog Chess")
+'''pygame.display.set_caption("Analog Chess")
 
 draw_line_round_corners_polygon(
     see_through, (120, 120), (220, 220), RED_HIGHLIGHT, 0.7 * 640 / 8
 )
-grabbed_piece = None
+grabbed_piece = None'''
 
 for piece in board.get_pieces():
     piece.calc_paths(board.get_pieces())
@@ -78,6 +78,11 @@ print(f"Gioco iniziato con black algorithm: {black_ia_algorithm} e depth: {black
 print(f"Granularità: {granularity}")
 while not done:
     print("Turno numero: ", turn_number)
+
+    for piece in board.get_pieces():
+        piece.calc_paths(board.get_pieces())
+
+
     if board.is_white_turn():
         if not board.is_terminal():
             print("Turno del bianco")

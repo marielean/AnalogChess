@@ -34,11 +34,28 @@ class IA:
         :return: list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         """
         list_moves = board.get_all_moves(board.is_white_turn())
-
-        random_piece = random.choice(list_moves)
-        while len(random_piece[-1]) == 0:
+        try:
             random_piece = random.choice(list_moves)
-        r_move = random.choice(random_piece[-1])
+        except:
+            return None
+        '''while len(random_piece[-1]) == 0:
+            random_piece = random.choice(list_moves)'''
+        try:
+            r_move = random.choice(random_piece[-1])
+            
+        except:
+            pieces = board.get_pieces()
+            for piece in pieces:
+                print(f"Piece: {piece.id}, {piece.color}, {piece.x}, {piece.y}, {piece.deleted}")
+            
+            for move in list_moves:
+                print(f"move: {move[0]}, {move[1]}, {move[2]}, {move[3]}")
+            print("random piece: ", random_piece)
+            
+            print(f"number of pieces: {board.number_of_pieces_in_game()}")
+
+
+
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move         
 

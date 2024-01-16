@@ -40,7 +40,7 @@ func_to_run = getattr(other_heuristics, custom_utility)
 
 
 # inizia il gioco con il turno del bianco
-ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
+ia = IA(utility=custom_heuristic_2, algorithm = 'AlphaBeta', depth = 2)
 # board = Board(granularity=10, pieces=chessboard_4) # Use this if you want to test a specific chessboard
 board = Board(granularity=1)
 

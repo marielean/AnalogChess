@@ -285,8 +285,16 @@ class Board:
                     direction = p.get_all_directions_per_piece(pieces)
                     list_directions_white.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])'''
                 if p.color == color:
+                    
                     direction = p.get_all_directions_per_piece(pieces)
-                    list_directions.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
+                    # manco ricalcolare le direzioni non funziona
+                    '''while len(direction) == 0:
+                        direction = p.get_all_directions_per_piece(pieces)
+                        print("direction")'''
+                    if len(direction) == 0:
+                        raise Exception(f"ERROR: direction is empty: {p.id}, {p.color}, {p.start_x}, {p.start_y}, {p.deleted}")
+                    else:
+                        list_directions.append([p.id, p.color, (p.start_x, p.start_y), direction, p.turn])
         
         return list_directions
     
@@ -303,6 +311,17 @@ class Board:
         
         return self.get_all_moves_from_distance(directions)
     
+    def number_of_pieces_in_game(self):
+        '''
+        Returns the number of pieces in game
+        :return
+            number_of_pieces: number of pieces in game
+        '''
+        number_of_pieces = 0
+        for piece in self.get_pieces():
+            if not piece.deleted:
+                number_of_pieces += 1
+        return number_of_pieces
 
 
     
