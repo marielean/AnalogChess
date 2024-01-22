@@ -95,6 +95,8 @@ class IA:
                     if value > max_value:
                         max_value = value
                         max_move = move
+                    elif value == max_value:
+                        max_move = random.choice([max_move, move])
             return max_move, max_value
         
         def min(curr_board, depth):
@@ -117,6 +119,8 @@ class IA:
                     if value > min_value:
                         min_value = value
                         min_move = move
+                    elif value == min_value:
+                        min_move = random.choice([min_move, move])
             return min_move, min_value
 
         move, value = max(board, depth)
@@ -183,7 +187,7 @@ class IA:
                         min_value = value
                         min_move = move
                     elif value == min_value:
-                        max_move = random.choice([min_move, move])
+                        min_move = random.choice([min_move, move])
                     if min_value <= alpha:
                         return min_move, min_value
                     if min_value < beta:
@@ -191,7 +195,7 @@ class IA:
             return min_move, min_value
 
         move, value = max(board, -np.inf, np.inf, self.depth)
-        print("Value: ", value)
+        # print("Value: ", value)
         return move
     
     

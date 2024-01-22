@@ -1,11 +1,13 @@
 from .piece import Piece
 from differentfiles.colors import *
 from differentfiles.utils import *
-from differentfiles.drawing import (
-    draw_line_round_corners_polygon,
-    see_through,
-    see_through2,
-)
+import config
+if config.GRAPHIC:
+    from differentfiles.drawing import (
+        draw_line_round_corners_polygon,
+        see_through,
+        see_through2,
+    )
 
 
 class Bishop(Piece):

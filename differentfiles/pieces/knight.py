@@ -1,7 +1,9 @@
 from .piece import Piece
 from differentfiles.colors import *
 from differentfiles.utils import *
-from differentfiles.drawing import arc, see_through, see_through2, pygame_draw_circle
+import config
+if config.GRAPHIC:
+    from differentfiles.drawing import arc, see_through, see_through2, pygame_draw_circle
 import numpy as np
 
 

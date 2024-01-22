@@ -3,12 +3,14 @@ from differentfiles.colors import *
 from differentfiles.utils import *
 from differentfiles.pieces.rook import Rook
 from differentfiles.pieces.queen import Queen
-from differentfiles.drawing import (
-    see_through,
-    see_through2,
-    pygame_draw_circle,
-    draw_line_round_corners_polygon,
-)
+import config
+if config.GRAPHIC:
+    from differentfiles.drawing import (
+        see_through,
+        see_through2,
+        pygame_draw_circle,
+        draw_line_round_corners_polygon,
+    )
 
 
 class King(Piece):
@@ -51,7 +53,7 @@ class King(Piece):
         if self.turn == 0:
             if long_castle:
                 if left_rook:
-                    if left_rook.turn == 0:
+                    if left_rook.turn == 0 and config.GRAPHIC:
                         pygame_draw_circle(
                             see_through2,
                             GREEN_HIGHLIGHT,
@@ -60,7 +62,7 @@ class King(Piece):
                         )
             if short_castle:
                 if right_rook:
-                    if right_rook.turn == 0:
+                    if right_rook.turn == 0 and config.GRAPHIC:
                         pygame_draw_circle(
                             see_through2,
                             GREEN_HIGHLIGHT,

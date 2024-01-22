@@ -1,7 +1,9 @@
 import math
-import pygame
 from differentfiles.utils import width, height, dist, to_game_coords, dist2
-from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
+import config
+if config.GRAPHIC:
+    import pygame
+    from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
 from differentfiles.colors import *
 
 class Piece:
@@ -22,7 +24,7 @@ class Piece:
         text_scale = 0.85
         self.letter = "X"
         self.id = "XX"
-        if pygame.get_init():
+        if config.GRAPHIC:
             self.font = pygame.font.SysFont(
                 get_fontname(), int(diameter / 8 * 640 * text_scale)
             )
@@ -369,9 +371,9 @@ class Piece:
             )
 
             if h < piece.radius * 2:
-                d = dist((piece.x, piece.y), (self.start_x, self.start_y))
-                hit_dist = math.sqrt(d**2 - h**2) - math.sqrt(
-                    4 * piece.__radius2 - h**2
+                d2 = dist2((piece.x, piece.y), (self.start_x, self.start_y))
+                hit_dist = math.sqrt(abs(d2 - h**2)) - math.sqrt(abs(
+                    4 * piece.__radius2 - h**2)
                 )
                 if hit_dist < first_hit_dist:
                     first_hit_dist = hit_dist

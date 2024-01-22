@@ -1,0 +1,7 @@
+white_algorithm; black_algorithm; white_depth; black_depth; granularity; white_wins [%]; mean_match_time [s]; mean_turns_number
+Random; Random; 1; 1; 1; 40.0; 1.1083306312561034; 67.2
+AlphaBeta; Random; 1; 1; 1; 100.0; 1.118973398208618; 18.2
+AlphaBeta; Random; 2; 1; 1; 100.0; 9.954867315292358; 10.6
+AlphaBeta; AlphaBeta; 1; 1; 1; 80.0; 2.131175327301025; 34.4
+AlphaBeta; AlphaBeta; 2; 2; 1; 40.0; 64.51384229660034; 49.6
+AlphaBeta; AlphaBeta; 3; 3; 1; 80.0; 1256.9561153411864; 35.6
