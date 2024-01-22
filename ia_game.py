@@ -19,14 +19,13 @@ from chessboardex import *
 # Possible heuristics: custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 # Possible algorithms: MiniMax, AlphaBeta, Random
 
-white_ia = IA(utility=custom_heuristic_0, algorithm='Random', depth=2)
-black_ia = IA(utility=custom_heuristic_0, algorithm = 'Random', depth = 2)
+white_ia = IA(utility=custom_heuristic_0, algorithm='AlphaBeta', depth=2)
+black_ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
 # board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
 board = Board(granularity=1)
 
 done = False
 clock = pygame.time.Clock()
-# confirmed = True
 
 turn_number = 0
 
