@@ -22,10 +22,14 @@ class Piece:
         text_scale = 0.85
         self.letter = "X"
         self.id = "XX"
-        self.font = pygame.font.SysFont(
-            get_fontname(), int(diameter / 8 * 640 * text_scale)
-        )
-        self.text = self.font.render(self.letter, True, (255, 255, 255))
+        if pygame.get_init():
+            self.font = pygame.font.SysFont(
+                get_fontname(), int(diameter / 8 * 640 * text_scale)
+            )
+            self.text = self.font.render(self.letter, True, (255, 255, 255))
+        else: 
+            self.font = None
+            self.text = None
         self.direction = False
         self.targeted = False
         self.turn = 0
@@ -48,14 +52,17 @@ class Piece:
 
     def set_letter(self, letter):
         self.letter = letter
-        if self.grabbed is False:
-            self.text = self.font.render(
-                self.letter,
-                True,
-                (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
-            )
+        if self.font is not None:
+            if self.grabbed is False:
+                self.text = self.font.render(
+                    self.letter,
+                    True,
+                    (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
+                )
+            else:
+                self.text = self.font.render(self.letter, True, (0, 255, 0))
         else:
-            self.text = self.font.render(self.letter, True, (0, 255, 0))
+            self.text = self.letter
 
     def can_promote(self):
         return False
@@ -70,8 +77,10 @@ class Piece:
 
     def target(self):
         self.targeted = True
-        self.text = self.font.render(self.letter, True, (255, 0, 0))
-
+        if self.font is not None:
+            self.text = self.font.render(self.letter, True, (255, 0, 0))
+        else:
+            self.text = self.letter
     def untarget(self):
         self.targeted = False
         self.set_letter(self.letter)
