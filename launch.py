@@ -17,8 +17,7 @@ configurations = [
     # AlphaBeta-AlphaBeta con uguale profondità -> it should be approx 50% - 50% e si può osservare la dipendenza del tempo di esecuzione dalla profondità
     ['AlphaBeta', 'AlphaBeta', 1, 1, 1],
     ['AlphaBeta', 'AlphaBeta', 2, 2, 1],
-    ['AlphaBeta', 'AlphaBeta', 3, 3, 1],
-    ['AlphaBeta', 'AlphaBeta', 4, 4, 1], # Forse un po' ottimistico
+    ['AlphaBeta', 'AlphaBeta', 3, 3, 1], # (circa 20 min di esecuzione a match -> 17h per 50 esecuzioni)
     # AlphaBeta-AlphaBeta con varie granularità (uguale profondità) -> L'idea è vedere la dipendenza del tempo di esecuzione dalla granularità
     ['AlphaBeta', 'AlphaBeta', 2, 2, 2],
     ['AlphaBeta', 'AlphaBeta', 2, 2, 3],
@@ -28,10 +27,8 @@ configurations = [
     # AlphaBeta-AlphaBeta con diverse profondità -> È il test più interessante e mostra come aumentando la profondità aumenti "l'intelligenza"
     ['AlphaBeta', 'AlphaBeta', 2, 1, 4],
     ['AlphaBeta', 'AlphaBeta', 3, 1, 4],
-    ['AlphaBeta', 'AlphaBeta', 4, 1, 4],
-    ['AlphaBeta', 'AlphaBeta', 4, 2, 4],
-    ['AlphaBeta', 'AlphaBeta', 4, 3, 4],
-    ['AlphaBeta', 'AlphaBeta', 4, 4, 4], # Questo è forse un po' ottimistico ma dovrebbe mostrare un ritorno al 50% - 50%
+    ['AlphaBeta', 'AlphaBeta', 3, 2, 4],
+    ['AlphaBeta', 'AlphaBeta', 3, 3, 4], # qua si dovrebbe riottenere un 50% - 50% 
     # La prova con MinMax è interessante per vedere quanto si guadagna in termini di tempo di esecuzione con i tagli alpha-beta
     ['MinMax', 'MinMax', 2, 2, 4], # La scelta dei parametri è per non richiedere troppo tempo ma si possono aggiungere altri test
 ]
