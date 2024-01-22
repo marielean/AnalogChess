@@ -53,9 +53,8 @@ class IA:
         """
         list_moves = board.get_all_moves(board.is_white_turn())
 
-        for element in list_moves:
-            if element[-1] == []:
-                list_moves.remove(element)
+        # remove empty moves
+        list_moves = [element for element in list_moves if element[-1] != []]
 
         random_piece = random.choice(list_moves)
         r_move = random.choice(random_piece[-1])
@@ -154,6 +153,8 @@ class IA:
                     if value > max_value:
                         max_value = value
                         max_move = move
+                    elif value == max_value:
+                        max_move = random.choice([max_move, move])
                     if max_value >= beta:
                         return max_move, max_value
                     if max_value >= alpha:
@@ -181,6 +182,8 @@ class IA:
                     if value < min_value:
                         min_value = value
                         min_move = move
+                    elif value == min_value:
+                        max_move = random.choice([min_move, move])
                     if min_value <= alpha:
                         return min_move, min_value
                     if min_value < beta:
