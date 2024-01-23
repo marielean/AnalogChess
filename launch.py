@@ -2,35 +2,35 @@ from concurrent.futures import ProcessPoolExecutor
 from withoutgraphic import run_match
 
 # Configurable parameters
-max_threads = 10 # questo deve essere il numero di virtual cores del server 
-num_matches_for_config = 5 # qua bisognerebbe farne 50 almeno
+max_threads = 10 # corrispondente al numero di virtual cores del server 
+num_matches_for_config = 5 # dovranno essere 50 o 100
 
 # Commento generale: penso che oltre profondità 3 si farà fatica a meno che non abbiate a disposizione tempo illimitato di esecuzione sul server
 # In tal caso si potrebbe tentare di fare anche 4 (forse) lasciandolo andare circa una settimana. Il requisito è che koka non termini il processo
 # dopo un tot.
 configurations = [
     # Random-Random for test -> it should be 50% - 50%
-    ['Random', 'Random', 1, 1, 1],
+    ['custom_heuristic_0', 'Random', 'Random', 1, 1, 1],
     # Random-AlphaBeta -> it should be approx 100% - 0%
-    ['AlphaBeta', 'Random', 1, 1, 1], # depth_black non serve davvero
-    ['AlphaBeta', 'Random', 2, 1, 1],
+    ['custom_heuristic_0', 'AlphaBeta', 'Random', 1, 1, 1], # depth_black non serve davvero
+    ['custom_heuristic_0', 'AlphaBeta', 'Random', 2, 1, 1],
     # AlphaBeta-AlphaBeta con uguale profondità -> it should be approx 50% - 50% e si può osservare la dipendenza del tempo di esecuzione dalla profondità
-    ['AlphaBeta', 'AlphaBeta', 1, 1, 1],
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 1],
-    ['AlphaBeta', 'AlphaBeta', 3, 3, 1], # (circa 20 min di esecuzione a match -> 17h per 50 esecuzioni)
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 1, 1, 1],
+    ['custom_heuristic_0', 'AlphaBeta', 2, 2, 1],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 1], # (circa 20 min di esecuzione a match -> 17h per 50 esecuzioni)
     # AlphaBeta-AlphaBeta con varie granularità (uguale profondità) -> L'idea è vedere la dipendenza del tempo di esecuzione dalla granularità
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 2],
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 3],
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 4],
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 5],
-    ['AlphaBeta', 'AlphaBeta', 2, 2, 10],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 2],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 3],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 4],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 5],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 10],
     # AlphaBeta-AlphaBeta con diverse profondità -> È il test più interessante e mostra come aumentando la profondità aumenti "l'intelligenza"
-    ['AlphaBeta', 'AlphaBeta', 2, 1, 4],
-    ['AlphaBeta', 'AlphaBeta', 3, 1, 4],
-    ['AlphaBeta', 'AlphaBeta', 3, 2, 4],
-    ['AlphaBeta', 'AlphaBeta', 3, 3, 4], # qua si dovrebbe riottenere un 50% - 50% 
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 1, 4],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 1, 4],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 2, 4],
+    ['custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 4], # qua si dovrebbe riottenere un 50% - 50% 
     # La prova con MinMax è interessante per vedere quanto si guadagna in termini di tempo di esecuzione con i tagli alpha-beta
-    ['MinMax', 'MinMax', 2, 2, 4], # La scelta dei parametri è per non richiedere troppo tempo ma si possono aggiungere altri test
+    ['custom_heuristic_0', 'MinMax', 'MinMax', 2, 2, 4], # La scelta dei parametri è per non richiedere troppo tempo ma si possono aggiungere altri test
 ]
 
 
