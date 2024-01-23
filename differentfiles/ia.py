@@ -2,7 +2,7 @@ from differentfiles.colors import *
 from differentfiles.pieces.board import Board
 import numpy as np
 import random
-from differentfiles.heuristics import custom_heuristic_0
+from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 
 class IA:
     def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1):
@@ -17,7 +17,17 @@ class IA:
         Possible algorithms: MiniMax, AlphaBeta, Random
         '''
         self.whiteTurn = True
-        self.utility = utility
+        if isinstance(utility, str):
+            if utility == 'custom_heuristic_0':
+                self.utility = custom_heuristic_0
+            elif utility == 'custom_heuristic_1':
+                self.utility = custom_heuristic_1
+            elif utility == 'custom_heuristic_2':
+                self.utility = custom_heuristic_2
+            else: 
+                raise Exception('Utility function not found')
+        else: 
+            self.utility = utility
         self.algorithm = algorithm
         self.depth = depth
 

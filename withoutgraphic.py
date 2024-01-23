@@ -7,11 +7,11 @@ import time
 # Possible heuristics: custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 # Possible algorithms: MiniMax, AlphaBeta, Random
 
-def run_match(utility, algorithm_white, algorithm_black, depth_white, depth_black, granularity):
+def run_match(utility_white, utility_black, algorithm_white, algorithm_black, depth_white, depth_black, granularity):
     start_time = time.time()
 
-    white_ia = IA(utility=utility, algorithm=algorithm_white, depth=depth_white)
-    black_ia = IA(utility=utility, algorithm = algorithm_black, depth=depth_black)
+    white_ia = IA(utility=utility_white, algorithm=algorithm_white, depth=depth_white)
+    black_ia = IA(utility=utility_black, algorithm = algorithm_black, depth=depth_black)
     # board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
     board = Board(granularity=granularity)
 

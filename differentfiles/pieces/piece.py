@@ -316,8 +316,8 @@ class Piece:
                     - math.sin(angle) * (self.x - piece.x)
                 )
                 block_dist = math.sqrt(
-                    dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2
-                    - block_perp_dist**2
+                    abs(dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2
+                    - block_perp_dist**2)
                 )
                 new_new_dist = block_dist - math.sqrt(
                     4 * self.__radius2 - block_perp_dist**2
