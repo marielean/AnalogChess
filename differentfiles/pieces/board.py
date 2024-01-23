@@ -22,6 +22,9 @@ class Board:
 
         self.whiteTurn = True
 
+        for piece in self.get_pieces():
+            piece.calc_paths(self.get_pieces())
+
     
     def set_pieces(self, new_pieces: list):
         '''

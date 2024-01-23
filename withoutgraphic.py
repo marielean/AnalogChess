@@ -3,23 +3,22 @@ from differentfiles.ia import IA
 from differentfiles.colors import *
 from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 import time
+import numpy as np
 
 # Possible heuristics: custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 # Possible algorithms: MiniMax, AlphaBeta, Random
 
-def run_match(utility_white, utility_black, algorithm_white, algorithm_black, depth_white, depth_black, granularity):
+def run_match(utility_white, utility_black, algorithm_white, algorithm_black, depth_white, depth_black, granularity, timeout=np.inf):
     start_time = time.time()
 
-    white_ia = IA(utility=utility_white, algorithm=algorithm_white, depth=depth_white)
-    black_ia = IA(utility=utility_black, algorithm = algorithm_black, depth=depth_black)
+    white_ia = IA(utility=utility_white, algorithm=algorithm_white, depth=depth_white, timeout=timeout)
+    black_ia = IA(utility=utility_black, algorithm = algorithm_black, depth=depth_black, timeout=timeout)
     # board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
     board = Board(granularity=granularity)
 
     turn_number = 1
 
     while True:
-        for piece in board.get_pieces():
-            piece.calc_paths(board.get_pieces())
         
         best_move = None
         if board.is_white_turn():
@@ -30,7 +29,7 @@ def run_match(utility_white, utility_black, algorithm_white, algorithm_black, de
 
         if board.is_terminal():
             end_time = time.time()
-            print('#', sep='', end='')
+            print('#', sep='', end='', flush=True)
             return board.is_white_turn(), end_time - start_time, turn_number
 
         board.set_turn(not board.is_white_turn())

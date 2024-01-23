@@ -1,5 +1,6 @@
 from concurrent.futures import ProcessPoolExecutor
 from withoutgraphic import run_match
+import numpy as np
 
 # Configurable parameters
 max_threads = 10 # corrispondente al numero di virtual cores del server 
@@ -11,7 +12,7 @@ num_matches_for_config = 5 # dovranno essere 50 o 100
 configurations = [
 
     # Random-Random for test -> it should be 50% - 50%
-    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1, np.inf],
 
     # White Random - Black AlphaBeta -> it should be approx 100% - 0%
     ['custom_heuristic_0', 'custom_heuristic_0', 'Random','AlphaBeta', 2, 2, 1], # profondità 2, granularità 1
@@ -47,13 +48,13 @@ configurations = [
 ]
 
 configurations1 = [
-    #[white_heuristic, black_heuristic, white_algorithm, black_algorithm, white_depth, black_depth, granularity]
+    #[white_heuristic, black_heuristic, white_algorithm, black_algorithm, white_depth, black_depth, granularity, timeout]
 
     # Random-Random for test -> it should be 50% - 50%
-    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1, np.inf],
 
     # AlphaBeta-AlphaBeta con differenti euristiche (uguale profondità e granularità)
-    ['custom_heuristic_0', 'custom_heuristic_2', 'AlphaBeta', 'AlphaBeta', 2, 2, 1]
+    ['custom_heuristic_0', 'custom_heuristic_2', 'AlphaBeta', 'AlphaBeta', 2, 2, 1, 5]
 ]
 
 
@@ -64,7 +65,7 @@ mean_number_of_turns = []
 
 # Stampa su file .csv l'intestazione
 with open('results.csv', 'w') as f:
-    print('white_heuristic; black_heuristic; white_algorithm; black_algorithm; white_depth; black_depth; granularity; white_wins [%]; mean_match_time [s]; mean_turns_number', file=f)
+    print('white_heuristic; black_heuristic; white_algorithm; black_algorithm; white_depth; black_depth; granularity; timeout [s]; white_wins [%]; mean_match_time [s]; mean_turns_number', file=f)
 
 for configuration in configurations1:
     black_wins = 0
@@ -73,11 +74,11 @@ for configuration in configurations1:
     number_of_turns = []
     threads = []
 
-    print("Running match with configuration: ", configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6])
+    print("Running match with configuration: ", configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6], configuration[7])
 
     print('Progress: ', end='')
     with ProcessPoolExecutor(max_workers=max_threads) as executor:
-        threads = [executor.submit(run_match, configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6]) for _ in range(num_matches_for_config)]
+        threads = [executor.submit(run_match, configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6], timeout=configuration[7]) for _ in range(num_matches_for_config)]
 
     print("") # A capo
 
@@ -94,4 +95,5 @@ for configuration in configurations1:
     # Stampa su file .csv le statistiche di questa configurazione
     with open('results.csv', 'a') as f:
         print('Results:\n', '\twhite_wins', white_wins/num_matches_for_config*100, '%', '\n\tMean_execution_time: ', mean_time[-1], 's', '\n\tMean_number_of_turns: ', mean_number_of_turns[-1],'\n')
-        print(configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6], white_wins/num_matches_for_config*100, mean_time[-1], mean_number_of_turns[-1], sep='; ', file=f)
+        timeout = configuration[7] if configuration[7] != np.inf else 'inf'
+        print(configuration[0], configuration[1], configuration[2], configuration[3], configuration[4], configuration[5], configuration[6], timeout, white_wins/num_matches_for_config*100, mean_time[-1], mean_number_of_turns[-1], sep='; ', file=f)

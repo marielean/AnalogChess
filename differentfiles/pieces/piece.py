@@ -284,7 +284,7 @@ class Piece:
 
             if h < piece.radius * 2:
                 proj_dist = math.sqrt(
-                    dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2 - h**2
+                    abs(dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2 - h**2)
                 )
                 if proj_dist < block_dist:
                     block_dist = proj_dist
