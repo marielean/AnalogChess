@@ -1,2 +1,2 @@
 white_heuristic; black_heuristic; white_algorithm; black_algorithm; white_depth; black_depth; granularity; timeout [s]; white_wins [%]; mean_match_time [s]; mean_turns_number
-custom_heuristic_0; custom_heuristic_0; Random; Random; 1; 1; 1; inf; 100.0; 0.6277125358581543; 93.8
+custom_heuristic_0; custom_heuristic_0; Random; Random; 1; 1; 1; inf; 0.0; 2.357455921173096; 161.6
