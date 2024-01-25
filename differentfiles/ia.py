@@ -4,6 +4,7 @@ import numpy as np
 import random
 from differentfiles.heuristics import *
 import time
+from datetime import datetime
 
 class IA:
     def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1, timeout=np.inf):
@@ -161,8 +162,8 @@ class IA:
         
         max_player = board.is_white_turn()
 
-        def max(curr_board, alpha, beta, depth):            
-            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
+        def max(curr_board, alpha, beta, depth, start_time):            
+            if ((depth == 0) or (curr_board.is_terminal()) or (datetime.now().hour * 60 + datetime.now().minute - start_time > self.timeout)):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -182,10 +183,10 @@ class IA:
 
                     # Prima della chiamata ricorsiva, controlla se il tempo è
                     # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return max_move, max_value
+                    '''if time.time() - start_time > self.timeout:
+                        return max_move, max_value'''
 
-                    _, value = min(next_board, alpha, beta, depth-1)
+                    _, value = min(next_board, alpha, beta, depth-1, start_time)
                     if value > max_value:
                         max_value = value
                         max_move = move
@@ -193,11 +194,11 @@ class IA:
                         return max_move, max_value
                     if max_value >= alpha:
                         alpha = max_value
-
+            #print("Value: ", max_value)
             return max_move, max_value
         
-        def min(curr_board, alpha, beta, depth):
-            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
+        def min(curr_board, alpha, beta, depth, start_time):
+            if ((depth == 0) or (curr_board.is_terminal()) or (datetime.now().hour * 60 + datetime.now().minute - start_time > self.timeout)):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -217,9 +218,9 @@ class IA:
 
                     # Prima della chiamata ricorsiva, controlla se il tempo è
                     # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return min_move, min_value
-                    _, value = max(next_board, alpha, beta, depth-1)
+                    '''if time.time() - start_time > self.timeout:
+                        return min_move, min_value'''
+                    _, value = max(next_board, alpha, beta, depth-1, start_time)
                     if value < min_value:
                         min_value = value
                         min_move = move
@@ -227,10 +228,12 @@ class IA:
                         return min_move, min_value
                     if min_value < beta:
                         beta = min_value
+            #print("Value: ", min_value)
             return min_move, min_value
 
-        start_time = time.time()
-        move, value = max(board, -np.inf, np.inf, self.depth)
+        ora_attuale = datetime.now()
+        minuti_totali = ora_attuale.hour * 60 + ora_attuale.minute
+        move, value = max(board, -np.inf, np.inf, self.depth, minuti_totali)
         # print("Value: ", value)
         return move
     
