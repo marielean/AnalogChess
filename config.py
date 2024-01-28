@@ -1,1 +1,1 @@
-GRAPHIC = False
+GRAPHIC = True

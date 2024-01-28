@@ -16,6 +16,7 @@ class Knight(Piece):
         self.draw_first_arc = True
         self.edge_positions=[]
         self.set_weight(3)
+        self.circle_radius = math.sqrt(5)
 
     
     def delete(self):
@@ -38,7 +39,7 @@ class Knight(Piece):
 
 
     def draw_moves(self, pieces):
-        Radius = math.sqrt(5)
+        Radius = self.circle_radius
         
 
         start = 0 if self.draw_first_arc else 1
@@ -52,13 +53,13 @@ class Knight(Piece):
                 see_through2,
                 GREEN_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 self.edge_position_angles[i],
                 self.edge_position_angles[i + 1] - self.edge_position_angles[i],
                 int(self.radius / 8 * 640 * 2),
             )
 
-        # arc(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)),(math.sqrt(5)+self.radius)/8*640 ,edge_position_angles[0],edge_position_angles[1]-edge_position_angles[0],int(self.radius/8*640*2))
+        # arc(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)),(self.circle_radius+self.radius)/8*640 ,edge_position_angles[0],edge_position_angles[1]-edge_position_angles[0],int(self.radius/8*640*2))
 
         # i dont know what im doing
         if not self.draw_first_arc:
@@ -66,7 +67,7 @@ class Knight(Piece):
                 see_through2,
                 GREEN_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 self.edge_position_angles[-1],
                 math.radians(360) - self.edge_position_angles[-1],
                 int(self.radius / 8 * 640 * 2),
@@ -75,7 +76,7 @@ class Knight(Piece):
                 see_through2,
                 GREEN_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 0,
                 self.edge_position_angles[0],
                 int(self.radius / 8 * 640 * 2),
@@ -91,7 +92,7 @@ class Knight(Piece):
                 see_through2,
                 GREEN_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 width=round(self.radius * 640 / 8 * 2),
             )
 
@@ -101,7 +102,7 @@ class Knight(Piece):
             x = (new_p[0] - self.start_x)
             y = (new_p[1] - self.start_y)
 
-            Radius = math.sqrt(5)
+            Radius = self.circle_radius
 
             if math.sqrt(x**2 + y**2) > 40 / 640 * 8:
                 distance = math.sqrt(x**2 + y**2)
@@ -149,14 +150,14 @@ class Knight(Piece):
                     (
                         self.radius,
                         self.start_y
-                        + math.sqrt(Radius**2 - (self.start_x - self.radius) ** 2),
+                        + math.sqrt(abs(Radius**2 - (self.start_x - self.radius) ** 2)),
                     )
                 )
                 edge_positions.append(
                     (
                         self.radius,
                         self.start_y
-                        - math.sqrt(Radius**2 - (self.start_x - self.radius) ** 2),
+                        - math.sqrt(abs(Radius**2 - (self.start_x - self.radius) ** 2)),
                     )
                 )
 
@@ -165,18 +166,18 @@ class Knight(Piece):
                     (
                         8 - self.radius,
                         self.start_y
-                        + math.sqrt(
+                        + math.sqrt(abs(
                             Radius**2 - (8 - self.start_x - self.radius) ** 2
-                        ),
+                        )),
                     )
                 )
                 edge_positions.append(
                     (
                         8 - self.radius,
                         self.start_y
-                        - math.sqrt(
+                        - math.sqrt(abs(
                             Radius**2 - (8 - self.start_x - self.radius) ** 2
-                        ),
+                        )),
                     )
                 )
 
@@ -184,14 +185,14 @@ class Knight(Piece):
                 edge_positions.append(
                     (
                         self.start_x
-                        + math.sqrt(Radius**2 - (self.start_y - self.radius) ** 2),
+                        + math.sqrt(abs(Radius**2 - (self.start_y - self.radius) ** 2)),
                         self.radius,
                     )
                 )
                 edge_positions.append(
                     (
                         self.start_x
-                        - math.sqrt(Radius**2 - (self.start_y - self.radius) ** 2),
+                        - math.sqrt(abs(Radius**2 - (self.start_y - self.radius) ** 2)),
                         self.radius,
                     )
                 )
@@ -200,18 +201,18 @@ class Knight(Piece):
                 edge_positions.append(
                     (
                         self.start_x
-                        + math.sqrt(
+                        + math.sqrt(abs(
                             Radius**2 - (8 - self.start_y - self.radius) ** 2
-                        ),
+                        )),
                         8 - self.radius,
                     )
                 )
                 edge_positions.append(
                     (
                         self.start_x
-                        - math.sqrt(
+                        - math.sqrt(abs(
                             Radius**2 - (8 - self.start_y - self.radius) ** 2
-                        ),
+                        )),
                         8 - self.radius,
                     )
                 )
@@ -304,7 +305,7 @@ class Knight(Piece):
             return
 
         self.edge_positions = []
-        Radius = math.sqrt(5)
+        Radius = self.circle_radius
         pieces_in_range_angles = []
         for piece in pieces:
             d = dist((self.start_x, self.start_y), (piece.x, piece.y))
@@ -352,14 +353,14 @@ class Knight(Piece):
                 (
                     self.radius,
                     self.start_y
-                    + math.sqrt(Radius**2 - (self.start_x - self.radius) ** 2),
+                    + math.sqrt(abs(Radius**2 - (self.start_x - self.radius) ** 2)),
                 )
             )
             self.edge_positions.append(
                 (
                     self.radius,
                     self.start_y
-                    - math.sqrt(Radius**2 - (self.start_x - self.radius) ** 2),
+                    - math.sqrt(abs(Radius**2 - (self.start_x - self.radius) ** 2)),
                 )
             )
             # this is so that um uhhh uh dont worry about it :)
@@ -370,14 +371,14 @@ class Knight(Piece):
                 (
                     8 - self.radius,
                     self.start_y
-                    + math.sqrt(Radius**2 - (8 - self.start_x - self.radius) ** 2),
+                    + math.sqrt(abs(Radius**2 - (8 - self.start_x - self.radius) ** 2)),
                 )
             )
             self.edge_positions.append(
                 (
                     8 - self.radius,
                     self.start_y
-                    - math.sqrt(Radius**2 - (8 - self.start_x - self.radius) ** 2),
+                    - math.sqrt(abs(Radius**2 - (8 - self.start_x - self.radius) ** 2)),
                 )
             )
             pieces_in_range_angles.append(0.5 * math.pi)
@@ -386,14 +387,14 @@ class Knight(Piece):
             self.edge_positions.append(
                 (
                     self.start_x
-                    + math.sqrt(Radius**2 - (self.start_y - self.radius) ** 2),
+                    + math.sqrt(abs(Radius**2 - (self.start_y - self.radius) ** 2)),
                     self.radius,
                 )
             )
             self.edge_positions.append(
                 (
                     self.start_x
-                    - math.sqrt(Radius**2 - (self.start_y - self.radius) ** 2),
+                    - math.sqrt(abs(Radius**2 - (self.start_y - self.radius) ** 2)),
                     self.radius,
                 )
             )
@@ -403,14 +404,14 @@ class Knight(Piece):
             self.edge_positions.append(
                 (
                     self.start_x
-                    + math.sqrt(Radius**2 - (8 - self.start_y - self.radius) ** 2),
+                    + math.sqrt(abs(Radius**2 - (8 - self.start_y - self.radius) ** 2)),
                     8 - self.radius,
                 )
             )
             self.edge_positions.append(
                 (
                     self.start_x
-                    - math.sqrt(Radius**2 - (8 - self.start_y - self.radius) ** 2),
+                    - math.sqrt(abs(Radius**2 - (8 - self.start_y - self.radius) ** 2)),
                     8 - self.radius,
                 )
             )
@@ -437,7 +438,7 @@ class Knight(Piece):
                     valid_edge_positions.append(pos)
 
         self.edge_positions = valid_edge_positions
-        # pygame_draw_circle(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)), (math.sqrt(5)+self.radius)/8*640,width=round(self.radius*640/8*2))
+        # pygame_draw_circle(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)), (self.circle_radius+self.radius)/8*640,width=round(self.radius*640/8*2))
         self.edge_position_angles = []
         for pos in self.edge_positions:
             angle = math.radians(90) - math.atan2(
@@ -448,19 +449,21 @@ class Knight(Piece):
             self.edge_position_angles.append(angle)
 
         # sort edge positions by angle
-
         self.edge_position_angles.sort()
         self.draw_first_arc = True
-        for angle in pieces_in_range_angles:
-            if self.edge_position_angles[0] < angle < self.edge_position_angles[1]:
-                self.draw_first_arc = False
+        try:
+            for angle in pieces_in_range_angles:
+                if self.edge_position_angles[0] < angle < self.edge_position_angles[1]:
+                    self.draw_first_arc = False
+        except:
+            pass
         
     def draw_paths(self, pieces):
 
         if self.deleted or self.targeted:
             return
         
-        Radius = math.sqrt(5)
+        Radius = self.circle_radius
         start = 0 if self.draw_first_arc else 1
         for pos in self.edge_positions:
             pygame_draw_circle(
@@ -471,13 +474,13 @@ class Knight(Piece):
                 see_through,
                 RED_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 self.edge_position_angles[i],
                 self.edge_position_angles[i + 1] - self.edge_position_angles[i],
                 int(self.radius / 8 * 640 * 2),
             )
 
-        # arc(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)),(math.sqrt(5)+self.radius)/8*640 ,edge_position_angles[0],edge_position_angles[1]-edge_position_angles[0],int(self.radius/8*640*2))
+        # arc(see_through2, GREEN_HIGHLIGHT, to_screen_coords((self.start_x,self.start_y)),(self.circle_radius+self.radius)/8*640 ,edge_position_angles[0],edge_position_angles[1]-edge_position_angles[0],int(self.radius/8*640*2))
 
         # i dont know what im doing
         if not self.draw_first_arc:
@@ -485,7 +488,7 @@ class Knight(Piece):
                 see_through,
                 RED_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 self.edge_position_angles[-1],
                 math.radians(360) - self.edge_position_angles[-1],
                 int(self.radius / 8 * 640 * 2),
@@ -494,7 +497,7 @@ class Knight(Piece):
                 see_through,
                 RED_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 0,
                 self.edge_position_angles[0],
                 int(self.radius / 8 * 640 * 2),
@@ -510,6 +513,6 @@ class Knight(Piece):
                 see_through,
                 RED_HIGHLIGHT,
                 to_screen_coords((self.start_x, self.start_y)),
-                (math.sqrt(5) + self.radius) / 8 * 640,
+                (self.circle_radius + self.radius) / 8 * 640,
                 width=round(self.radius * 640 / 8 * 2),
             )

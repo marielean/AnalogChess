@@ -26,6 +26,7 @@ def run_match(utility_white, utility_black, algorithm_white, algorithm_black, de
         else:
             best_move = black_ia.get_best_move(board)
         board.apply_move(best_move)
+        print(f'Mossa giocata: {best_move}')
 
         if board.is_terminal():
             end_time = time.time()

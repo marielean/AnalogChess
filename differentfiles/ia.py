@@ -105,11 +105,6 @@ class IA:
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
-                    # Prima della chiamata ricorsiva, controlla se il tempo è
-                    # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return max_move, max_value
-
                     _, value = min(next_board, depth-1)
                     if value > max_value:
                         max_value = value
@@ -134,11 +129,6 @@ class IA:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
-
-                    # Prima della chiamata ricorsiva, controlla se il tempo è
-                    # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return min_move, min_value
 
                     _, value = max(next_board, depth-1)
                     if value > min_value:
@@ -180,15 +170,14 @@ class IA:
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
-                    # Prima della chiamata ricorsiva, controlla se il tempo è
-                    # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return max_move, max_value
-
                     _, value = min(next_board, alpha, beta, depth-1)
                     if value > max_value:
                         max_value = value
                         max_move = move
+                    # if value == max_value:
+                    #     if random.random() < 0.5:
+                    #         max_value = value
+                    #         max_move = move
                     if max_value >= beta:
                         return max_move, max_value
                     if max_value >= alpha:
@@ -215,14 +204,14 @@ class IA:
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
 
-                    # Prima della chiamata ricorsiva, controlla se il tempo è
-                    # scaduto. Se è scaduto, ritorna il valore corrente.
-                    if time.time() - start_time > self.timeout:
-                        return min_move, min_value
                     _, value = max(next_board, alpha, beta, depth-1)
                     if value < min_value:
                         min_value = value
                         min_move = move
+                    # if value == min_value:
+                    #     if random.random() < 0.5:
+                    #         min_value = value
+                    #         min_move = move
                     if min_value <= alpha:
                         return min_move, min_value
                     if min_value < beta:

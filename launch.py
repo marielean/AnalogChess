@@ -1,10 +1,12 @@
+import config
+config.GRAPHIC = False
 from concurrent.futures import ProcessPoolExecutor
 from withoutgraphic import run_match
 import numpy as np
 
 # Configurable parameters
 max_threads = 10 # corrispondente al numero di virtual cores del server 
-num_matches_for_config = 5 # dovranno essere 50 o 100
+num_matches_for_config = 20 # dovranno essere 50 o 100
 
 # Commento generale: penso che oltre profondità 3 si farà fatica a meno che non abbiate a disposizione tempo illimitato di esecuzione sul server
 # In tal caso si potrebbe tentare di fare anche 4 (forse) lasciandolo andare circa una settimana. Il requisito è che koka non termini il processo
@@ -54,9 +56,8 @@ configurations1 = [
     ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1, np.inf],
 
     # AlphaBeta-AlphaBeta con differenti euristiche (uguale profondità e granularità)
-    ['custom_heuristic_0', 'custom_heuristic_2', 'AlphaBeta', 'AlphaBeta', 2, 2, 1, 5]
+    ['custom_heuristic_0', 'custom_heuristic_2', 'AlphaBeta', 'AlphaBeta', 2, 2, 1, np.inf]
 ]
-
 
 # Statistics
 winner_ratio = []
