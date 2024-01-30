@@ -17,36 +17,40 @@ configurations = [
     ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'Random', 1, 1, 1, np.inf],
 
     # White Random - Black AlphaBeta -> it should be approx 100% - 0%
-    ['custom_heuristic_0', 'custom_heuristic_0', 'Random','AlphaBeta', 2, 2, 1], # profondità 2, granularità 1
-    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'AlphaBeta', 2, 2, 2], # profondità 2, granularità 2
+    ['custom_heuristic_0', 'custom_heuristic_0', 'Random','AlphaBeta', 2, 2, 1, np.inf], # profondità 2, granularità 1
+    ['custom_heuristic_0', 'custom_heuristic_0', 'Random', 'AlphaBeta', 2, 2, 2, np.inf], # profondità 2, granularità 2
 
     # AlphaBeta-AlphaBeta con uguale profondità -> it should be approx 50% - 50% 
     # Si può osservare la dipendenza del tempo di esecuzione dalla profondità
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 1, 1, 1],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 1],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 1],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 1], # (circa 20 min di esecuzione a match -> 17h per 50 esecuzioni)
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 1, 1, 1, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 1, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 1, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 1, np.inf], # (circa 20 min di esecuzione a match -> 17h per 50 esecuzioni)
 
     # AlphaBeta-AlphaBeta con varie granularità (uguale profondità e euristica) -> 
     # Si può osservarela dipendenza del tempo di esecuzione dalla granularità
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 2],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 3],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 4],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 5],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 10],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 2, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 3, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 5, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 2, 10, np.inf],
 
     # AlphaBeta-AlphaBeta con differenti euristiche (uguale profondità e granularità)
-    ['custom_heuristic_0', 'custom_heuristic_1', 'AlphaBeta', 'AlphaBeta', 2, 2, 2],
+    ['custom_heuristic_0', 'custom_heuristic_1', 'AlphaBeta', 'AlphaBeta', 2, 2, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_2', 'AlphaBeta', 'AlphaBeta', 2, 2, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_1', 'AlphaBeta', 'AlphaBeta', 3, 3, 4, 60],
+    ['custom_heuristic_0', 'custom_heuristic_1', 'AlphaBeta', 'AlphaBeta', 3, 3, 4, 30],
+    ['custom_heuristic_0', 'custom_heuristic_1', 'AlphaBeta', 'AlphaBeta', 3, 3, 4, 10],
 
     # AlphaBeta-AlphaBeta con diverse profondità
     # È il test più interessante e mostra come aumentando la profondità aumenti "l'intelligenza"
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 1, 4],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 1, 4],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 2, 4],
-    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 4], # qua si dovrebbe riottenere un 50% - 50% 
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 2, 1, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 1, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 2, 4, np.inf],
+    ['custom_heuristic_0', 'custom_heuristic_0', 'AlphaBeta', 'AlphaBeta', 3, 3, 4, np.inf], # qua si dovrebbe riottenere un 50% - 50% 
 
     # La prova con MinMax è interessante per vedere quanto si guadagna in termini di tempo di esecuzione con i tagli alpha-beta
-    ['custom_heuristic_0', 'MinMax', 'MinMax', 2, 2, 4], # La scelta dei parametri è per non richiedere troppo tempo ma si possono aggiungere altri test
+    ['custom_heuristic_0', 'custom_heuristic_0', 'MinMax', 'MinMax', 2, 2, 4, np.inf], # La scelta dei parametri è per non richiedere troppo tempo ma si possono aggiungere altri test
 ]
 
 configurations1 = [
@@ -68,7 +72,7 @@ mean_number_of_turns = []
 with open('results.csv', 'w') as f:
     print('white_heuristic; black_heuristic; white_algorithm; black_algorithm; white_depth; black_depth; granularity; timeout [s]; white_wins [%]; mean_match_time [s]; mean_turns_number', file=f)
 
-for configuration in configurations1:
+for configuration in configurations:
     black_wins = 0
     white_wins = 0
     execution_times = []

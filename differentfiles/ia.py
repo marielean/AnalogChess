@@ -39,7 +39,7 @@ class IA:
         '''
         self.whiteTurn = whiteTurn
     
-    def get_best_move(self, board) -> list:
+    def get_best_move(self, board):
         '''
         Returns the best move for the current player, based on the algorithm and the depth set in the constructor.
         :param
@@ -55,7 +55,7 @@ class IA:
             return self.__random_search(board)
 
     
-    def __random_search(self, board: Board) -> list:
+    def __random_search(self, board: Board):
         """
         Returns a random move from the list of all possible moves.
         :param
@@ -74,7 +74,7 @@ class IA:
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move         
 
-    def __minimax_search(self, board: Board) -> list:
+    def __minimax_search(self, board: Board):
         '''
         Returns the best move for the current player, based on the minimax algorithm.
         :param
@@ -140,7 +140,7 @@ class IA:
         move, value = max(board, depth)
         return move
     
-    def __alphabeta_search(self, board: Board) -> list:
+    def __alphabeta_search(self, board: Board):
         '''
         Returns the best move for the current player, based on the alpha-beta pruning algorithm.
         :param
