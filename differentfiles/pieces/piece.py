@@ -1,7 +1,9 @@
 import math
-import pygame
 from differentfiles.utils import width, height, dist, to_game_coords, dist2
-from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
+import config
+if config.GRAPHIC:
+    import pygame
+    from differentfiles.drawing import draw_center_text, draw_circle, screen, get_fontname
 from differentfiles.colors import *
 
 class Piece:
@@ -22,12 +24,12 @@ class Piece:
         text_scale = 0.85
         self.letter = "X"
         self.id = "XX"
-        if pygame.get_init():
+        if config.GRAPHIC:
             self.font = pygame.font.SysFont(
                 get_fontname(), int(diameter / 8 * 640 * text_scale)
             )
             self.text = self.font.render(self.letter, True, (255, 255, 255))
-        else:
+        else: 
             self.font = None
             self.text = None
         self.direction = False
@@ -52,15 +54,17 @@ class Piece:
 
     def set_letter(self, letter):
         self.letter = letter
-        if self.grabbed is False:
-            if pygame.get_init():
+        if self.font is not None:
+            if self.grabbed is False:
                 self.text = self.font.render(
                     self.letter,
                     True,
                     (255 - self.color[0], 255 - self.color[1], 255 - self.color[2]),
                 )
+            else:
+                self.text = self.font.render(self.letter, True, (0, 255, 0))
         else:
-            self.text = self.font.render(self.letter, True, (0, 255, 0))
+            self.text = self.letter
 
     def can_promote(self):
         return False
@@ -75,11 +79,10 @@ class Piece:
 
     def target(self):
         self.targeted = True
-        if pygame.get_init():
+        if self.font is not None:
             self.text = self.font.render(self.letter, True, (255, 0, 0))
         else:
-            self.text = None
-
+            self.text = self.letter
     def untarget(self):
         self.targeted = False
         self.set_letter(self.letter)
@@ -284,7 +287,7 @@ class Piece:
 
             if h < piece.radius * 2:
                 proj_dist = math.sqrt(
-                    dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2 - h**2
+                    abs(dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2 - h**2)
                 )
                 if proj_dist < block_dist:
                     block_dist = proj_dist
@@ -316,8 +319,8 @@ class Piece:
                     - math.sin(angle) * (self.x - piece.x)
                 )
                 block_dist = math.sqrt(
-                    dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2
-                    - block_perp_dist**2
+                    abs(dist((self.start_x, self.start_y), (piece.x, piece.y)) ** 2
+                    - block_perp_dist**2)
                 )
                 new_new_dist = block_dist - math.sqrt(
                     4 * self.__radius2 - block_perp_dist**2
@@ -371,9 +374,9 @@ class Piece:
             )
 
             if h < piece.radius * 2:
-                d = dist((piece.x, piece.y), (self.start_x, self.start_y))
-                hit_dist = math.sqrt(d**2 - h**2) - math.sqrt(
-                    4 * piece.__radius2 - h**2
+                d2 = dist2((piece.x, piece.y), (self.start_x, self.start_y))
+                hit_dist = math.sqrt(abs(d2 - h**2)) - math.sqrt(abs(
+                    4 * piece.__radius2 - h**2)
                 )
                 if hit_dist < first_hit_dist:
                     first_hit_dist = hit_dist

@@ -2,23 +2,51 @@ from differentfiles.colors import *
 from differentfiles.pieces.board import Board
 import numpy as np
 import random
-from differentfiles.heuristics import custom_heuristic_0
+from differentfiles.heuristics import *
+import time
 
 class IA:
-    def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1):
+    def __init__(self, utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 1, timeout=np.inf):
         '''
+        IA class constructor
+        :param  
+            utility: utility function
+            algorithm: algorithm to use
+            depth: maximum depth of the algorithm
+            
+        Possible heuristics: custom_heuristic_0, custom_heuristic_1
         Possible algorithms: MiniMax, AlphaBeta, Random
         '''
         self.whiteTurn = True
-        self.utility = utility
+        if isinstance(utility, str):
+            if utility == 'custom_heuristic_0':
+                self.utility = custom_heuristic_0
+            elif utility == 'custom_heuristic_1':
+                self.utility = custom_heuristic_1
+            elif utility == 'custom_heuristic_2':
+                self.utility = custom_heuristic_2
+            else:
+                raise Exception('Utility function not found')
+        else:
+            self.utility = utility
         self.algorithm = algorithm
         self.depth = depth
+        self.timeout = timeout
 
     def set_turn(self, whiteTurn):
+        '''
+        Sets the turn.
+        '''
         self.whiteTurn = whiteTurn
-
-    # function for best move
+    
     def get_best_move(self, board):
+        '''
+        Returns the best move for the current player, based on the algorithm and the depth set in the constructor.
+        :param
+            board: current board instance (current state)
+        :return: 
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
+        '''
         if self.algorithm == "MiniMax":
             return self.__minimax_search(board)
         elif self.algorithm == "AlphaBeta":
@@ -29,48 +57,37 @@ class IA:
     
     def __random_search(self, board: Board):
         """
-        Selects a random move from the valid moves for the current players turn
-        :param board: the current board being used for the game (pieces)
-        :return: list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
+        Returns a random move from the list of all possible moves.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         """
         list_moves = board.get_all_moves(board.is_white_turn())
-        try:
-            random_piece = random.choice(list_moves)
-        except:
-            return None
-        '''while len(random_piece[-1]) == 0:
-            random_piece = random.choice(list_moves)'''
-        try:
-            r_move = random.choice(random_piece[-1])
-            
-        except:
-            pieces = board.get_pieces()
-            for piece in pieces:
-                print(f"Piece: {piece.id}, {piece.color}, {piece.x}, {piece.y}, {piece.deleted}")
-            
-            for move in list_moves:
-                print(f"move: {move[0]}, {move[1]}, {move[2]}, {move[3]}")
-            print("random piece: ", random_piece)
-            
-            print(f"number of pieces: {board.number_of_pieces_in_game()}")
 
+        # remove empty moves
+        list_moves = [element for element in list_moves if element[-1] != []]
 
+        random_piece = random.choice(list_moves)
+        r_move = random.choice(random_piece[-1])
 
         move = [random_piece[0], random_piece[1], random_piece[2], r_move]
         return move         
 
     def __minimax_search(self, board: Board):
         '''
-        Metodo che implementa la funzione minimax.
-        board: current board instance (current state)
-        depth: maximum depth of the algorithm
+        Returns the best move for the current player, based on the minimax algorithm.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         '''
         max_player = board.is_white_turn()
         depth = self.depth
 
         def max(curr_board, depth):
             
-            if (depth == 0 or curr_board.is_terminal()):
+            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -79,9 +96,11 @@ class IA:
 
             # algorithm iteration (max is the turn player)
             possible_moves = curr_board.get_all_moves(max_player)
+            random.shuffle(possible_moves)
             for piece in possible_moves:
-                # print(piece)
-                for next_position in piece[3]:
+                next_positions = piece[3]
+                random.shuffle(next_positions)
+                for next_position in next_positions:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
@@ -93,7 +112,7 @@ class IA:
             return max_move, max_value
         
         def min(curr_board, depth):
-            if (depth == 0 or curr_board.is_terminal()):
+            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -102,8 +121,11 @@ class IA:
 
             # algorithm iteration (min is the turn player)
             possible_moves = curr_board.get_all_moves(not max_player)
+            random.shuffle(possible_moves)
             for piece in possible_moves:
-                for next_position in piece[3]:
+                next_positions = piece[3]
+                random.shuffle(next_positions)
+                for next_position in next_positions:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
@@ -114,19 +136,23 @@ class IA:
                         min_move = move
             return min_move, min_value
 
+        start_time = time.time()
         move, value = max(board, depth)
         return move
     
     def __alphabeta_search(self, board: Board):
         '''
-        Metodo che implementa l'algoritmo alpha-beta.
-        board: current board instance (current state)
+        Returns the best move for the current player, based on the alpha-beta pruning algorithm.
+        :param
+            board: current board instance (current state)
+        :return
+            list representing move; format: [id, color, (x_start, y_start), (x_end, y_end)]
         '''
         
         max_player = board.is_white_turn()
 
         def max(curr_board, alpha, beta, depth):            
-            if (depth == 0 or curr_board.is_terminal()):
+            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -135,8 +161,11 @@ class IA:
 
             # algorithm iteration (max is the turn player)
             possible_moves = curr_board.get_all_moves(max_player)
+            random.shuffle(possible_moves)
             for piece in possible_moves:
-                for next_position in piece[3]:
+                next_positions = piece[3]
+                random.shuffle(next_positions)
+                for next_position in next_positions:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
@@ -145,6 +174,10 @@ class IA:
                     if value > max_value:
                         max_value = value
                         max_move = move
+                    # if value == max_value:
+                    #     if random.random() < 0.5:
+                    #         max_value = value
+                    #         max_move = move
                     if max_value >= beta:
                         return max_move, max_value
                     if max_value >= alpha:
@@ -153,7 +186,7 @@ class IA:
             return max_move, max_value
         
         def min(curr_board, alpha, beta, depth):
-            if (depth == 0 or curr_board.is_terminal()):
+            if (depth == 0 or curr_board.is_terminal() or time.time() - start_time > self.timeout):
                 return None, self.utility(curr_board, max_player)
             
             # initialization
@@ -162,8 +195,11 @@ class IA:
 
             # algorithm iteration (min is the turn player)
             possible_moves = curr_board.get_all_moves(not max_player)
+            random.shuffle(possible_moves)
             for piece in possible_moves:
-                for next_position in piece[3]:
+                next_positions = piece[3]
+                random.shuffle(next_positions)
+                for next_position in next_positions:
                     move = [piece[0],piece[1],piece[2],next_position]
                     next_board = Board(pieces=curr_board.get_pieces(), granularity=curr_board.granularity)
                     next_board.apply_move(move)
@@ -172,14 +208,19 @@ class IA:
                     if value < min_value:
                         min_value = value
                         min_move = move
+                    # if value == min_value:
+                    #     if random.random() < 0.5:
+                    #         min_value = value
+                    #         min_move = move
                     if min_value <= alpha:
                         return min_move, min_value
                     if min_value < beta:
                         beta = min_value
             return min_move, min_value
 
+        start_time = time.time()
         move, value = max(board, -np.inf, np.inf, self.depth)
-        print("Value: ", value)
+        # print("Value: ", value)
         return move
     
     

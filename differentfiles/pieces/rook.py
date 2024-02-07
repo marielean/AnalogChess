@@ -1,11 +1,14 @@
 from .piece import Piece
 from differentfiles.colors import *
 from differentfiles.utils import *
-from differentfiles.drawing import (
-    see_through,
-    see_through2,
-    draw_line_round_corners_polygon,
-)
+import config
+
+if config.GRAPHIC:
+    from differentfiles.drawing import (
+        see_through,
+        see_through2,
+        draw_line_round_corners_polygon,
+    )
 
 
 class Rook(Piece):

@@ -53,10 +53,8 @@ def total_path_len(piece, edge_positions):
 
 def custom_heuristic_1(board, player):
     '''
-    custom_heuristic_1(pieces, player)
-    This function calculates a score for players based on a custom heuristic
-    function. The function is based on the total length of the avaiable path per
-    piece, weighted on the piece weight, and normalized on the mean path of the piece
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the lengths of the paths of the pieces.
     '''
     pieces = board.get_pieces()
     white_score = 0 # white score
@@ -72,9 +70,8 @@ def custom_heuristic_1(board, player):
 
 def custom_heuristic_0(board, player):
     '''
-    custom_heuristic_0(pieces, player)
-    This function calculates a score for players based on a custom heuristic
-    function. The function is based on the pieces weight difference
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the weights of the pieces.
     '''
     pieces = board.get_pieces()
 
@@ -87,37 +84,26 @@ def custom_heuristic_0(board, player):
             black_score += piece.weight
     return white_score-black_score if player else black_score-white_score
 
-
-
 def custom_heuristic_2(board, player):
-
+    '''
+    Returns the difference of the player scores.
+    The score of each player is calculated as the sum of the weights of the pieces.
+    The weight of pawns is multiplied by a factor that depends on the advancement of pawns.
+    '''
     pieces = board.get_pieces()
 
     white_score = 0
     black_score = 0
-
     for piece in pieces:
         if piece.color == white and piece.deleted == False:
-            white_score += evaluate_piece(piece)*piece.weight
+            if isinstance(piece, Pawn):
+                white_score += piece.weight*(piece.y/8)
+            else:
+                white_score += piece.weight
         if piece.color == black and piece.deleted == False:
-            black_score += evaluate_piece(piece)*piece.weight
-
-    # Restituzione della differenza tra i punteggi del giocatore e dell'avversario
+            if isinstance(piece, Pawn):
+                black_score += piece.weight*(8-piece.y/8)
+            else:
+                black_score += piece.weight
+    
     return white_score-black_score if player else black_score-white_score
-
-
-def evaluate_piece(piece):
-    # Esempio di valutazione di un pezzo in base alla sua posizione, tipo, ecc.
-    # Puoi adattare questa funzione in base alle regole specifiche del tuo gioco
-    piece_value = 1
-
-    # Ad esempio, assegna un valore più alto a pezzi che sono più avanzati sulla scacchiera
-    if isinstance(piece, Pawn):
-        if piece.color == white:
-            piece_value = 10 if piece.y > 1.5 else 1
-        else:
-            piece_value = 10 if piece.y < 6.5 else 1
-
-    # Altri criteri di valutazione specifici possono essere aggiunti in base alle regole del gioco
-
-    return piece_value

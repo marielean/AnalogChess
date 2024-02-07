@@ -22,6 +22,9 @@ class Board:
 
         self.whiteTurn = True
 
+        for piece in self.get_pieces():
+            piece.calc_paths(self.get_pieces())
+
     
     def set_pieces(self, new_pieces: list):
         '''
@@ -47,7 +50,7 @@ class Board:
                 print("ERROR: Piece not found")
         
     # metodo che resituisce se la partita è finita 
-    def is_terminal(self) -> bool:
+    def is_terminal(self):
         '''
         Returns if the game is over by controlling the number of kings on the board
         :return
@@ -76,7 +79,7 @@ class Board:
                 pieces[i].start_y = move[3][1]
 
                 for j in range(len(pieces)):
-                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= ((2*pieces[i].radius)*(1-1e-15))**2): # Il fattore 1-1e-15 serve per far sì che il pezzo venga mangiato solo se si sovrappone anche solo minimamente e non se tange (o comunque per non lasciare al troncamento della variabile la decisione)
+                    if (j != i) and (not pieces[j].deleted) and (pieces[i].color != pieces[j].color) and (((pieces[i].start_x - pieces[j].start_x)**2 + (pieces[i].start_y - pieces[j].start_y)**2) <= (2*pieces[i].radius)**2):
                         pieces[j].deleted = True
                         pieces[j].start_x, pieces[j].x = 100, 100 # Render outside the board
                 break
@@ -91,7 +94,7 @@ class Board:
         for p in self.get_pieces():
             if p.can_promote():
                 new_pieces_list.append(Queen(p.start_x, p.start_y, p.color))
-            else:
+            elif not p.deleted:
                 new_pieces_list.append(p)
         self.set_pieces(new_pieces_list)
 
@@ -106,7 +109,7 @@ class Board:
         '''
         self.whiteTurn = whiteTurn
 
-    def is_white_turn(self) -> bool:
+    def is_white_turn(self):
         '''
         Returns the turn of the board
         :return
@@ -154,7 +157,7 @@ class Board:
         ] 
 
     #restituisce lo stato della scacchiera con le posizioni di tutti i pezzi ancora in gioco diviso per colori
-    def get_chess_board_status(self) -> tuple[list, list]:
+    def get_chess_board_status(self):
         '''
         Return the actual status of the chess board 
         :return
@@ -170,7 +173,7 @@ class Board:
                 black_status.append([piece.id, piece.start_x, piece.start_y])
         return white_status, black_status
     
-    def get_pieces(self) -> list:
+    def get_pieces(self):
         '''
         Returns the list of pieces on the board
         :return
@@ -187,7 +190,7 @@ class Board:
                                  x_end: float, 
                                  y_end: float, 
                                  knight_flag=False, 
-                                 king_rook_flag=False) -> list[tuple[float, float]]:
+                                 king_rook_flag=False):
         '''
         Returns all the possible moves for a piece. The moves are calculated from the starting point (x_start, y_start) to the final point (x_end, y_end). \n
             If the piece is a knight, the moves are calculated from the starting angle (x_start, y_start) to the final angle (x_end, y_end).
@@ -239,7 +242,7 @@ class Board:
 
     # restituisce tutte le mosse possibili per tutti i pezzi presenti nella list_pieces nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
     def get_all_moves_from_distance(self, 
-                                    list_pieces: list) -> list[list]:
+                                    list_pieces: list):
         '''
         Returns all the possible moves for all the pieces in the list_pieces. \n
         :param
@@ -264,7 +267,7 @@ class Board:
         return list_moves
 
     # restituisce tutte le direzioni di tutti i pezzi presenti diviso per colori nella forma [id, colore, (x_start, y_start), [(x_end, y_end), (x_end, y_end), ...]]
-    def get_all_directions_all_in_one(self, turn) -> tuple[list, list]:
+    def get_all_directions_all_in_one(self):
         '''
         Returns all the possible directions for all the pieces in the board divided by color. \n
         :return
@@ -298,7 +301,7 @@ class Board:
         
         return list_directions
     
-    def get_all_moves(self, turn: bool) -> list[list]:
+    def get_all_moves(self, turn: bool):
         '''
         Return all the possible moves for the selected player
         :param

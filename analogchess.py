@@ -12,11 +12,14 @@ from differentfiles.drawing import (
     draw_center_text,
 )
 from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
+from differentfiles.heuristics import custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
 
 pygame.init()
 
 from chessboardex import *
 
+# Possible heuristics: custom_heuristic_0, custom_heuristic_1, custom_heuristic_2
+# Possible algorithms: MiniMax, AlphaBeta, Random
 from chessboardex import *
 
 import configparser
@@ -39,6 +42,8 @@ import differentfiles.heuristics as other_heuristics
 func_to_run = getattr(other_heuristics, custom_utility)
 
 
+ia = IA(utility=custom_heuristic_0, algorithm = 'AlphaBeta', depth = 2)
+# board = Board(granularity=10, pieces=chessboard_5) # Use this if you want to test a specific chessboard
 # inizia il gioco con il turno del bianco
 ia = IA(utility=custom_heuristic_2, algorithm = 'AlphaBeta', depth = 2)
 # board = Board(granularity=10, pieces=chessboard_4) # Use this if you want to test a specific chessboard
@@ -100,14 +105,6 @@ while not done:
                         new_pieces.append(piece)
 
                 board.set_pieces(new_pieces)
-
-                # if board.is_terminal():
-                #     print("This is the end...")
-                #     done = True
-                #     font = pygame.font.SysFont("oldenglishtext", int(80))
-                #     confirm_text = font.render("Wiiiiiiin", True, black)
-                #     draw_center_text(confirm_text)
-                #     pygame.display.flip()
 
                 for piece in board.get_pieces():
                     piece.calc_paths(board.get_pieces())
